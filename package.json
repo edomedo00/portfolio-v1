@@ -4,6 +4,8 @@
   "scripts": {
     "dev:web": "pnpm --dir web dev",
     "build:web": "pnpm --dir web build",
-    "lint:web": "pnpm --dir web lint"
+    "lint:web": "pnpm --dir web lint",
+    "dev:studio": "pnpm --dir studio dev",
+    "build:studio": "pnpm --dir studio build"
   }
 }
