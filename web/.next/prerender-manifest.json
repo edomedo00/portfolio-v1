@@ -5,7 +5,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 10465,
+      "htmlSize": 10387,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -33,7 +33,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 9209,
+      "htmlSize": 9133,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -62,7 +62,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 8276,
+      "htmlSize": 8200,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -119,43 +119,11 @@
       ]
     }
   },
-  "dynamicRoutes": {
-    "/studio/[[...tool]]": {
-      "routeType": "page",
-      "response": "empty",
-      "compute": "blocking",
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "next-action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "routeRegex": "^/studio(?:/(.+?))?(?:/)?$",
-      "dataRoute": "/studio/[[...tool]].rsc",
-      "fallback": null,
-      "fallbackRootParams": [],
-      "fallbackRouteParams": [],
-      "dataRouteRegex": "^/studio(?:/(.+?))?\\.rsc$",
-      "prefetchDataRoute": null,
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    }
-  },
+  "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "03229aa8849a2ef7192c5d31d314c45c",
-    "previewModeSigningKey": "cbe07f341e4184568b68769e5f0d54905c5700025a134626faca72ceaf8610d8",
-    "previewModeEncryptionKey": "8bf8b87e41f2460caf66601551a8bf72e7ec811330ceb450fd9fd47941f2ad33"
+    "previewModeId": "e00ea812a60eafdd7eb394655eeaca44",
+    "previewModeSigningKey": "93c81b7ffa142811d8354cc4cd68299104e03b87098ff2d821619623f3ad4372",
+    "previewModeEncryptionKey": "73a33d99f61f9702d1ceb51cab78f74e289138055703b46cd740d1842c488d9e"
   }
 }

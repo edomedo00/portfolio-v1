@@ -21,16 +21,7 @@
     "afterFiles": [],
     "fallback": []
   },
-  "dynamicRoutes": [
-    {
-      "page": "/studio/[[...tool]]",
-      "regex": "^/studio(?:/(.+?))?(?:/)?$",
-      "routeKeys": {
-        "nxtPtool": "nxtPtool"
-      },
-      "namedRegex": "^/studio(?:/(?<nxtPtool>.+?))?(?:/)?$"
-    }
-  ],
+  "dynamicRoutes": [],
   "staticRoutes": [
     {
       "page": "/",

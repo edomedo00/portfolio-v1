@@ -7,5 +7,6 @@
     "lint:web": "pnpm --dir web lint",
     "dev:studio": "pnpm --dir studio dev",
     "build:studio": "pnpm --dir studio build"
-  }
+  },
+  "packageManager": "pnpm@11.9.0"
 }

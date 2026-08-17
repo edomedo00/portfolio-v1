@@ -1,43 +1,25 @@
 [
   {
-    "route": "/studio/[[...tool]]",
-    "firstLoadUncompressedJsBytes": 5893057,
-    "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\17kow4vjzquqb.js",
-      ".next\\static\\chunks\\3xlflxia1vi_l.js",
-      ".next\\static\\chunks\\0nw7tpslsn1hl.js",
-      ".next\\static\\chunks\\42poxq1i0vaoy.js",
-      ".next\\static\\chunks\\26je2t7tlguwg.js",
-      ".next\\static\\chunks\\36zc4q4c8v1_o.js",
-      ".next\\static\\chunks\\14_26m0q3yb3p.js",
-      ".next\\static\\chunks\\103qjnr_8le79.js",
-      ".next\\static\\chunks\\3rry0qyjmepwo.js",
-      ".next\\static\\chunks\\turbopack-2iv0jk2top11d.js"
-    ]
-  },
-  {
     "route": "/",
-    "firstLoadUncompressedJsBytes": 469601,
+    "firstLoadUncompressedJsBytes": 468739,
     "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\17kow4vjzquqb.js",
-      ".next\\static\\chunks\\2iz2ml59avhpd.js",
-      ".next\\static\\chunks\\36zc4q4c8v1_o.js",
-      ".next\\static\\chunks\\14_26m0q3yb3p.js",
-      ".next\\static\\chunks\\103qjnr_8le79.js",
-      ".next\\static\\chunks\\3rry0qyjmepwo.js",
-      ".next\\static\\chunks\\turbopack-2iv0jk2top11d.js"
+      ".next\\static\\chunks\\0_ls4ks-2pr1x.js",
+      ".next\\static\\chunks\\1e8q5i5ndfc8j.js",
+      ".next\\static\\chunks\\0ivt_s91s1w7m.js",
+      ".next\\static\\chunks\\0phxwa-b2g2ax.js",
+      ".next\\static\\chunks\\12uzlahtn_rrk.js",
+      ".next\\static\\chunks\\turbopack-2hiomfibaeaj5.js"
     ]
   },
   {
     "route": "/_not-found",
-    "firstLoadUncompressedJsBytes": 453996,
+    "firstLoadUncompressedJsBytes": 453197,
     "firstLoadChunkPaths": [
-      ".next\\static\\chunks\\17kow4vjzquqb.js",
-      ".next\\static\\chunks\\36zc4q4c8v1_o.js",
-      ".next\\static\\chunks\\14_26m0q3yb3p.js",
-      ".next\\static\\chunks\\103qjnr_8le79.js",
-      ".next\\static\\chunks\\3rry0qyjmepwo.js",
-      ".next\\static\\chunks\\turbopack-2iv0jk2top11d.js"
+      ".next\\static\\chunks\\0_ls4ks-2pr1x.js",
+      ".next\\static\\chunks\\0ivt_s91s1w7m.js",
+      ".next\\static\\chunks\\0phxwa-b2g2ax.js",
+      ".next\\static\\chunks\\12uzlahtn_rrk.js",
+      ".next\\static\\chunks\\turbopack-2hiomfibaeaj5.js"
     ]
   }
 ]
