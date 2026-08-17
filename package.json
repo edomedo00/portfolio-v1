@@ -6,7 +6,8 @@
     "build:web": "pnpm --dir web build",
     "lint:web": "pnpm --dir web lint",
     "dev:studio": "pnpm --dir studio dev",
-    "build:studio": "pnpm --dir studio build"
+    "build:studio": "pnpm --dir studio build",
+    "typegen": "pnpm --dir studio typegen"
   },
   "packageManager": "pnpm@11.9.0"
 }
