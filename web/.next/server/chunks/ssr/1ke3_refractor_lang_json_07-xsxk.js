@@ -1,0 +1,3 @@
+module.exports=[642676,a=>{"use strict";function b(a){a.languages.json={property:{pattern:/(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?=\s*:)/,lookbehind:!0,greedy:!0},string:{pattern:/(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?!\s*:)/,lookbehind:!0,greedy:!0},comment:{pattern:/\/\/.*|\/\*[\s\S]*?(?:\*\/|$)/,greedy:!0},number:/-?\b\d+(?:\.\d+)?(?:e[+-]?\d+)?\b/i,punctuation:/[{}[\],]/,operator:/:/,boolean:/\b(?:false|true)\b/,null:{pattern:/\bnull\b/,alias:"keyword"}},a.languages.webmanifest=a.languages.json}b.displayName="json",b.aliases=["webmanifest"],a.s(["default",0,b])}];
+
+//# sourceMappingURL=1ke3_refractor_lang_json_07-xsxk.js.map

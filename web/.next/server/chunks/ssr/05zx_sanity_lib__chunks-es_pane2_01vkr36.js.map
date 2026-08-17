@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../../node_modules/.pnpm/sanity%405.31.1_%40emotion%2Bis-p_ff16b3d72ff8ddcef6d6ea1370642c37/node_modules/sanity/lib/_chunks-es/pane2.js"],"sourcesContent":["import { PaneContainer } from \"./structureTool.js\";\nexport {\n  PaneContainer as default\n};\n//# sourceMappingURL=pane2.js.map\n"],"names":[],"mappings":""}

@@ -6,7 +6,9 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  web:
     dependencies:
       '@sanity/image-url':
         specifier: ^2.1.1

@@ -1,0 +1,3 @@
+module.exports=[110820,a=>{"use strict";a.i(343078),a.i(960946),a.i(948279),a.i(117818);var b=a.i(4944);a.i(108168),a.i(596252),a.i(696156),a.i(234058),a.i(170366),a.i(43979),a.i(979482),a.i(131908),a.i(725048),a.i(613493),a.i(381216);let c=(0,b.defineLocalesResources)("media-library",{"invalid-video-warning.description":"The value of this field is not a valid video. Resetting this field will let you choose a new video.","invalid-video-warning.reset-button.text":"Reset value","invalid-video-warning.title":"Invalid video value","video-error.description":"Failed to load video","video-error.retry-button.text":"Retry"});a.s(["default",0,c])}];
+
+//# sourceMappingURL=05zx_sanity_lib__chunks-es_resources6_1hqy7pp.js.map
