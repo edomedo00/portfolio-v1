@@ -3,6 +3,9 @@ import {defineField, defineType} from 'sanity'
 
 type ImageParent = {
   isDecorative?: boolean
+  asset?: {
+    _ref?: string
+  }
 }
 
 export const imageWithAlt = defineType({
@@ -31,7 +34,7 @@ export const imageWithAlt = defineType({
         rule.custom((value, context) => {
           const parent = context.parent as ImageParent | undefined
 
-          if (parent?.isDecorative) {
+          if (!parent?.asset?._ref || parent.isDecorative) {
             return true
           }
 

@@ -15,6 +15,25 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type SiteSettings = {
+  _id: string;
+  _type: "siteSettings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  siteTitle?: string;
+  siteUrl?: string;
+  defaultSeo?: Seo;
+};
+
+export type Seo = {
+  _type: "seo";
+  title?: string;
+  description?: string;
+  image?: ImageWithAlt;
+  noIndex?: boolean;
+};
+
 export type Page = {
   _id: string;
   _type: "page";
@@ -24,14 +43,6 @@ export type Page = {
   title?: string;
   slug?: Slug;
   seo?: Seo;
-};
-
-export type Seo = {
-  _type: "seo";
-  title?: string;
-  description?: string;
-  image?: ImageWithAlt;
-  noIndex?: boolean;
 };
 
 export type Slug = {
@@ -172,8 +183,9 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
-  | Page
+  | SiteSettings
   | Seo
+  | Page
   | Slug
   | SanityImageAssetReference
   | ImageWithAlt
@@ -187,3 +199,50 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint;
+
+// Source: ../web/src/sanity/lib/queries.ts
+// Variable: SITE_SETTINGS_QUERY
+// Query: *[_id == "siteSettings"][0] {    _id,    siteTitle,    siteUrl,    defaultSeo {      title,      description,      image,      noIndex    }  }
+export type SITE_SETTINGS_QUERY_RESULT =
+  | {
+      _id: "siteSettings";
+      siteTitle: null;
+      siteUrl: null;
+      defaultSeo: null;
+    }
+  | {
+      _id: "siteSettings";
+      siteTitle: string | null;
+      siteUrl: string | null;
+      defaultSeo: {
+        title: string | null;
+        description: string | null;
+        image: ImageWithAlt | null;
+        noIndex: boolean | null;
+      } | null;
+    }
+  | null;
+
+// Source: ../web/src/sanity/lib/queries.ts
+// Variable: PAGE_BY_SLUG_QUERY
+// Query: *[_type == "page" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    seo {      title,      description,      image,      noIndex    }  }
+export type PAGE_BY_SLUG_QUERY_RESULT = {
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: ImageWithAlt | null;
+    noIndex: boolean | null;
+  } | null;
+} | null;
+
+// Query TypeMap
+import "@sanity/client";
+declare module "@sanity/client" {
+  interface SanityQueries {
+    '\n  *[_id == "siteSettings"][0] {\n    _id,\n    siteTitle,\n    siteUrl,\n    defaultSeo {\n      title,\n      description,\n      image,\n      noIndex\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_type == "page" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    seo {\n      title,\n      description,\n      image,\n      noIndex\n    }\n  }\n': PAGE_BY_SLUG_QUERY_RESULT;
+  }
+}

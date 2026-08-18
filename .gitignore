@@ -47,3 +47,5 @@ next-env.d.ts
 **/out/
 **/dist/
 **/.sanity/
+
+studio/schema.json
