@@ -40,3 +40,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Workspace dependencies and generated files
+**/node_modules/
+**/.next/
+**/out/
+**/dist/
+**/.sanity/
