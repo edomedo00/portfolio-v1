@@ -1,7 +1,8 @@
 {
-  "name": "studio",
+  "name": "@portfolio-v1/studio",
   "private": true,
   "version": "1.0.0",
+  "description": "Sanity Studio for Portfolio v1.",
   "main": "package.json",
   "license": "UNLICENSED",
   "scripts": {
@@ -9,8 +10,13 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
+    "lint": "eslint .",
     "start": "sanity start",
+    "typecheck": "tsc --noEmit",
     "typegen": "sanity schema extract --force && sanity typegen generate"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   },
   "keywords": [
     "sanity"
@@ -18,8 +24,8 @@
   "dependencies": {
     "@sanity/icons": "^5.2.1",
     "@sanity/vision": "^6.9.2",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "sanity": "^6.9.2",
     "styled-components": "^6.1.18"
   },

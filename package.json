@@ -1,13 +1,27 @@
 {
-  "name": "next-sanity-template",
+  "name": "portfolio-v1",
+  "version": "0.1.0",
+  "description": "Personal portfolio powered by Next.js and Sanity.",
   "private": true,
+  "license": "UNLICENSED",
   "scripts": {
+    "dev": "pnpm --recursive --parallel run dev",
     "dev:web": "pnpm --dir web dev",
-    "build:web": "pnpm --dir web build",
-    "lint:web": "pnpm --dir web lint",
     "dev:studio": "pnpm --dir studio dev",
+    "build": "pnpm run build:web && pnpm run build:studio",
+    "build:web": "pnpm --dir web build",
     "build:studio": "pnpm --dir studio build",
-    "typegen": "pnpm --dir studio typegen"
+    "lint": "pnpm run lint:web && pnpm run lint:studio",
+    "lint:web": "pnpm --dir web lint",
+    "lint:studio": "pnpm --dir studio lint",
+    "typecheck": "pnpm run typecheck:web && pnpm run typecheck:studio",
+    "typecheck:web": "pnpm --dir web typecheck",
+    "typecheck:studio": "pnpm --dir studio typecheck",
+    "typegen": "pnpm --dir studio typegen",
+    "check": "pnpm run lint && pnpm run typecheck && pnpm run build"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   },
   "packageManager": "pnpm@11.9.0"
 }

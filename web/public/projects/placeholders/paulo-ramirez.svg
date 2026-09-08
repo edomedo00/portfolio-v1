@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1110" height="664" viewBox="0 0 1110 664">
+  <rect width="1110" height="664" fill="#0C0C0C"/>
+  <rect x="40" y="40" width="505" height="282" fill="#292929" stroke="#4A4A4A"/>
+  <rect x="565" y="40" width="505" height="282" fill="#FCFCFC"/>
+  <rect x="40" y="342" width="1030" height="282" fill="#292929" stroke="#4A4A4A"/>
+  <text x="605" y="194" fill="#0C0C0C" font-family="sans-serif" font-size="58">PAULO</text>
+  <text x="80" y="505" fill="#FCFCFC" font-family="sans-serif" font-size="88">RAMIREZ</text>
+  <text x="80" y="584" fill="#FCFCFC" font-family="monospace" font-size="18">PREVIEW PENDIENTE_</text>
+</svg>
