@@ -2,32 +2,6 @@ import { SanityLive, sanityFetch } from "@/sanity/lib/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
-
-const montreal = localFont({
-  src: "./fonts/montreal-regular.otf",
-  variable: "--font-montreal",
-  display: "swap",
-  weight: "400",
-  style: "normal",
-});
-
-const haasDisplay = localFont({
-  src: "./fonts/neue-haas-grotesk-display-roman.otf",
-  variable: "--font-haas-display",
-  display: "swap",
-  weight: "400",
-  style: "normal",
-});
-
-const neueMontrealMono = localFont({
-  src: "./fonts/pp-neue-montreal-mono-book.ttf",
-  variable: "--font-neue-montreal-mono",
-  display: "swap",
-  weight: "400",
-  style: "normal",
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await sanityFetch({
@@ -38,11 +12,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const title =
     settings?.defaultSeo?.title ??
     settings?.siteTitle ??
-    "Portfolio v1";
+    "Next.js + Sanity Starter";
 
   const description =
     settings?.defaultSeo?.description ??
-    "Personal portfolio.";
+    "A reusable Next.js and Sanity starter.";
 
   const seoImage = settings?.defaultSeo?.image;
 
@@ -79,10 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${montreal.variable} ${haasDisplay.variable} ${neueMontrealMono.variable}`}
-    >
+    <html lang="en">
       <body>
         {children}
         <SanityLive />

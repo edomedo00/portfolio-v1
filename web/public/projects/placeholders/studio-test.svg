@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1110" height="664" viewBox="0 0 1110 664">
-  <rect width="1110" height="664" fill="#292929"/>
-  <path d="M0 166h1110M0 332h1110M0 498h1110M222 0v664M444 0v664M666 0v664M888 0v664" stroke="#4A4A4A"/>
-  <circle cx="555" cy="332" r="166" fill="none" stroke="#FCFCFC"/>
-  <text x="40" y="72" fill="#FCFCFC" font-family="monospace" font-size="28">STUDIO TEST</text>
-  <text x="40" y="624" fill="#FCFCFC" font-family="monospace" font-size="18">PREVIEW PENDIENTE_</text>
-</svg>

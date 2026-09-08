@@ -1,22 +1,23 @@
-# Portfolio v1
+# Next.js + Sanity Template
 
-Personal portfolio monorepo with a Next.js frontend and a standalone Sanity Studio.
+Reusable starter for building responsive websites with Next.js, TypeScript, CSS Modules, Sanity, and pnpm.
 
 ## Requirements
 
-- Node.js 22.12 or newer
-- pnpm 11.9
-- A Sanity project and dataset
+- Node.js 20.9 or newer
+- pnpm 11
+- A Sanity account and project
 
-## Workspace
+## Project structure
 
 ```text
 .
 ├── web/       Next.js frontend
-└── studio/    Standalone Sanity Studio
+├── studio/    Standalone Sanity Studio
+└── package.json
 ```
 
-## Setup
+## Installation
 
 Install dependencies from the project root:
 
@@ -24,63 +25,131 @@ Install dependencies from the project root:
 pnpm install
 ```
 
-Copy the environment examples and add the credentials for your Sanity project:
+If pnpm asks to approve the `esbuild` build script:
+
+```bash
+pnpm approve-builds
+```
+
+Select `esbuild` and approve it.
+
+## Environment variables
+
+Copy:
 
 ```text
 web/.env.example → web/.env.local
 studio/.env.example → studio/.env.local
 ```
 
-Add `http://localhost:3000` to the Sanity project's CORS origins. Run TypeGen after
-the environment files are configured and whenever schemas or GROQ queries change:
+Configure the frontend:
+
+```env
+NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_SANITY_API_VERSION=2026-08-17
+```
+
+Configure the Studio:
+
+```env
+SANITY_STUDIO_PROJECT_ID=your-project-id
+SANITY_STUDIO_DATASET=production
+SANITY_STUDIO_TITLE=Project Studio
+```
+
+Local environment files are ignored by Git.
+
+## Sanity setup
+
+Create or select a project at [Sanity Manage](https://www.sanity.io/manage).
+
+Add this development URL to the project’s CORS origins:
+
+```text
+http://localhost:3000
+```
+
+Then generate the Sanity types:
 
 ```bash
 pnpm run typegen
 ```
 
+Run TypeGen again whenever schemas or GROQ queries change.
+
 ## Development
 
-Run the frontend and Studio together:
-
-```bash
-pnpm run dev
-```
-
-Or run either app separately:
+Start the frontend:
 
 ```bash
 pnpm run dev:web
+```
+
+Start Sanity Studio in another terminal:
+
+```bash
 pnpm run dev:studio
 ```
+
+The default URLs are:
 
 - Frontend: `http://localhost:3000`
 - Studio: `http://localhost:3333`
 
-## Quality checks
+## Initial content
 
-```bash
-pnpm run lint
-pnpm run typecheck
-pnpm run build
-pnpm run check
+In Sanity Studio:
+
+1. Open **Site Settings**.
+2. Enter the site title and URL.
+3. Add the default SEO information.
+4. Publish the document.
+5. Create and publish pages with unique slugs.
+
+A page with the slug `about` is available at:
+
+```text
+http://localhost:3000/about
 ```
 
-The builds that access Sanity require the local environment files to be configured.
+Content stored in Sanity is not included when this repository is cloned.
 
-## Design foundation
+## Available commands
 
-The global tokens live in `web/src/app/globals.css`.
+```bash
+pnpm run dev:web
+pnpm run dev:studio
+pnpm run typegen
+pnpm run lint:web
+pnpm run build:web
+pnpm run build:studio
+```
 
-- Colors: black, white, grid dark, and grid dark accent
-- Desktop grid: 12 columns, 2.5rem page margins, 1.25rem gutters
-- Mobile grid: 4 columns, 1.25rem page margins, 1rem gutters
-- Display type: Montreal Regular
-- Body and navigation type: PP Neue Montreal Mono Book
+## Final verification
 
-The fonts are self-hosted through `next/font/local`. Confirm their licenses before a public
-deployment or distribution of this repository.
+Before using or publishing the template:
 
-## Content
+```bash
+pnpm run typegen
+pnpm run lint:web
+pnpm run build:web
+pnpm run build:studio
+```
 
-Sanity content is not stored in this repository. Use Site Settings for global metadata and
-create pages with unique slugs in the Studio.
+## Template scope
+
+The template includes:
+
+- Next.js App Router
+- TypeScript
+- CSS Modules
+- Standalone Sanity Studio
+- Live published-content updates
+- Sanity TypeGen
+- Site Settings singleton
+- Dynamic page routes
+- Global and page-specific SEO
+- Accessible Sanity images
+
+Design-specific components, page sections, navigation, Portable Text, and Visual Editing should be added separately for each project.

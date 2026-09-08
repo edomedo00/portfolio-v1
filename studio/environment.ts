@@ -13,4 +13,4 @@ export const projectId = requireValue(
 
 export const dataset = requireValue(process.env.SANITY_STUDIO_DATASET, 'SANITY_STUDIO_DATASET')
 
-export const studioTitle = process.env.SANITY_STUDIO_TITLE || 'Portfolio v1 Studio'
+export const studioTitle = process.env.SANITY_STUDIO_TITLE || 'Sanity Studio'
