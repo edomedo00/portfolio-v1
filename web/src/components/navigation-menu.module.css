@@ -1,0 +1,29 @@
+.list {
+  display: flex;
+  width: 22.25rem;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  list-style: none;
+}
+
+.link {
+  display: block;
+  border: 0.0625rem solid var(--color-white);
+  padding: 0.25rem 1.5rem;
+  color: var(--color-white);
+  font-family: var(--font-family-navigation);
+  font-size: var(--font-size-navigation);
+  font-weight: 400;
+  line-height: var(--line-height-navigation);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.link[data-current="true"],
+.link:hover {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
