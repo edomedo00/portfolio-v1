@@ -1,0 +1,123 @@
+.panel {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  grid-column: 9 / -1;
+  align-self: start;
+  height: fit-content;
+  margin-block: var(--grid-margin);
+  overflow: hidden;
+  background-color: var(--color-about);
+  color: var(--color-black);
+  clip-path: polygon(3rem 0, 100% 0, 100% 100%, 0 100%, 0 3rem);
+}
+
+.panelContent {
+  position: relative;
+  padding: 2.5rem 2.5rem 4rem;
+}
+
+.panelHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.close {
+  display: grid;
+  align-self: flex-end;
+  padding: 0.3125rem;
+  place-items: center;
+  background-color: var(--color-black);
+  text-decoration: none;
+}
+
+.closeIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.heading {
+  margin-top: 0;
+  padding-bottom: 1.5rem;
+  border-bottom: 0.0625rem solid var(--color-black);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.5rem;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.field label {
+  text-transform: uppercase;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 0.0625rem solid var(--color-black);
+  border-radius: 0;
+  padding-inline: 0.5rem;
+  background: transparent;
+  outline: none;
+}
+
+.field input {
+  height: 1.625rem;
+}
+
+.field textarea {
+  height: 6rem;
+  padding-block: 0.375rem;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  box-shadow: inset 0 0 0 0.0625rem var(--color-black);
+}
+
+.submit {
+  width: fit-content;
+  margin-top: 0.5rem;
+  border: 0.0625rem solid var(--color-black);
+  border-radius: 0;
+  padding: 0.25rem 1.5rem;
+  background-color: var(--color-black);
+  color: var(--color-about);
+  font-family: var(--font-family-navigation);
+  font-size: var(--font-size-navigation);
+  line-height: var(--line-height-navigation);
+  cursor: pointer;
+}
+
+.submit:hover,
+.submit:focus-visible {
+  background-color: transparent;
+  color: var(--color-black);
+}
+
+@media (max-width: 48rem) {
+  .panel {
+    grid-column: 1 / -1;
+  }
+
+  .fieldRow {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

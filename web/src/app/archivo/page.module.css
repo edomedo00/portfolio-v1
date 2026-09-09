@@ -12,7 +12,7 @@
   text-transform: uppercase;
 }
 
-.archiveViewport {
+.archiveFrame {
   --archive-column: calc(8.333333vw - 1.5625rem);
   --archive-card-size: calc(
     var(--archive-column) + var(--archive-column) + var(--archive-column) +
@@ -30,11 +30,49 @@
   align-self: start;
   /* 20% through the space between the menu edge and bottom page margin. */
   margin-top: calc(20svh + 6.5rem);
+  margin-left: calc(0rem - var(--grid-margin));
   margin-right: calc(0rem - var(--grid-margin));
+}
+
+.archiveFrame::before,
+.archiveFrame::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: var(--grid-margin);
+  opacity: 0;
+  content: "";
+  pointer-events: none;
+  backdrop-filter: blur(0.5rem);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.archiveFrame::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-black), transparent);
+  -webkit-mask-image: linear-gradient(to right, black, transparent);
+  mask-image: linear-gradient(to right, black, transparent);
+}
+
+.archiveFrame::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-black), transparent);
+  -webkit-mask-image: linear-gradient(to left, black, transparent);
+  mask-image: linear-gradient(to left, black, transparent);
+}
+
+.archiveFrame[data-can-scroll-left="true"]::before,
+.archiveFrame[data-can-scroll-right="true"]::after {
+  opacity: 1;
+}
+
+.archiveViewport {
+  min-width: 0;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
   scrollbar-width: none;
-  scroll-snap-type: x proximity;
 }
 
 .archiveViewport::-webkit-scrollbar {
@@ -51,6 +89,7 @@
   width: max-content;
   min-width: 100%;
   gap: var(--archive-project-gap);
+  padding-left: var(--grid-margin);
   padding-right: var(--grid-margin);
 }
 
@@ -58,7 +97,6 @@
   display: block;
   flex: 0 0 var(--archive-card-size);
   color: var(--color-white);
-  scroll-snap-align: start;
   text-decoration: none;
 }
 
@@ -98,8 +136,9 @@
 
 .projectCaption {
   display: flex;
+  margin-top: 0.25rem;
+  align-items: center;
   justify-content: space-between;
-  align-items: baseline;
 }
 
 .projectArrow {
@@ -154,26 +193,32 @@
   backdrop-filter: blur(0.1875rem);
 }
 
+.modalBackdrop {
+  position: absolute;
+  inset: 0;
+}
+
 .detailPanel {
   position: relative;
+  z-index: 1;
   grid-column: 8 / -1;
   height: 100svh;
-  margin-right: calc(0rem - var(--grid-margin));
-  overflow-y: auto;
+  margin: 0 calc(0rem - var(--grid-margin)) 0 0;
+  overflow: hidden;
   background-color: var(--color-about);
   color: var(--color-black);
   clip-path: polygon(3rem 0, 100% 0, 100% 100%, 0 100%, 0 3rem);
-  overscroll-behavior: contain;
-  scrollbar-width: none;
-}
-
-.detailPanel::-webkit-scrollbar {
-  display: none;
 }
 
 .detailContent {
+  --archive-detail-gap: 1.5rem;
+
   position: relative;
-  min-height: 100%;
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  gap: var(--archive-detail-gap);
   padding: var(--grid-margin);
 }
 
@@ -182,58 +227,84 @@
   top: var(--grid-margin);
   right: var(--grid-margin);
   display: grid;
-  width: 1.5625rem;
-  height: 1.5625rem;
+  /* width: 1.5625rem;
+  height: 1.5625rem; */
+  padding: 0.3125rem;
   place-items: center;
   background-color: var(--color-black);
 }
 
 .detailHeading {
-  margin-top: 1.75rem;
-  padding-bottom: 1.6875rem;
+  margin-top: var(--archive-detail-gap);
+  padding-bottom: var(--archive-detail-gap);
   border-bottom: 0.0625rem solid var(--color-black);
   font-size: var(--font-size-h2);
   line-height: 1.2;
 }
 
 .detailCopy {
-  padding-block: 2rem 1.6875rem;
+  display: grid;
+  gap: var(--archive-detail-gap);
+  padding-bottom: var(--archive-detail-gap);
   border-bottom: 0.0625rem solid var(--color-black);
   text-transform: uppercase;
 }
 
 .detailCopy p + p {
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 .detailActions {
   display: flex;
-  gap: var(--grid-gutter);
-  margin-top: 1.875rem;
+  gap: var(--archive-detail-gap);
 }
 
 .detailAction {
   display: flex;
-  min-width: 7.5rem;
-  min-height: 1.8125rem;
+  width: fit-content;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   border: 0.0625rem solid var(--color-black);
+  padding: 0.25rem 1.5rem;
   font-family: var(--font-family-navigation);
   font-size: var(--font-size-navigation);
   line-height: var(--line-height-navigation);
+  text-decoration: none;
+}
+
+.detailGalleryViewport {
+  position: relative;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 
 .detailGallery {
-  display: grid;
-  gap: 0.625rem;
-  margin-top: 1.875rem;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-block: var(--archive-detail-gap);
+  scrollbar-width: none;
+}
+
+.detailGallery::-webkit-scrollbar {
+  display: none;
+}
+
+.detailGallery:focus-visible {
+  outline: 0.0625rem solid var(--color-black);
+  outline-offset: -0.25rem;
 }
 
 .detailMedia {
   position: relative;
-  aspect-ratio: 515 / 306;
+  width: 100%;
+  flex: 0 0 auto;
+  aspect-ratio: 16 / 9;
   margin: 0;
   overflow: hidden;
   background-color: var(--color-black);
@@ -248,11 +319,16 @@
     display: none;
   }
 
-  .archiveViewport {
+  .archiveFrame {
     --archive-card-size: calc(100vw - var(--grid-margin) - var(--grid-margin));
     --archive-project-gap: var(--grid-gutter);
 
     margin-top: 18.4375rem;
+  }
+
+  .archiveFrame::before,
+  .archiveFrame::after {
+    display: none;
   }
 
   .modalLayer {
@@ -262,6 +338,7 @@
 
   .detailPanel {
     width: 100%;
+    height: 100svh;
     margin: 0;
     clip-path: polygon(2rem 0, 100% 0, 100% 100%, 0 100%, 0 2rem);
   }

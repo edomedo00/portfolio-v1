@@ -1,58 +1,42 @@
 import Image from "next/image";
 import Link from "next/link";
-import { PortfolioShell } from "@/components/portfolio-shell";
+import type { ReactNode } from "react";
+import {
+  archiveDescription,
+  navigationSubtitle,
+  RouteScrambleText,
+} from "@/components/scramble-text";
 import { ArchiveCarousel } from "./archive-carousel";
+import {
+  archiveProjects,
+  getNextArchiveId,
+  type ArchiveProject,
+} from "./archive-projects";
 import styles from "./page.module.css";
 
-const archiveProjects = [
-  {
-    id: "001",
-    title: "ASCII GARDEN",
-    image: "/projects/kaomaxi/preview.png",
-    imagePosition: "left center",
-    kind: "image",
-  },
-  {
-    id: "002",
-    title: "ASCII GARDEN",
-    image: "/projects/kaomaxi/hero.png",
-    imagePosition: "45% center",
-    kind: "video",
-  },
-  {
-    id: "004",
-    title: "ASCII GARDEN",
-    image: "/projects/kaomaxi/hero.png",
-    imagePosition: "75% center",
-    kind: "video",
-  },
-  {
-    id: "001",
-    title: "ASCII GARDEN",
-    image: "/projects/kaomaxi/preview.png",
-    imagePosition: "left center",
-    kind: "image",
-  },
-] as const;
-
 type ArchiveViewProps = {
-  showAsciiFlowers?: boolean;
+  children: ReactNode;
 };
 
-export function ArchiveView({ showAsciiFlowers = false }: ArchiveViewProps) {
+export function ArchiveView({ children }: ArchiveViewProps) {
+  const nextArchiveId = getNextArchiveId();
+
   return (
-    <PortfolioShell activeItem="archive" headerVariant="compact" showLocalTime>
+    <>
       <h1 className={styles.visuallyHidden}>Archivo</h1>
 
-      <p className={styles.archiveIntro}>
-        UN ESPACIO PARA MOSTRAR CONCEPTOS,
-        <br />
-        PROYECTOS SECUNDARIOS, EXPERIMENTOS,
-        <br />
-        COLABORACIONES_
-      </p>
+      <RouteScrambleText
+        className={styles.archiveIntro}
+        routePrefix="/archivo"
+        showCursor
+        sourceText={navigationSubtitle}
+        text={archiveDescription}
+      />
 
-      <ArchiveCarousel className={styles.archiveViewport}>
+      <ArchiveCarousel
+        className={styles.archiveViewport}
+        frameClassName={styles.archiveFrame}
+      >
         <section
           aria-label="Proyectos del archivo"
           className={styles.archiveTrack}
@@ -60,8 +44,8 @@ export function ArchiveView({ showAsciiFlowers = false }: ArchiveViewProps) {
           {archiveProjects.map((project, index) => (
             <Link
               className={styles.project}
-              href="/archivo/ascii-flowers"
-              key={`${project.id}-${index}`}
+              href={`/archivo/${project.slug}`}
+              key={project.slug}
               scroll={false}
             >
               <article>
@@ -100,17 +84,47 @@ export function ArchiveView({ showAsciiFlowers = false }: ArchiveViewProps) {
               </article>
             </Link>
           ))}
+
+          <article
+            aria-label={`Próximo proyecto del archivo, número ${nextArchiveId}`}
+            className={styles.project}
+          >
+            <p className={styles.projectId}>[{nextArchiveId}]</p>
+
+            <figure className={styles.projectFigure}>
+              <div className={styles.projectMedia}>
+                <Image
+                  alt="Vista previa pendiente"
+                  className={styles.projectImage}
+                  fill
+                  sizes="(max-width: 48rem) calc(100vw - 2.5rem), calc(25vw - 2.1875rem)"
+                  src="/projects/placeholders/proyecto-05.svg"
+                />
+              </div>
+
+              <figcaption className={styles.projectCaption}>
+                <span>PRÓXIMAMENTE...</span>
+              </figcaption>
+            </figure>
+          </article>
         </section>
       </ArchiveCarousel>
 
-      {showAsciiFlowers ? <AsciiFlowersDetail /> : null}
-    </PortfolioShell>
+      {children}
+    </>
   );
 }
 
-function AsciiFlowersDetail() {
+export function ArchiveProjectDetail({ project }: { project: ArchiveProject }) {
   return (
     <div className={styles.modalLayer}>
+      <Link
+        aria-hidden="true"
+        className={styles.modalBackdrop}
+        href="/archivo"
+        scroll={false}
+        tabIndex={-1}
+      />
       <section
         aria-labelledby="archive-detail-title"
         aria-modal="true"
@@ -128,54 +142,63 @@ function AsciiFlowersDetail() {
           </Link>
 
           <h2 className={styles.detailHeading} id="archive-detail-title">
-            ASCII FLOWERS
+            {project.detail.title}
           </h2>
 
           <div className={styles.detailCopy}>
-            <p>
-              THIS IS AN EXPANSION ON THE UNDERSTANDING OF FLOWERS AS CARRIERS
-              OF BEAUTY. CHARACTERS AND SYMBOLS CARRY BEAUTY AS POTENTIAL
-              EXPRESSORS OF CONCEPTS AND HOLDERS OF ALL POSSIBILITIES. WHITHIN
-              THOSE COUNTLESS WAYS OF UNFOLDING LIES THE FIGURE OF A FOWER.
-            </p>
-            <p>
-              THIS PROJECT WAS BUILT WITH THAT ON MIND. IT BUILDS FLOWER FIGURES
-              USING ONLY TEXT CHARACTERS THROUGH A PROCEDURAL ALGORITHM,
-              RESULTING IN A BEAUTIFUL TEXT GARDEN.
-            </p>
+            {project.detail.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
           </div>
 
-          <div className={styles.detailActions} aria-label="Enlaces del proyecto">
-            <span className={styles.detailAction}>
+          <div
+            className={styles.detailActions}
+            aria-label="Enlaces del proyecto"
+          >
+            <a
+              aria-label="Visitar proyecto en GitHub"
+              className={styles.detailAction}
+              href={project.detail.visitUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
               VISIT
-              <Image alt="" height={17} src="/icons/up-right-arrow.svg" width={17} />
-            </span>
-            <span className={styles.detailAction}>
+              <span aria-hidden="true" className={styles.detailActionIcon} />
+            </a>
+            <a
+              aria-label="Ver código del proyecto en GitHub"
+              className={styles.detailAction}
+              href={project.detail.codeUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
               CODE
-              <Image alt="" height={17} src="/icons/up-right-arrow.svg" width={17} />
-            </span>
+              <span aria-hidden="true" className={styles.detailActionIcon} />
+            </a>
           </div>
 
-          <div className={styles.detailGallery} id="archive-gallery">
-            <figure className={styles.detailMedia}>
-              <Image
-                alt="Vista amplia del jardín ASCII"
-                className={styles.detailImage}
-                fill
-                loading="eager"
-                sizes="36vw"
-                src="/projects/kaomaxi/hero.png"
-              />
-            </figure>
-            <figure className={styles.detailMedia}>
-              <Image
-                alt="Segunda vista del jardín ASCII"
-                className={styles.detailImage}
-                fill
-                sizes="36vw"
-                src="/projects/kaomaxi/preview.png"
-              />
-            </figure>
+          <div className={styles.detailGalleryViewport}>
+            <div
+              aria-label={`Galería del proyecto ${project.detail.title}`}
+              className={styles.detailGallery}
+              id="archive-gallery"
+              role="region"
+              tabIndex={0}
+            >
+              {project.detail.gallery.map((image, index) => (
+                <figure className={styles.detailMedia} key={image.src}>
+                  <Image
+                    alt={image.alt}
+                    className={styles.detailImage}
+                    fill
+                    loading={index === 0 ? "eager" : "lazy"}
+                    sizes="36vw"
+                    src={image.src}
+                    style={{ objectPosition: image.objectPosition }}
+                  />
+                </figure>
+              ))}
+            </div>
           </div>
         </div>
       </section>

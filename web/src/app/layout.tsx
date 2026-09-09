@@ -1,6 +1,7 @@
 import { SanityLive, sanityFetch } from "@/sanity/lib/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
+import { PortfolioShell } from "@/components/portfolio-shell";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -14,10 +15,10 @@ const montreal = localFont({
 });
 
 const haasDisplay = localFont({
-  src: "./fonts/neue-haas-grotesk-display-roman.otf",
+  src: "./fonts/neue-haas-grotesk-display-light-trial.otf",
   variable: "--font-haas-display",
   display: "swap",
-  weight: "400",
+  weight: "300",
   style: "normal",
 });
 
@@ -84,7 +85,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${montreal.variable} ${haasDisplay.variable} ${neueMontrealMono.variable}`}
     >
       <body>
-        {children}
+        <PortfolioShell>{children}</PortfolioShell>
         <SanityLive />
       </body>
     </html>

@@ -3,7 +3,7 @@
   grid-row: 1;
   grid-column: 10 / -1;
   align-self: start;
-  margin: 4.8125rem 0 0;
+  margin: 4.625rem 0 0;
   color: var(--color-white);
   font-family: var(--font-family-body);
   font-size: var(--font-size-body);
@@ -17,7 +17,7 @@
   grid-row: 1;
   grid-column: 1 / span 5;
   align-self: start;
-  height: calc(100svh - 16.4375rem);
+  height: calc(100svh - 13.9375rem);
   margin-top: 13.9375rem;
   overflow: hidden;
 }
@@ -53,10 +53,10 @@
 .projectList {
   box-sizing: border-box;
   height: 100%;
-  padding-block: 2.5rem;
+  padding-block: 1.25rem;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scroll-padding-block: 2.5rem;
+  scroll-padding-block: 1.25rem;
   scrollbar-width: none;
 }
 
@@ -71,13 +71,10 @@
 
 .projectLink {
   display: block;
-  margin-bottom: 2.5rem;
+  width: 100%;
+  padding-block: 1.25rem;
   color: var(--color-white);
   text-decoration: none;
-}
-
-.projectLink:last-child {
-  margin-bottom: 0;
 }
 
 .projectLink:focus-visible {
@@ -99,7 +96,7 @@
   color: var(--color-white);
   font-family: var(--font-family-heading);
   font-size: var(--font-size-h1);
-  font-weight: 400;
+  font-weight: 300;
   line-height: var(--line-height-h1);
   text-transform: uppercase;
   white-space: nowrap;
@@ -158,28 +155,130 @@
   display: grid;
   grid-template-columns: repeat(var(--grid-column-count), minmax(0, 1fr));
   column-gap: var(--grid-gutter);
-  padding-inline: var(--grid-margin);
   background: color-mix(in srgb, var(--color-black) 45%, transparent);
   backdrop-filter: blur(0.1875rem);
 }
 
+.modalBackdrop {
+  position: absolute;
+  inset: 0;
+}
+
 .projectModal {
+  --project-detail-gap: 1.5rem;
+
   position: relative;
+  z-index: 1;
+  display: grid;
   grid-column: 4 / span 9;
-  height: calc(100svh - 5rem);
-  margin-block: var(--grid-margin);
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  height: 100svh;
+  margin-block: 0;
   overflow: hidden;
-  background-color: var(--color-white);
+  background-color: #ff7a00;
+  color: var(--color-black);
   clip-path: polygon(3rem 0, 100% 0, 100% 100%, 0 100%, 0 3rem);
+}
+
+.projectDetail {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  grid-column: 1 / span 4;
+  flex-direction: column;
+  gap: var(--project-detail-gap);
+  padding: 4.0625rem var(--grid-margin) var(--grid-margin);
+}
+
+.projectDetailTitle {
+  padding: 0 3rem var(--project-detail-gap) 0;
+  border-bottom: 0.0625rem solid var(--color-black);
+  font-size: var(--font-size-h2);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.projectDetailMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--project-detail-gap);
+  padding-bottom: var(--project-detail-gap);
+  border-bottom: 0.0625rem solid var(--color-black);
+  text-transform: uppercase;
+}
+
+.projectDetailCopy {
+  display: grid;
+  gap: var(--project-detail-gap);
+  padding-bottom: var(--project-detail-gap);
+  border-bottom: 0.0625rem solid var(--color-black);
+  text-transform: uppercase;
+}
+
+.projectDetailAction {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0.0625rem solid var(--color-black);
+  padding: 0.25rem 1.5rem;
+  font-family: var(--font-family-navigation);
+  font-size: var(--font-size-navigation);
+  line-height: var(--line-height-navigation);
+}
+
+.projectMediaViewport {
+  min-width: 0;
+  min-height: 0;
+  grid-column: 5 / -1;
+  overflow: hidden;
+  background-color: #ff7a00;
+}
+
+.projectMediaCarousel {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.projectMediaCarousel::-webkit-scrollbar {
+  display: none;
+}
+
+.projectMediaCarousel:focus-visible {
+  outline: 0.0625rem solid var(--color-black);
+  outline-offset: -0.25rem;
+}
+
+.projectDetailMedia {
+  position: relative;
+  width: 100%;
+  flex: 0 0 auto;
+  aspect-ratio: 16 / 9;
+  margin: 0;
+  overflow: hidden;
+  background-color: var(--color-grid-dark);
+}
+
+.projectDetailImage {
+  object-fit: cover;
 }
 
 .modalClose {
   position: absolute;
   top: var(--grid-margin);
   right: var(--grid-margin);
+  z-index: 2;
   display: grid;
-  width: 1.5625rem;
-  height: 1.5625rem;
+  /* width: 1.5625rem;
+  height: 1.5625rem; */
+  padding: 0.3125rem;
   place-items: center;
   background-color: var(--color-black);
 }

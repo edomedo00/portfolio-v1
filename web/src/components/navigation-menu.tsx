@@ -12,7 +12,7 @@ const navigationItems = [
 export type NavigationItemId = (typeof navigationItems)[number]["id"];
 
 type NavigationMenuProps = {
-  activeItem: NavigationItemId;
+  activeItem?: NavigationItemId;
 };
 
 export function NavigationMenu({ activeItem }: NavigationMenuProps) {

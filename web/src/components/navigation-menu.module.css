@@ -19,6 +19,9 @@
   line-height: var(--line-height-navigation);
   text-align: center;
   text-decoration: none;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
   white-space: nowrap;
 }
 

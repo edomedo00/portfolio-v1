@@ -79,8 +79,8 @@ export default async function Page({ params }: Props) {
   if (!page) notFound();
 
   return (
-    <main>
+    <section>
       <h1>{page.title}</h1>
-    </main>
+    </section>
   );
 }

@@ -30,6 +30,7 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
               onFocus={() => setActiveSlug(project.slug)}
               onPointerEnter={() => setActiveSlug(project.slug)}
               onPointerLeave={() => setActiveSlug(undefined)}
+              scroll={false}
             >
               <article className={styles.project}>
                 <h2 className={styles.projectTitle}>{project.title}</h2>

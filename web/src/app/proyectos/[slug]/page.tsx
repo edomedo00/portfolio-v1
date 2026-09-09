@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
+import { ProjectDetail } from "../project-detail";
 import { getProject, projects } from "../projects";
-import { ProjectsView } from "../projects-view";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -12,10 +12,11 @@ export function generateStaticParams() {
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
+  const project = getProject(slug);
 
-  if (!getProject(slug)) {
+  if (!project) {
     notFound();
   }
 
-  return <ProjectsView selectedSlug={slug} />;
+  return <ProjectDetail project={project} />;
 }

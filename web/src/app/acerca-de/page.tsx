@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { PortfolioShell } from "@/components/portfolio-shell";
+import { AnimatedRoutePanel } from "@/components/animated-route-panel";
 import styles from "./page.module.css";
 
 export default function AboutPage() {
   return (
-    <PortfolioShell activeItem="about">
-      <section className={styles.panel} aria-labelledby="about-title">
-        <div className={styles.panelContent}>
+    <AnimatedRoutePanel className={styles.panel} labelledBy="about-title">
+      <div className={styles.panelContent}>
           <header className={styles.panelHeader}>
             <Link
               className={styles.close}
@@ -54,8 +53,7 @@ export default function AboutPage() {
               X(TWITTER)
             </a>
           </div>
-        </div>
-      </section>
-    </PortfolioShell>
+      </div>
+    </AnimatedRoutePanel>
   );
 }

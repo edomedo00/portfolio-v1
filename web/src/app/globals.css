@@ -17,7 +17,7 @@
 
   --font-size-h1: 4rem;
   --line-height-h1: normal;
-  --font-size-h2: 2.75rem;
+  --font-size-h2: 3.5rem;
   --line-height-h2: normal;
   --font-size-body: 0.875rem;
   --line-height-body: 1.0625rem;
@@ -64,7 +64,7 @@ p {
 h1,
 h2 {
   font-family: var(--font-family-heading);
-  font-weight: 400;
+  font-weight: 300;
 }
 
 h1 {
@@ -124,6 +124,117 @@ video {
   font-family: var(--font-family-navigation);
   font-size: var(--font-size-navigation);
   line-height: var(--line-height-navigation);
+}
+
+.terminalCursor {
+  display: inline-block;
+  width: 0.62em;
+  height: 1em;
+  margin-left: 0.12em;
+  overflow: hidden;
+  vertical-align: -0.14em;
+  background-color: currentColor;
+  box-shadow: 0 0 0.22em currentColor;
+  animation: terminal-cursor-blink 1.05s step-end infinite;
+}
+
+@keyframes terminal-cursor-blink {
+  0%,
+  52% {
+    opacity: 1;
+  }
+
+  53%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminalCursor {
+    animation: none;
+  }
+}
+
+.routePanelGrow {
+  transform-origin: top right;
+  animation: route-panel-grow 900ms cubic-bezier(0.76, 0, 0.24, 1) both;
+  will-change: clip-path;
+}
+
+@keyframes route-panel-grow {
+  0% {
+    clip-path: polygon(100% 0, 100% 0, 100% 3rem, 100% 3rem, 100% 3rem);
+  }
+
+  50% {
+    clip-path: polygon(3rem 0, 100% 0, 100% 3rem, 0 3rem, 0 3rem);
+  }
+
+  100% {
+    clip-path: polygon(3rem 0, 100% 0, 100% 100%, 0 100%, 0 3rem);
+  }
+}
+
+.routePanelContent {
+  width: 100%;
+  height: 100%;
+  animation: route-panel-content-in 180ms ease-out 900ms both;
+}
+
+.routePanelClosing {
+  animation-name: route-panel-shrink;
+  animation-delay: 160ms;
+}
+
+.routePanelClosing .routePanelContent {
+  animation: route-panel-content-out 160ms ease-in both;
+}
+
+@keyframes route-panel-content-in {
+  0% {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  1% {
+    visibility: visible;
+  }
+
+  100% {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@keyframes route-panel-content-out {
+  0% {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  99% {
+    visibility: visible;
+  }
+
+  100% {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+@keyframes route-panel-shrink {
+  0% {
+    clip-path: polygon(3rem 0, 100% 0, 100% 100%, 0 100%, 0 3rem);
+  }
+
+  50% {
+    clip-path: polygon(3rem 0, 100% 0, 100% 3rem, 0 3rem, 0 3rem);
+  }
+
+  100% {
+    clip-path: polygon(100% 0, 100% 0, 100% 3rem, 100% 3rem, 100% 3rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
