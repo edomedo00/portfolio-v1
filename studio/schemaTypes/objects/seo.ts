@@ -11,17 +11,12 @@ export const seo = defineType({
       name: 'title',
       title: 'SEO title',
       description: 'Optional override for the page title.',
-      type: 'string',
-      validation: (rule) =>
-        rule.max(60).warning('Titles longer than 60 characters may be truncated.'),
+      type: 'internationalizedArrayString',
     }),
     defineField({
       name: 'description',
       title: 'Meta description',
-      type: 'text',
-      rows: 3,
-      validation: (rule) =>
-        rule.max(160).warning('Descriptions longer than 160 characters may be truncated.'),
+      type: 'internationalizedArrayText',
     }),
     defineField({
       name: 'image',

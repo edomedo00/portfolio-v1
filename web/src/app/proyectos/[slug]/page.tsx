@@ -1,22 +1,33 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getLocale } from "@/i18n/locale";
+import { buildProjectMetadata } from "@/sanity/lib/project-metadata";
+import { getProjectBySlug, getProjectSlugs } from "@/sanity/lib/projects";
 import { ProjectDetail } from "../project-detail";
-import { getProject, projects } from "../projects";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+export async function generateStaticParams() {
+  return (await getProjectSlugs()).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const language = await getLocale();
+  const project = await getProjectBySlug(slug, language);
+  return project ? buildProjectMetadata(project.title, project.seo) : {};
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const language = await getLocale();
+  const project = await getProjectBySlug(slug, language);
 
   if (!project) {
     notFound();
   }
 
-  return <ProjectDetail project={project} />;
+  return <ProjectDetail language={language} project={project} />;
 }

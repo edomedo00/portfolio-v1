@@ -1,31 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
+import { AnimatedRoutePanel } from "@/components/animated-route-panel";
+import { ContentImage } from "@/components/content-image";
+import { RichText } from "@/components/rich-text";
+import type { Locale } from "@/content/types";
 import type { Project } from "./projects";
 import styles from "./page.module.css";
 
 type ProjectDetailProps = {
+  language: Locale;
   project: Project;
 };
 
-export function ProjectDetail({ project }: ProjectDetailProps) {
-  const metaParts = project.meta.split(" / ");
-  const year = metaParts.at(-1) ?? "";
-  const disciplines = metaParts.slice(0, -1).join(" / ");
-  const projectName = project.title.toUpperCase();
-  const galleryImages = [
-    {
-      src: project.preview.src,
-      alt: project.preview.alt,
-    },
-    {
-      src: "/projects/kaomaxi/hero.png",
-      alt: `Vista amplia del proyecto ${project.title}`,
-    },
-    {
-      src: "/projects/kaomaxi/preview.png",
-      alt: `Vista secundaria del proyecto ${project.title}`,
-    },
-  ];
+export function ProjectDetail({ language, project }: ProjectDetailProps) {
+  const disciplines = project.disciplines.join(" / ");
+  const copy =
+    language === "es"
+      ? {
+          close: "Cerrar proyecto",
+          code: "CÓDIGO",
+          gallery: "Imágenes del proyecto",
+          visit: "VISITAR",
+          visitLabel: "Visitar el sitio web de",
+          codeLabel: "Ver el código de",
+        }
+      : {
+          close: "Close project",
+          code: "CODE",
+          gallery: "Project images",
+          visit: "VISIT",
+          visitLabel: "Visit the website for",
+          codeLabel: "View the code for",
+        };
 
   return (
     <div className={styles.modalLayer}>
@@ -37,86 +43,102 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
         tabIndex={-1}
       />
 
-      <section
-        aria-labelledby="project-detail-title"
-        aria-modal="true"
+      <AnimatedRoutePanel
         className={styles.projectModal}
-        role="dialog"
+        contentClassName={styles.projectModalContent}
+        dialog
+        labelledBy="project-detail-title"
       >
-        <div className={styles.projectDetail}>
-          <Link
-            aria-label="Cerrar proyecto"
-            className={styles.modalClose}
-            href="/proyectos"
-            scroll={false}
-          >
-            <Image
-              alt=""
-              className={styles.modalCloseIcon}
-              height={14}
-              src="/icons/cross.svg"
-              width={14}
-            />
-          </Link>
+        <Link
+          aria-label={copy.close}
+          className={styles.modalClose}
+          href="/proyectos"
+          scroll={false}
+        >
+          <Image
+            alt=""
+            className={styles.modalCloseIcon}
+            height={14}
+            src="/icons/cross.svg"
+            width={14}
+          />
+        </Link>
 
+        <div className={styles.projectDetail}>
           <h2 className={styles.projectDetailTitle} id="project-detail-title">
             {project.title}
           </h2>
 
           <div className={styles.projectDetailMeta}>
             <span>{disciplines}</span>
-            <span>{year}</span>
+            <span>{project.year}</span>
           </div>
 
           <div className={styles.projectDetailCopy}>
-            <p>
-              DISEÑO Y DESARROLLO DEL SITIO WEB DE {projectName}, CREADO PARA
-              TRASLADAR SU IDENTIDAD A UNA EXPERIENCIA DIGITAL CLARA, DINÁMICA
-              Y VISUALMENTE ATRACTIVA.
-            </p>
-            <p>
-              EL PROYECTO COMBINA UNA INTERFAZ CONTEMPORÁNEA, NAVEGACIÓN
-              INTUITIVA Y DISEÑO RESPONSIVO PARA OFRECER UNA EXPERIENCIA FLUIDA
-              EN CUALQUIER DISPOSITIVO.
-            </p>
+            <RichText value={project.body} />
           </div>
 
-          <span className={styles.projectDetailAction}>
-            VISITAR
-            <Image
-              alt=""
-              height={17}
-              src="/icons/up-right-arrow.svg"
-              width={17}
-            />
-          </span>
+          {project.websiteUrl ? (
+            <a
+              aria-label={`${copy.visitLabel} ${project.title}`}
+              className={styles.projectDetailAction}
+              href={project.websiteUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {copy.visit}
+              <Image
+                alt=""
+                height={17}
+                src="/icons/up-right-arrow.svg"
+                width={17}
+              />
+            </a>
+          ) : null}
+
+          {project.codeUrl ? (
+            <a
+              aria-label={`${copy.codeLabel} ${project.title}`}
+              className={styles.projectDetailAction}
+              href={project.codeUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {copy.code}
+              <Image
+                alt=""
+                height={17}
+                src="/icons/up-right-arrow.svg"
+                width={17}
+              />
+            </a>
+          ) : null}
         </div>
 
         <div className={styles.projectMediaViewport}>
           <div
-            aria-label={`Imágenes del proyecto ${project.title}`}
+            aria-label={`${copy.gallery} ${project.title}`}
             className={styles.projectMediaCarousel}
             role="region"
             tabIndex={0}
           >
-            {galleryImages.map((image, index) => (
+            {project.gallery.map((image, index) => (
               <figure
                 className={styles.projectDetailMedia}
-                key={`${image.src}-${index}`}
+                key={image._key ?? `${project.slug}-${index}`}
               >
-                <Image
-                  alt={image.alt}
+                <ContentImage
                   className={styles.projectDetailImage}
                   fill
+                  image={image}
                   loading={index === 0 ? "eager" : "lazy"}
                   sizes="45vw"
-                  src={image.src}
                 />
               </figure>
             ))}
           </div>
         </div>
-      </section>
+      </AnimatedRoutePanel>
     </div>
   );
 }

@@ -1,22 +1,40 @@
-import { notFound } from "next/navigation";
-import { archiveProjects, getArchiveProject } from "../archive-projects";
-import { ArchiveProjectDetail } from "../archive-view";
+import type {Metadata} from 'next'
+import {notFound} from 'next/navigation'
+import {getLocale} from '@/i18n/locale'
+import {
+  getArchiveProjectBySlug,
+  getArchiveSlugs,
+  getSiteChrome,
+} from '@/sanity/lib/content'
+import {buildMetadata} from '@/sanity/lib/metadata'
+import {ArchiveProjectDetail} from '../archive-view'
 
 type ArchiveProjectPageProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export function generateStaticParams() {
-  return archiveProjects.map((project) => ({ slug: project.slug }));
+  params: Promise<{slug: string}>
 }
 
-export default async function ArchiveProjectPage({
+export async function generateStaticParams() {
+  return (await getArchiveSlugs()).map((slug) => ({slug}))
+}
+
+export async function generateMetadata({
   params,
-}: ArchiveProjectPageProps) {
-  const { slug } = await params;
-  const project = getArchiveProject(slug);
+}: ArchiveProjectPageProps): Promise<Metadata> {
+  const [{slug}, language] = await Promise.all([params, getLocale()])
+  const [project, {settings}] = await Promise.all([
+    getArchiveProjectBySlug(slug, language),
+    getSiteChrome(language),
+  ])
+  return project
+    ? buildMetadata({fallbackTitle: project.detailTitle, seo: project.seo, site: settings})
+    : {}
+}
 
-  if (!project) notFound();
+export default async function ArchiveProjectPage({params}: ArchiveProjectPageProps) {
+  const [{slug}, language] = await Promise.all([params, getLocale()])
+  const project = await getArchiveProjectBySlug(slug, language)
 
-  return <ArchiveProjectDetail project={project} />;
+  if (!project) notFound()
+
+  return <ArchiveProjectDetail language={language} project={project} />
 }

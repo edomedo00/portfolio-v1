@@ -1,4 +1,5 @@
 .collectionIntro {
+  backdrop-filter: blur(var(--glass-blur));
   z-index: 1;
   grid-row: 1;
   grid-column: 10 / -1;
@@ -12,6 +13,7 @@
 }
 
 .projectViewport {
+  backdrop-filter: blur(var(--glass-blur));
   position: relative;
   z-index: 1;
   grid-row: 1;
@@ -30,27 +32,32 @@
   z-index: 2;
   content: "";
   pointer-events: none;
-  height: 2.5rem;
-  backdrop-filter: blur(0.5rem);
+  height: var(--scroll-fade-size);
+  backdrop-filter: blur(var(--glass-blur));
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
 
 .projectViewport::before {
   top: 0;
-  background: linear-gradient(to bottom, var(--color-black), transparent);
   -webkit-mask-image: linear-gradient(to bottom, black, transparent);
   mask-image: linear-gradient(to bottom, black, transparent);
 }
 
 .projectViewport::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--color-black), transparent);
   -webkit-mask-image: linear-gradient(to top, black, transparent);
   mask-image: linear-gradient(to top, black, transparent);
 }
 
 .projectList {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--scroll-fade-size),
+    black calc(100% - var(--scroll-fade-size)),
+    transparent
+  );
   box-sizing: border-box;
   height: 100%;
   padding-block: 1.25rem;
@@ -91,6 +98,29 @@
   margin: 0;
 }
 
+.projectTitleSlot,
+.projectCopySlot {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 720ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.projectRowExpanded {
+  grid-template-rows: 1fr;
+}
+
+.projectTitleInner,
+.projectCopySlotInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.projectCopySpace {
+  display: grid;
+  grid-template-rows: repeat(2, var(--line-height-body));
+  min-height: 2.125rem;
+}
+
 .projectTitle {
   margin: 0;
   color: var(--color-white);
@@ -100,7 +130,8 @@
   line-height: var(--line-height-h1);
   text-transform: uppercase;
   white-space: nowrap;
-  transition: opacity 160ms ease;
+  opacity: 1;
+  transition: opacity 180ms ease-out;
 }
 
 .projectMeta,
@@ -111,6 +142,7 @@
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .preview {
@@ -155,8 +187,8 @@
   display: grid;
   grid-template-columns: repeat(var(--grid-column-count), minmax(0, 1fr));
   column-gap: var(--grid-gutter);
-  background: color-mix(in srgb, var(--color-black) 45%, transparent);
-  backdrop-filter: blur(0.1875rem);
+  background: transparent;
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .modalBackdrop {
@@ -169,15 +201,18 @@
 
   position: relative;
   z-index: 1;
-  display: grid;
   grid-column: 4 / span 9;
-  grid-template-columns: repeat(9, minmax(0, 1fr));
   height: 100svh;
   margin-block: 0;
   overflow: hidden;
-  background-color: #ff7a00;
+  background-color: var(--color-projects);
   color: var(--color-black);
   clip-path: polygon(3rem 0, 100% 0, 100% 100%, 0 100%, 0 3rem);
+}
+
+.projectModalContent {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
 }
 
 .projectDetail {
@@ -227,6 +262,7 @@
   font-family: var(--font-family-navigation);
   font-size: var(--font-size-navigation);
   line-height: var(--line-height-navigation);
+  text-decoration: none;
 }
 
 .projectMediaViewport {
@@ -234,7 +270,7 @@
   min-height: 0;
   grid-column: 5 / -1;
   overflow: hidden;
-  background-color: #ff7a00;
+  background-color: var(--color-projects);
 }
 
 .projectMediaCarousel {

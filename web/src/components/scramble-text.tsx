@@ -1,11 +1,9 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import { useScramble } from "use-scramble";
 import {
   type CSSProperties,
-  createContext,
-  type ReactNode,
-  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -18,316 +16,308 @@ export const projectsDescription =
   "UNA COLECCIÓN DE PROYECTOS DE DISEÑO Y DESARROLLO WEB";
 export const archiveDescription =
   "UN ESPACIO PARA MOSTRAR CONCEPTOS, PROYECTOS SECUNDARIOS, EXPERIMENTOS, COLABORACIONES";
-export const scrambleDuration = 900;
 
-export const descriptionScrambleTargets = [
-  { routePrefix: "/proyectos", text: projectsDescription },
-  { routePrefix: "/archivo", text: archiveDescription },
-] as const;
-
-const scrambleInterval = 65;
-const scrambleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/[]{}+-_*";
-
-type ScrambleState = {
-  key: string;
-  progress: number;
-  text: string;
+const libraryScrambleParameters = {
+  range: [65, 125] as [number, number],
+  speed: 0.84,
+  tick: 2,
+  step: 5,
+  scramble: 18,
+  seed: 4,
+  chance: 1,
+  overdrive: false,
+  overflow: false,
 };
 
-type ScrambleTextProps = {
-  animateOnMount?: boolean;
-  as?: "p" | "span";
-  className?: string;
-  duration?: number;
-  from: string;
-  fromLetterSpacingEm?: number;
-  showCursor?: boolean;
-  style?: CSSProperties;
-  to: string;
-  toLetterSpacingEm?: number;
+const invisibleCharacter = "\u200B";
+const noop = () => undefined;
+const visuallyHiddenText: CSSProperties = {
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: 0,
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: 0,
 };
+
+export type ScrambleTextPhase =
+  | "appearing"
+  | "visible"
+  | "exiting"
+  | "empty";
 
 type RouteScrambleTextProps = {
   className?: string;
-  duration?: number;
+  navigationReady?: boolean;
+  onExitStart?: () => void;
   routePrefix: string;
   showCursor?: boolean;
-  sourceText: string;
   text: string;
 };
 
-type RouteScrambleTarget = {
-  routePrefix: string;
+type ScrambleInProps = {
+  className?: string;
+  onAnimationEnd: () => void;
+  onAnimationFrame: (text: string) => void;
+  showCursor: boolean;
   text: string;
 };
 
-type RouteScrambleContextValue = {
-  completeTransition: (routePrefix: string) => void;
-  isTransitionDestination: (routePrefix: string) => boolean;
-  prepareTransition: (target?: RouteScrambleTarget) => void;
-  resolveTarget: (pathname: string) => RouteScrambleTarget | undefined;
+type ScrambleOutProps = {
+  accessibleText?: string;
+  className?: string;
+  onAnimationEnd: () => void;
+  showCursor: boolean;
+  text: string;
 };
 
-const RouteScrambleContext = createContext<RouteScrambleContextValue | null>(
-  null,
-);
+type ScrambleTransitionTextProps = {
+  accessibleText?: string;
+  className?: string;
+  onAnimationEnd?: () => void;
+  onAnimationFrame?: (text: string) => void;
+  phase: ScrambleTextPhase;
+  showCursor?: boolean;
+  text: string;
+};
 
-function getScrambledText(source: string, target: string, progress: number) {
-  if (progress >= 1) return target;
+type NavigationIdentityProps = {
+  className?: string;
+  text: string;
+};
 
-  const length = Math.round(
-    source.length + (target.length - source.length) * progress,
-  );
-  const settledCharacters = Math.floor(target.length * progress);
-
-  return Array.from({ length }, (_, index) => {
-    if (index < settledCharacters) return target[index] ?? "";
-
-    const referenceCharacter = target[index] ?? source[index];
-    if (referenceCharacter === " ") return " ";
-
-    const randomIndex = Math.floor(Math.random() * scrambleCharacters.length);
-    return scrambleCharacters[randomIndex];
-  }).join("");
+function hasVisibleText(text: string) {
+  return Boolean(text.replace(/[\s\u00a0]/g, ""));
 }
 
 function isWithinRoute(pathname: string, routePrefix: string) {
   return pathname === routePrefix || pathname.startsWith(`${routePrefix}/`);
 }
 
-export function RouteScrambleProvider({
-  children,
-  targets,
-}: {
-  children: ReactNode;
-  targets: readonly RouteScrambleTarget[];
-}) {
-  const pendingTransition = useRef<RouteScrambleTarget | null>(null);
-  const contextValue = useMemo<RouteScrambleContextValue>(
-    () => ({
-      completeTransition(routePrefix) {
-        if (pendingTransition.current?.routePrefix === routePrefix) {
-          pendingTransition.current = null;
-        }
-      },
-      isTransitionDestination(routePrefix) {
-        return pendingTransition.current?.routePrefix === routePrefix;
-      },
-      prepareTransition(target) {
-        pendingTransition.current = target ?? null;
-      },
-      resolveTarget(pathname) {
-        return targets.reduce<RouteScrambleTarget | undefined>(
-          (match, target) =>
-            isWithinRoute(pathname, target.routePrefix) &&
-            (!match || target.routePrefix.length > match.routePrefix.length)
-              ? target
-              : match,
-          undefined,
-        );
-      },
-    }),
-    [targets],
-  );
-
-  return (
-    <RouteScrambleContext.Provider value={contextValue}>
-      {children}
-    </RouteScrambleContext.Provider>
-  );
-}
-
-function useRouteScramble() {
-  const context = useContext(RouteScrambleContext);
-
-  if (!context) {
-    throw new Error(
-      "RouteScrambleText must be rendered inside RouteScrambleProvider.",
-    );
-  }
-
-  return context;
-}
-
-function useScrambleText({
-  animateOnMount,
-  duration,
-  from,
-  to,
-}: {
-  animateOnMount: boolean;
-  duration: number;
-  from: string;
-  to: string;
-}) {
-  const transitionKey = useMemo(
-    () => `${from}\u0000${to}\u0000${duration}`,
-    [duration, from, to],
-  );
-  const animationFrame = useRef<number | null>(null);
-  const isInitialEffect = useRef(true);
-  const [state, setState] = useState<ScrambleState>(() => ({
-    key: transitionKey,
-    progress: animateOnMount ? 0 : 1,
-    text: animateOnMount ? from : to,
-  }));
-
-  useEffect(() => {
-    const isInitial = isInitialEffect.current;
-    isInitialEffect.current = false;
-
-    if (animationFrame.current !== null) {
-      window.cancelAnimationFrame(animationFrame.current);
-      animationFrame.current = null;
-    }
-
-    if (isInitial && !animateOnMount) return;
-
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (reduceMotion) {
-      animationFrame.current = window.requestAnimationFrame(() => {
-        setState({ key: transitionKey, progress: 1, text: to });
-        animationFrame.current = null;
-      });
-
-      return () => {
-        if (animationFrame.current !== null) {
-          window.cancelAnimationFrame(animationFrame.current);
-          animationFrame.current = null;
-        }
-      };
-    }
-
-    const startedAt = performance.now();
-    let lastScrambleUpdate = startedAt;
-
-    const animate = (currentTime: number) => {
-      const progress = Math.min((currentTime - startedAt) / duration, 1);
-      const settleProgress = Math.max(0, (progress - 0.35) / 0.65);
-      let nextText: string | undefined;
-
-      if (progress >= 1) {
-        nextText = to;
-      } else if (
-        progress >= 0.1 &&
-        currentTime - lastScrambleUpdate >= scrambleInterval
-      ) {
-        nextText = getScrambledText(from, to, settleProgress);
-        lastScrambleUpdate = currentTime;
-      }
-
-      setState((current) => ({
-        key: transitionKey,
-        progress,
-        text:
-          nextText ?? (current.key === transitionKey ? current.text : from),
-      }));
-
-      if (progress < 1) {
-        animationFrame.current = window.requestAnimationFrame(animate);
-      } else {
-        animationFrame.current = null;
-      }
-    };
-
-    animationFrame.current = window.requestAnimationFrame(animate);
-
-    return () => {
-      if (animationFrame.current !== null) {
-        window.cancelAnimationFrame(animationFrame.current);
-        animationFrame.current = null;
-      }
-    };
-  }, [animateOnMount, duration, from, to, transitionKey]);
-
-  if (state.key !== transitionKey) {
-    return { progress: 0, text: from };
-  }
-
-  return state;
-}
-
-export function ScrambleText({
-  animateOnMount = true,
-  as = "span",
+export function NavigationIdentity({
   className,
-  duration = scrambleDuration,
-  from,
-  fromLetterSpacingEm,
-  showCursor = false,
-  style,
-  to,
-  toLetterSpacingEm,
-}: ScrambleTextProps) {
-  const { progress, text } = useScrambleText({
-    animateOnMount,
-    duration,
-    from,
-    to,
+  text,
+}: NavigationIdentityProps) {
+  const [initialText] = useState(text);
+  const { ref } = useScramble({
+    text,
+    ...libraryScrambleParameters,
+    overflow: true,
+    playOnMount: false,
   });
-  const Element = as;
-  const hasLetterSpacingAnimation =
-    fromLetterSpacingEm !== undefined || toLetterSpacingEm !== undefined;
-  const spacingProgress = progress * progress * (3 - 2 * progress);
-  const initialSpacing = fromLetterSpacingEm ?? 0;
-  const finalSpacing = toLetterSpacingEm ?? initialSpacing;
-  const letterSpacing =
-    initialSpacing + (finalSpacing - initialSpacing) * spacingProgress;
 
   return (
-    <Element
-      className={className}
-      style={
-        hasLetterSpacingAnimation
-          ? { ...style, letterSpacing: `${letterSpacing}em` }
-          : style
+    <p className={className}>
+      <span style={visuallyHiddenText}>{text}</span>
+      <span aria-hidden="true" ref={ref}>
+        {initialText}
+      </span>
+    </p>
+  );
+}
+
+function ScrambleIn({
+  className,
+  onAnimationEnd,
+  onAnimationFrame,
+  showCursor,
+  text,
+}: ScrambleInProps) {
+  const cursorRef = useRef<HTMLSpanElement>(null);
+  const { ref } = useScramble({
+    text,
+    ...libraryScrambleParameters,
+    onAnimationEnd,
+    onAnimationFrame(result) {
+      onAnimationFrame(result);
+
+      if (cursorRef.current) {
+        cursorRef.current.hidden = !hasVisibleText(result);
       }
-    >
-      {text}
+    },
+  });
+
+  return (
+    <p className={className}>
+      <span style={visuallyHiddenText}>{text}</span>
+      <span aria-hidden="true" ref={ref} />
       {showCursor ? (
-        <span aria-hidden="true" className="terminalCursor">
+        <span
+          aria-hidden="true"
+          className="terminalCursor"
+          hidden
+          ref={cursorRef}
+        >
           _
         </span>
       ) : null}
-    </Element>
+    </p>
+  );
+}
+
+function ScrambleOut({
+  accessibleText,
+  className,
+  onAnimationEnd,
+  showCursor,
+  text,
+}: ScrambleOutProps) {
+  const displayRef = useRef<HTMLSpanElement>(null);
+  const cursorRef = useRef<HTMLSpanElement>(null);
+  const reversedSource = useMemo(() => Array.from(text).reverse(), [text]);
+  const target = useMemo(
+    () =>
+      reversedSource
+        .map((character) =>
+          character === " " ? " " : invisibleCharacter,
+        )
+        .join(""),
+    [reversedSource],
+  );
+  const { ref: driverRef } = useScramble({
+    text: target,
+    ...libraryScrambleParameters,
+    onAnimationEnd,
+    onAnimationFrame(result) {
+      const driverCharacters = Array.from(result);
+      const nextText =
+        result === target
+          ? ""
+          : [
+              ...driverCharacters.map((character) =>
+                character === invisibleCharacter ? "" : character,
+              ),
+              ...reversedSource.slice(driverCharacters.length),
+            ]
+              .reverse()
+              .join("");
+
+      if (displayRef.current) {
+        displayRef.current.textContent = nextText;
+      }
+
+      if (cursorRef.current) {
+        cursorRef.current.hidden = !hasVisibleText(nextText);
+      }
+    },
+  });
+
+  return (
+    <p aria-hidden={accessibleText ? undefined : true} className={className}>
+      {accessibleText ? (
+        <span style={visuallyHiddenText}>{accessibleText}</span>
+      ) : null}
+      <span aria-hidden={accessibleText ? true : undefined}>
+        <span ref={displayRef}>{text}</span>
+        <span hidden ref={driverRef} />
+        {showCursor ? (
+          <span className="terminalCursor" ref={cursorRef}>
+            _
+          </span>
+        ) : null}
+      </span>
+    </p>
+  );
+}
+
+export function ScrambleTransitionText({
+  accessibleText,
+  className,
+  onAnimationEnd,
+  onAnimationFrame,
+  phase,
+  showCursor = false,
+  text,
+}: ScrambleTransitionTextProps) {
+  if (phase === "exiting") {
+    return (
+      <ScrambleOut
+        accessibleText={accessibleText}
+        className={className}
+        onAnimationEnd={onAnimationEnd ?? noop}
+        showCursor={showCursor}
+        text={text}
+      />
+    );
+  }
+
+  if (phase === "empty") {
+    return accessibleText ? (
+      <p className={className}>
+        <span style={visuallyHiddenText}>{accessibleText}</span>
+      </p>
+    ) : (
+      <p aria-hidden="true" className={className} />
+    );
+  }
+
+  if (phase === "visible") {
+    return (
+      <p className={className}>
+        {text}
+        {showCursor ? (
+          <span aria-hidden="true" className="terminalCursor">
+            _
+          </span>
+        ) : null}
+      </p>
+    );
+  }
+
+  return (
+    <ScrambleIn
+      className={className}
+      onAnimationEnd={onAnimationEnd ?? noop}
+      onAnimationFrame={onAnimationFrame ?? noop}
+      showCursor={showCursor}
+      text={text}
+    />
   );
 }
 
 export function RouteScrambleText({
   className,
-  duration = scrambleDuration,
+  navigationReady = true,
+  onExitStart,
   routePrefix,
   showCursor = false,
-  sourceText,
   text,
 }: RouteScrambleTextProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const {
-    completeTransition,
-    isTransitionDestination,
-    prepareTransition,
-    resolveTarget,
-  } = useRouteScramble();
-  const isNavigating = useRef(false);
-  const navigationTimer = useRef<number | null>(null);
-  const [enteredFromSharedTransition] = useState(() =>
-    isTransitionDestination(routePrefix),
-  );
-  const [exitText, setExitText] = useState<string | null>(null);
+  const currentText = useRef("");
+  const pendingRoute = useRef<string | null>(null);
+  const [exitText, setExitText] = useState(text);
+  const [phase, setPhase] = useState<ScrambleTextPhase>("appearing");
 
   useEffect(() => {
-    if (enteredFromSharedTransition) {
-      completeTransition(routePrefix);
+    if (
+      phase !== "empty" ||
+      !navigationReady ||
+      !pendingRoute.current
+    ) {
+      return;
     }
-  }, [completeTransition, enteredFromSharedTransition, routePrefix]);
+
+    const animationFrame = window.requestAnimationFrame(() => {
+      const nextRoute = pendingRoute.current;
+
+      if (!nextRoute) return;
+
+      pendingRoute.current = null;
+      router.push(nextRoute);
+    });
+
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [navigationReady, phase, router]);
 
   useEffect(() => {
     const handleNavigation = (event: MouseEvent) => {
       if (
+        event.defaultPrevented ||
         event.button !== 0 ||
         event.metaKey ||
         event.ctrlKey ||
@@ -352,69 +342,52 @@ export function RouteScrambleText({
 
       if (
         destination.origin !== window.location.origin ||
-        isWithinRoute(destination.pathname, routePrefix) ||
-        destination.pathname === pathname
+        destination.pathname === pathname ||
+        isWithinRoute(destination.pathname, routePrefix)
       ) {
         return;
       }
 
       event.preventDefault();
 
-      if (isNavigating.current) return;
+      if (pendingRoute.current) return;
 
-      const nextRoute = `${destination.pathname}${destination.search}${destination.hash}`;
-      const destinationTarget = resolveTarget(destination.pathname);
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
+      pendingRoute.current = `${destination.pathname}${destination.search}${destination.hash}`;
+      onExitStart?.();
 
-      prepareTransition(destinationTarget);
-
-      if (reduceMotion) {
-        router.push(nextRoute);
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        currentText.current = "";
+        setPhase("empty");
         return;
       }
 
-      isNavigating.current = true;
-      setExitText(destinationTarget?.text ?? sourceText);
-
-      navigationTimer.current = window.setTimeout(() => {
-        navigationTimer.current = null;
-        router.push(nextRoute);
-      }, duration);
+      const visibleText = currentText.current;
+      setExitText(visibleText);
+      setPhase(visibleText ? "exiting" : "empty");
     };
 
-    document.addEventListener("click", handleNavigation, true);
-
-    return () => {
-      document.removeEventListener("click", handleNavigation, true);
-
-      if (navigationTimer.current !== null) {
-        window.clearTimeout(navigationTimer.current);
-      }
-    };
-  }, [
-    duration,
-    pathname,
-    prepareTransition,
-    resolveTarget,
-    routePrefix,
-    router,
-    sourceText,
-  ]);
-
-  const isClosing = exitText !== null;
-  const initialText = enteredFromSharedTransition ? text : sourceText;
+    window.addEventListener("click", handleNavigation, true);
+    return () => window.removeEventListener("click", handleNavigation, true);
+  }, [onExitStart, pathname, routePrefix]);
 
   return (
-    <ScrambleText
-      animateOnMount={!enteredFromSharedTransition}
-      as="p"
+    <ScrambleTransitionText
       className={className}
-      duration={duration}
-      from={isClosing ? text : initialText}
+      onAnimationEnd={() => {
+        if (phase === "exiting") {
+          currentText.current = "";
+          setPhase("empty");
+        } else if (phase === "appearing") {
+          currentText.current = text;
+          setPhase("visible");
+        }
+      }}
+      onAnimationFrame={(value) => {
+        currentText.current = value;
+      }}
+      phase={phase}
       showCursor={showCursor}
-      to={exitText ?? text}
+      text={phase === "exiting" ? exitText : text}
     />
   );
 }

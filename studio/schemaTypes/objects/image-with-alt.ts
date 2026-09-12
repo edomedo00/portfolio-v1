@@ -28,7 +28,7 @@ export const imageWithAlt = defineType({
       name: 'alt',
       title: 'Alternative text',
       description: 'Describe the image’s meaning, not its visual styling.',
-      type: 'string',
+      type: 'internationalizedArrayString',
       hidden: ({parent}) => (parent as ImageParent | undefined)?.isDecorative === true,
       validation: (rule) =>
         rule.custom((value, context) => {
@@ -38,12 +38,14 @@ export const imageWithAlt = defineType({
             return true
           }
 
-          return value?.trim() ? true : 'Alternative text is required'
+          return Array.isArray(value) && value.length >= 2
+            ? true
+            : 'Alternative text is required in English and Spanish'
         }),
     }),
     defineField({
       name: 'caption',
-      type: 'string',
+      type: 'internationalizedArrayString',
     }),
   ],
 })

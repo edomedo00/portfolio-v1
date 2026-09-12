@@ -1,59 +1,68 @@
-import Image from "next/image";
-import Link from "next/link";
-import { AnimatedRoutePanel } from "@/components/animated-route-panel";
-import styles from "./page.module.css";
+import type {Metadata} from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import {AnimatedRoutePanel} from '@/components/animated-route-panel'
+import {RichText} from '@/components/rich-text'
+import {getLocale} from '@/i18n/locale'
+import {getAboutContent, getSiteChrome} from '@/sanity/lib/content'
+import {buildMetadata} from '@/sanity/lib/metadata'
+import styles from './page.module.css'
 
-export default function AboutPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const language = await getLocale()
+  const [content, {settings}] = await Promise.all([
+    getAboutContent(language),
+    getSiteChrome(language),
+  ])
+  return buildMetadata({fallbackTitle: content.heading, seo: content.seo, site: settings})
+}
+
+export default async function AboutPage() {
+  const language = await getLocale()
+  const [content, chrome] = await Promise.all([
+    getAboutContent(language),
+    getSiteChrome(language),
+  ])
+  const closeLabel = language === 'es' ? 'Cerrar acerca de' : 'Close about'
+  const socialsLabel = language === 'es' ? 'Redes sociales' : 'Social links'
+
   return (
     <AnimatedRoutePanel className={styles.panel} labelledBy="about-title">
       <div className={styles.panelContent}>
-          <header className={styles.panelHeader}>
-            <Link
-              className={styles.close}
-              href="/"
-              aria-label="Cerrar acerca de"
-            >
-              <Image
-                className={styles.closeIcon}
-                src="/icons/cross.svg"
-                width={14}
-                height={14}
-                alt=""
-              />
-            </Link>
+        <header className={styles.panelHeader}>
+          <Link className={styles.close} href="/" aria-label={closeLabel}>
+            <Image
+              className={styles.closeIcon}
+              src="/icons/cross.svg"
+              width={14}
+              height={14}
+              alt=""
+            />
+          </Link>
 
-            <h2 className={styles.heading} id="about-title">
-              ACERCA DE
-            </h2>
-          </header>
+          <h2 className={styles.heading} id="about-title">
+            {content.heading}
+          </h2>
+        </header>
 
-          <p className={styles.description}>
-            SOY UN <strong>DESARROLLADOR WEB Y PROGRAMADOR CREATIVO.</strong>{" "}
-            TRABAJO EN LA INTERSECCIÓN ENTRE TECNOLOGÍA, DISEÑO Y
-            EXPERIMENTACIÓN VISUAL PARA CREAR EXPERIENCIAS DIGITALES QUE NO SOLO
-            FUNCIONAN BIEN, SINO QUE TAMBIÉN DESPIERTAN{" "}
-            <strong>CURIOSIDAD.</strong>
-          </p>
+        <div className={styles.description}>
+          <RichText value={content.body} />
+        </div>
 
-          <div className={styles.socials} aria-label="Redes sociales">
+        <div className={styles.socials} aria-label={socialsLabel}>
+          {chrome.settings.socialLinks.map((link) => (
             <a
               className={styles.socialLink}
-              href="https://www.linkedin.com/"
+              href={link.url}
+              key={link._key}
               target="_blank"
               rel="noreferrer"
             >
-              LINKEDIN
+              {link.label}
             </a>
-            <a
-              className={styles.socialLink}
-              href="https://x.com/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              X(TWITTER)
-            </a>
-          </div>
+          ))}
+        </div>
       </div>
     </AnimatedRoutePanel>
-  );
+  )
 }

@@ -1,31 +1,50 @@
-import type { ReactNode } from "react";
-import {
-  navigationSubtitle,
-  projectsDescription,
-  RouteScrambleText,
-} from "@/components/scramble-text";
+"use client";
+
+import { type ReactNode, useCallback, useState } from "react";
+import { RouteScrambleText } from "@/components/scramble-text";
+import type { Locale } from "@/content/types";
 import { ProjectsGallery } from "./projects-gallery";
-import { projects } from "./projects";
+import type { Project } from "./projects";
 import styles from "./page.module.css";
 
 type ProjectsViewProps = {
   children: ReactNode;
+  heading: string;
+  introduction: string;
+  language: Locale;
+  projects: Project[];
 };
 
-export function ProjectsView({ children }: ProjectsViewProps) {
+export function ProjectsView({
+  children,
+  heading,
+  introduction,
+  language,
+  projects,
+}: ProjectsViewProps) {
+  const [listExitReady, setListExitReady] = useState(true);
+  const handleExitStart = useCallback(() => setListExitReady(false), []);
+  const handleExitComplete = useCallback(() => setListExitReady(true), []);
+
   return (
     <>
-      <h1 className={styles.visuallyHidden}>Proyectos</h1>
+      <h1 className={styles.visuallyHidden}>{heading}</h1>
 
       <RouteScrambleText
         className={styles.collectionIntro}
+        navigationReady={listExitReady}
+        onExitStart={handleExitStart}
         routePrefix="/proyectos"
         showCursor
-        sourceText={navigationSubtitle}
-        text={projectsDescription}
+        text={introduction}
       />
 
-      <ProjectsGallery projects={projects} />
+      <ProjectsGallery
+        exitRequested={!listExitReady}
+        language={language}
+        onExitComplete={handleExitComplete}
+        projects={projects}
+      />
 
       {children}
     </>

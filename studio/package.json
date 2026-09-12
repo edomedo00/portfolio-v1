@@ -11,6 +11,7 @@
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
     "lint": "eslint .",
+    "seed": "sanity exec scripts/seed.ts --with-user-token",
     "start": "sanity start",
     "typecheck": "tsc --noEmit",
     "typegen": "sanity schema extract --force && sanity typegen generate"
@@ -27,6 +28,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "sanity": "^6.9.2",
+    "sanity-plugin-internationalized-array": "5.1.27",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {

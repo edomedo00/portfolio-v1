@@ -8,12 +8,16 @@ const closeSequenceDuration = 1060;
 type AnimatedRoutePanelProps = {
   children: ReactNode;
   className: string;
+  contentClassName?: string;
+  dialog?: boolean;
   labelledBy: string;
 };
 
 export function AnimatedRoutePanel({
   children,
   className,
+  contentClassName,
+  dialog = false,
   labelledBy,
 }: AnimatedRoutePanelProps) {
   const pathname = usePathname();
@@ -54,7 +58,11 @@ export function AnimatedRoutePanel({
         return;
       }
 
-      event.preventDefault();
+      const navigationIsManaged = event.defaultPrevented;
+
+      if (!navigationIsManaged) {
+        event.preventDefault();
+      }
 
       if (closing.current) return;
 
@@ -64,17 +72,21 @@ export function AnimatedRoutePanel({
       ).matches;
 
       if (reduceMotion) {
-        router.push(nextRoute);
+        if (!navigationIsManaged) {
+          router.push(nextRoute);
+        }
         return;
       }
 
       closing.current = true;
       setIsClosing(true);
 
-      closeTimer.current = window.setTimeout(() => {
-        closeTimer.current = null;
-        router.push(nextRoute);
-      }, closeSequenceDuration);
+      if (!navigationIsManaged) {
+        closeTimer.current = window.setTimeout(() => {
+          closeTimer.current = null;
+          router.push(nextRoute);
+        }, closeSequenceDuration);
+      }
     };
 
     document.addEventListener("click", handleNavigation, true);
@@ -92,11 +104,19 @@ export function AnimatedRoutePanel({
     <section
       aria-hidden={isClosing || undefined}
       aria-labelledby={labelledBy}
+      aria-modal={dialog || undefined}
       className={`${className} routePanelGrow ${
         isClosing ? "routePanelClosing" : ""
       }`}
+      role={dialog ? "dialog" : undefined}
     >
-      <div className="routePanelContent">{children}</div>
+      <div
+        className={`routePanelContent${
+          contentClassName ? ` ${contentClassName}` : ""
+        }`}
+      >
+        {children}
+      </div>
     </section>
   );
 }

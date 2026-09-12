@@ -8,10 +8,16 @@ export const siteSettings = defineType({
   icon: CogIcon,
   fields: [
     defineField({
-      name: 'siteTitle',
-      title: 'Site title',
+      name: 'displayName',
+      title: 'Display name',
       type: 'string',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'role',
+      title: 'Professional role',
+      type: 'internationalizedArrayString',
+      validation: (rule) => rule.required().min(2),
     }),
     defineField({
       name: 'siteUrl',
@@ -23,6 +29,20 @@ export const siteSettings = defineType({
       name: 'defaultSeo',
       title: 'Default SEO',
       type: 'seo',
+    }),
+    defineField({
+      name: 'socialLinks',
+      title: 'Social links',
+      type: 'array',
+      of: [{type: 'externalLink'}],
+    }),
+    defineField({
+      name: 'timeZone',
+      title: 'Local time zone',
+      description: 'IANA time zone used by the local-time display.',
+      type: 'string',
+      initialValue: 'America/Mexico_City',
+      validation: (rule) => rule.required(),
     }),
   ],
 })

@@ -1,121 +1,67 @@
-import Image from "next/image";
-import Link from "next/link";
-import type { ReactNode } from "react";
-import {
-  archiveDescription,
-  navigationSubtitle,
-  RouteScrambleText,
-} from "@/components/scramble-text";
-import { ArchiveCarousel } from "./archive-carousel";
-import {
-  archiveProjects,
-  getNextArchiveId,
-  type ArchiveProject,
-} from "./archive-projects";
-import styles from "./page.module.css";
+import Image from 'next/image'
+import Link from 'next/link'
+import type {ReactNode} from 'react'
+import {AnimatedRoutePanel} from '@/components/animated-route-panel'
+import {ContentImage} from '@/components/content-image'
+import {RichText} from '@/components/rich-text'
+import type {ArchiveContent, ArchiveProject, Locale} from '@/content/types'
+import {ArchiveExperience} from './archive-experience'
+import styles from './page.module.css'
 
 type ArchiveViewProps = {
-  children: ReactNode;
-};
+  children: ReactNode
+  content: ArchiveContent
+  language: Locale
+}
 
-export function ArchiveView({ children }: ArchiveViewProps) {
-  const nextArchiveId = getNextArchiveId();
+export function ArchiveView({children, content, language}: ArchiveViewProps) {
+  const highestProjectId = Math.max(
+    0,
+    ...content.projects.map((project) => project.archiveId || 0),
+  )
+  const nextArchiveId = String(highestProjectId + 1).padStart(3, '0')
 
   return (
     <>
-      <h1 className={styles.visuallyHidden}>Archivo</h1>
+      <h1 className={styles.visuallyHidden}>{content.page.heading}</h1>
 
-      <RouteScrambleText
-        className={styles.archiveIntro}
-        routePrefix="/archivo"
-        showCursor
-        sourceText={navigationSubtitle}
-        text={archiveDescription}
+      <ArchiveExperience
+        comingSoonLabel={content.page.comingSoonLabel}
+        introduction={content.page.introduction}
+        language={language}
+        nextArchiveId={nextArchiveId}
+        projects={content.projects}
       />
-
-      <ArchiveCarousel
-        className={styles.archiveViewport}
-        frameClassName={styles.archiveFrame}
-      >
-        <section
-          aria-label="Proyectos del archivo"
-          className={styles.archiveTrack}
-        >
-          {archiveProjects.map((project, index) => (
-            <Link
-              className={styles.project}
-              href={`/archivo/${project.slug}`}
-              key={project.slug}
-              scroll={false}
-            >
-              <article>
-                <p className={styles.projectId}>[{project.id}]</p>
-
-                <figure className={styles.projectFigure}>
-                  <div className={styles.projectMedia}>
-                    <Image
-                      alt={`Vista previa de ${project.title}`}
-                      className={styles.projectImage}
-                      fill
-                      loading={index === 0 ? "eager" : "lazy"}
-                      sizes="(max-width: 48rem) calc(100vw - 2.5rem), calc(25vw - 2.1875rem)"
-                      src={project.image}
-                      style={{ objectPosition: project.imagePosition }}
-                    />
-
-                    {project.kind === "video" ? (
-                      <span className={styles.playIcon} aria-hidden="true">
-                        <span className={styles.playTriangle} />
-                      </span>
-                    ) : null}
-                  </div>
-
-                  <figcaption className={styles.projectCaption}>
-                    <span>{project.title}</span>
-                    <Image
-                      alt=""
-                      className={styles.projectArrow}
-                      height={17}
-                      src="/icons/up-right-arrow.svg"
-                      width={17}
-                    />
-                  </figcaption>
-                </figure>
-              </article>
-            </Link>
-          ))}
-
-          <article
-            aria-label={`Próximo proyecto del archivo, número ${nextArchiveId}`}
-            className={styles.project}
-          >
-            <p className={styles.projectId}>[{nextArchiveId}]</p>
-
-            <figure className={styles.projectFigure}>
-              <div className={styles.projectMedia}>
-                <Image
-                  alt="Vista previa pendiente"
-                  className={styles.projectImage}
-                  fill
-                  sizes="(max-width: 48rem) calc(100vw - 2.5rem), calc(25vw - 2.1875rem)"
-                  src="/projects/placeholders/proyecto-05.svg"
-                />
-              </div>
-
-              <figcaption className={styles.projectCaption}>
-                <span>PRÓXIMAMENTE...</span>
-              </figcaption>
-            </figure>
-          </article>
-        </section>
-      </ArchiveCarousel>
 
       {children}
     </>
-  );
+  )
 }
 
-export function ArchiveProjectDetail({ project }: { project: ArchiveProject }) {
+export function ArchiveProjectDetail({
+  language,
+  project,
+}: {
+  language: Locale
+  project: ArchiveProject
+}) {
+  const copy =
+    language === 'es'
+      ? {
+          close: 'Cerrar proyecto de archivo',
+          gallery: 'Galería del proyecto',
+          links: 'Enlaces del proyecto',
+          visit: 'VISITAR',
+          code: 'CÓDIGO',
+        }
+      : {
+          close: 'Close archive project',
+          gallery: 'Project gallery',
+          links: 'Project links',
+          visit: 'VISIT',
+          code: 'CODE',
+        }
+
   return (
     <div className={styles.modalLayer}>
       <Link
@@ -125,15 +71,14 @@ export function ArchiveProjectDetail({ project }: { project: ArchiveProject }) {
         scroll={false}
         tabIndex={-1}
       />
-      <section
-        aria-labelledby="archive-detail-title"
-        aria-modal="true"
+      <AnimatedRoutePanel
         className={styles.detailPanel}
-        role="dialog"
+        dialog
+        labelledBy="archive-detail-title"
       >
         <div className={styles.detailContent}>
           <Link
-            aria-label="Cerrar proyecto de archivo"
+            aria-label={copy.close}
             className={styles.detailClose}
             href="/archivo"
             scroll={false}
@@ -142,66 +87,75 @@ export function ArchiveProjectDetail({ project }: { project: ArchiveProject }) {
           </Link>
 
           <h2 className={styles.detailHeading} id="archive-detail-title">
-            {project.detail.title}
+            {project.detailTitle}
           </h2>
 
           <div className={styles.detailCopy}>
-            {project.detail.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+            <RichText value={project.body} />
           </div>
 
-          <div
-            className={styles.detailActions}
-            aria-label="Enlaces del proyecto"
-          >
-            <a
-              aria-label="Visitar proyecto en GitHub"
-              className={styles.detailAction}
-              href={project.detail.visitUrl}
-              rel="noreferrer"
-              target="_blank"
-            >
-              VISIT
-              <span aria-hidden="true" className={styles.detailActionIcon} />
-            </a>
-            <a
-              aria-label="Ver código del proyecto en GitHub"
-              className={styles.detailAction}
-              href={project.detail.codeUrl}
-              rel="noreferrer"
-              target="_blank"
-            >
-              CODE
-              <span aria-hidden="true" className={styles.detailActionIcon} />
-            </a>
-          </div>
+          {project.websiteUrl || project.codeUrl ? (
+            <div className={styles.detailActions} aria-label={copy.links}>
+              {project.websiteUrl ? (
+                <a
+                  className={styles.detailAction}
+                  href={project.websiteUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {copy.visit}
+                  <Image
+                    alt=""
+                    className={styles.detailActionIcon}
+                    height={17}
+                    src="/icons/up-right-arrow.svg"
+                    width={17}
+                  />
+                </a>
+              ) : null}
+              {project.codeUrl ? (
+                <a
+                  className={styles.detailAction}
+                  href={project.codeUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {copy.code}
+                  <Image
+                    alt=""
+                    className={styles.detailActionIcon}
+                    height={17}
+                    src="/icons/up-right-arrow.svg"
+                    width={17}
+                  />
+                </a>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className={styles.detailGalleryViewport}>
             <div
-              aria-label={`Galería del proyecto ${project.detail.title}`}
+              aria-label={`${copy.gallery}: ${project.detailTitle}`}
               className={styles.detailGallery}
               id="archive-gallery"
               role="region"
               tabIndex={0}
             >
-              {project.detail.gallery.map((image, index) => (
-                <figure className={styles.detailMedia} key={image.src}>
-                  <Image
-                    alt={image.alt}
+              {project.gallery.map((image, index) => (
+                <figure className={styles.detailMedia} key={image._key}>
+                  <ContentImage
                     className={styles.detailImage}
                     fill
-                    loading={index === 0 ? "eager" : "lazy"}
+                    image={image}
+                    loading={index === 0 ? 'eager' : 'lazy'}
                     sizes="36vw"
-                    src={image.src}
-                    style={{ objectPosition: image.objectPosition }}
                   />
                 </figure>
               ))}
             </div>
           </div>
         </div>
-      </section>
+      </AnimatedRoutePanel>
     </div>
-  );
+  )
 }

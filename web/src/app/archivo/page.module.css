@@ -1,4 +1,5 @@
 .archiveIntro {
+  backdrop-filter: blur(var(--glass-blur));
   position: relative;
   z-index: 1;
   grid-row: 1;
@@ -13,6 +14,8 @@
 }
 
 .archiveFrame {
+  --fade-left: 0px;
+  --fade-right: 0px;
   --archive-column: calc(8.333333vw - 1.5625rem);
   --archive-card-size: calc(
     var(--archive-column) + var(--archive-column) + var(--archive-column) +
@@ -34,6 +37,29 @@
   margin-right: calc(0rem - var(--grid-margin));
 }
 
+.archiveTextBackdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.archiveBackdropTrack {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  gap: var(--archive-project-gap);
+  padding-inline: var(--grid-margin);
+  transform: translateX(calc(-1 * var(--archive-scroll-x, 0px)));
+}
+
+.archiveCardBackdrop {
+  flex: 0 0 var(--archive-card-size);
+  width: var(--archive-card-size);
+  height: 100%;
+  backdrop-filter: blur(var(--glass-blur));
+}
+
 .archiveFrame::before,
 .archiveFrame::after {
   position: absolute;
@@ -44,21 +70,19 @@
   opacity: 0;
   content: "";
   pointer-events: none;
-  backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(var(--glass-blur));
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
 
 .archiveFrame::before {
   left: 0;
-  background: linear-gradient(to right, var(--color-black), transparent);
   -webkit-mask-image: linear-gradient(to right, black, transparent);
   mask-image: linear-gradient(to right, black, transparent);
 }
 
 .archiveFrame::after {
   right: 0;
-  background: linear-gradient(to left, var(--color-black), transparent);
   -webkit-mask-image: linear-gradient(to left, black, transparent);
   mask-image: linear-gradient(to left, black, transparent);
 }
@@ -68,7 +92,11 @@
   opacity: 1;
 }
 
+.archiveFrame[data-can-scroll-left="true"] { --fade-left: var(--scroll-fade-size); }
+.archiveFrame[data-can-scroll-right="true"] { --fade-right: var(--scroll-fade-size); }
+
 .archiveViewport {
+  mask-image: linear-gradient(to right, transparent, black var(--fade-left), black calc(100% - var(--fade-right)), transparent);
   min-width: 0;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
@@ -116,7 +144,10 @@
 }
 
 .projectId {
+  width: 100%;
+  min-height: calc(var(--line-height-body) + 0.25rem);
   padding-bottom: 0.25rem;
+  white-space: nowrap;
 }
 
 .projectFigure {
@@ -130,43 +161,117 @@
   background: var(--color-grid-dark);
 }
 
+.projectMediaEntering,
+.projectMediaExiting {
+  animation-duration: 900ms;
+  animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+  animation-fill-mode: both;
+  will-change: clip-path;
+}
+
+.projectMediaEntering {
+  animation-name: archive-project-media-in;
+}
+
+.projectMediaExiting {
+  animation-name: archive-project-media-out;
+}
+
+.projectMediaEmpty {
+  clip-path: polygon(0 0, 0 0, 0 3rem, 0 3rem);
+}
+
+@keyframes archive-project-media-in {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 3rem, 0 3rem);
+  }
+
+  50% {
+    clip-path: polygon(0 0, 100% 0, 100% 3rem, 0 3rem);
+  }
+
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@keyframes archive-project-media-out {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  50% {
+    clip-path: polygon(0 0, 100% 0, 100% 3rem, 0 3rem);
+  }
+
+  100% {
+    clip-path: polygon(0 0, 0 0, 0 3rem, 0 3rem);
+  }
+}
+
 .projectImage {
   object-fit: cover;
 }
 
 .projectCaption {
   display: flex;
+  min-height: var(--line-height-body);
   margin-top: 0.25rem;
   align-items: center;
   justify-content: space-between;
 }
 
+.projectTitle {
+  min-width: 0;
+  flex: 1 1 0;
+  margin: 0;
+  white-space: nowrap;
+}
+
 .projectArrow {
   width: 1.0625rem;
   height: 1.0625rem;
+  visibility: hidden;
+  opacity: 0;
   filter: invert(1);
 }
 
-.playIcon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: grid;
-  width: 5rem;
-  height: 4.0625rem;
-  border: 0.0625rem solid rgba(252, 252, 252, 0.75);
-  border-radius: 1.5rem;
-  place-items: center;
-  transform: translate(-50%, -50%);
+.projectArrowEntering,
+.projectArrowVisible,
+.projectArrowExiting {
+  visibility: visible;
 }
 
-.playTriangle {
-  width: 0;
-  height: 0;
-  border-top: 0.9375rem solid transparent;
-  border-bottom: 0.9375rem solid transparent;
-  border-left: 1.125rem solid var(--color-white);
-  transform: translateX(0.125rem);
+.projectArrowEntering {
+  animation: archive-project-icon-in 180ms ease-out both;
+}
+
+.projectArrowVisible {
+  opacity: 1;
+}
+
+.projectArrowExiting {
+  animation: archive-project-icon-out 180ms ease-in both;
+}
+
+@keyframes archive-project-icon-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes archive-project-icon-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 .visuallyHidden {
@@ -189,8 +294,8 @@
   grid-template-columns: repeat(var(--grid-column-count), minmax(0, 1fr));
   column-gap: var(--grid-gutter);
   padding-inline: var(--grid-margin);
-  background: color-mix(in srgb, var(--color-black) 38%, transparent);
-  backdrop-filter: blur(0.1875rem);
+  background: transparent;
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .modalBackdrop {
@@ -273,6 +378,12 @@
   text-decoration: none;
 }
 
+.detailActionIcon {
+  width: 1.0625rem;
+  height: 1.0625rem;
+  flex: 0 0 auto;
+}
+
 .detailGalleryViewport {
   position: relative;
   min-height: 0;
@@ -346,4 +457,13 @@
   .detailContent {
     padding: 1.25rem;
   }
+}
+
+.projectVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
 }

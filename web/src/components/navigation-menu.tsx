@@ -1,25 +1,29 @@
 import Link from "next/link";
+import type { Locale, SiteChromeContent } from "@/content/types";
 import styles from "./navigation-menu.module.css";
 
 const navigationItems = [
-  { href: "/", id: "home", label: "INICIO" },
-  { href: "/proyectos", id: "projects", label: "PROYECTOS" },
-  { href: "/archivo", id: "archive", label: "ARCHIVO" },
-  { href: "/acerca-de", id: "about", label: "ACERCA DE" },
-  { href: "/contacto", id: "contact", label: "CONTACTO" },
+  { href: "/", id: "home" },
+  { href: "/proyectos", id: "projects" },
+  { href: "/archivo", id: "archive" },
+  { href: "/cells", id: "cells" },
+  { href: "/acerca-de", id: "about" },
+  { href: "/contacto", id: "contact" },
 ] as const;
 
 export type NavigationItemId = (typeof navigationItems)[number]["id"];
 
 type NavigationMenuProps = {
   activeItem?: NavigationItemId;
+  labels: SiteChromeContent["navigation"];
+  language: Locale;
 };
 
-export function NavigationMenu({ activeItem }: NavigationMenuProps) {
+export function NavigationMenu({ activeItem, labels, language }: NavigationMenuProps) {
   return (
-    <nav aria-label="Navegación principal">
+    <nav aria-label={language === "es" ? "Navegación principal" : "Primary navigation"}>
       <ul className={styles.list}>
-        {navigationItems.map(({ href, id, label }) => (
+        {navigationItems.map(({ href, id }) => (
           <li key={href}>
             <Link
               className={styles.link}
@@ -27,7 +31,7 @@ export function NavigationMenu({ activeItem }: NavigationMenuProps) {
               href={href}
               aria-current={id === activeItem ? "page" : undefined}
             >
-              {label}
+              {labels[id]}
             </Link>
           </li>
         ))}

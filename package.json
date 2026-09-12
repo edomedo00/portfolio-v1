@@ -18,6 +18,7 @@
     "typecheck:web": "pnpm --dir web typecheck",
     "typecheck:studio": "pnpm --dir studio typecheck",
     "typegen": "pnpm --dir studio typegen",
+    "seed": "pnpm --dir studio seed",
     "check": "pnpm run lint && pnpm run typecheck && pnpm run build"
   },
   "engines": {

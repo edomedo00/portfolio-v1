@@ -1,4 +1,6 @@
 :root {
+  --glass-blur: 3px;
+  --scroll-fade-size: 2.5rem;
   color-scheme: light;
 
   --color-black: #0c0c0c;
@@ -8,6 +10,8 @@
   --color-about: #4eb77e;
   --color-background: var(--color-white);
   --color-foreground: var(--color-black);
+  --color-projects: #4eb77e;
+  /* --color-projects: #ff7a00; */
 
   --font-family-display: var(--font-montreal), Arial, sans-serif;
   --font-family-heading: var(--font-haas-display), Arial, sans-serif;
@@ -135,7 +139,7 @@ video {
   vertical-align: -0.14em;
   background-color: currentColor;
   box-shadow: 0 0 0.22em currentColor;
-  animation: terminal-cursor-blink 1.05s step-end infinite;
+  animation: terminal-cursor-blink 2s step-end infinite;
 }
 
 @keyframes terminal-cursor-blink {

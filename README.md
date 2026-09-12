@@ -38,6 +38,17 @@ the environment files are configured and whenever schemas or GROQ queries change
 pnpm run typegen
 ```
 
+To populate a new dataset with the portfolio's starter content and images, authenticate
+the Sanity CLI and run the idempotent seed script:
+
+```bash
+pnpm run seed
+```
+
+Running it again updates the same singleton and slug-based documents instead of creating
+duplicates. Review the placeholder site URL, email address, and social links in Site
+Settings before publishing.
+
 ## Development
 
 Run the frontend and Studio together:
@@ -82,5 +93,29 @@ deployment or distribution of this repository.
 
 ## Content
 
-Sanity content is not stored in this repository. Use Site Settings for global metadata and
-create pages with unique slugs in the Studio.
+The Studio is organized around seven singleton settings/pages plus two document lists:
+
+- Site Settings: name, role, site URL, social links, time zone, and default SEO
+- Home, Projects, Archive, About, Contact, and Cells page settings
+- Projects and Archive Projects
+
+Editable copy is localized in Spanish and English. The frontend language switcher stores
+the selected language in an HTTP-only cookie and falls back to Spanish when a translation
+is missing.
+
+Project disciplines are simple labels, not category references. Project and archive media
+are image-only galleries; the first gallery image is automatically used by listings, so
+there is no separate preview-image field. Projects can optionally link to a live website or
+source code.
+
+When Sanity environment variables are absent, the frontend uses the checked-in fallback
+content so local development still renders. Sanity remains the source of truth once valid
+project and dataset values are configured.
+
+## Editorial preview
+
+The Studio Presentation tool opens the frontend and resolves previews for every singleton,
+project, and archive project. Draft Mode is enabled through `/api/draft-mode/enable` and
+requires `SANITY_API_READ_TOKEN` in `web/.env.local` to read private drafts. Add both the
+local frontend origin and the deployed frontend origin to the Sanity project's CORS list
+with credentials enabled.

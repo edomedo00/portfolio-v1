@@ -1,9 +1,29 @@
-# Sanity Clean Content Studio
+# Portfolio Content Studio
 
-Congratulations, you have now installed the Sanity Content Studio, an open-source real-time content editing environment connected to the Sanity backend.
+Standalone Sanity Studio for the portfolio. It contains fixed editors for Site Settings,
+Home, Projects, Archive, About, Contact, and Cells, plus reusable Project and Archive
+Project documents.
 
-Now you can do the following things:
+## Content rules
 
-- [Read “getting started” in the docs](https://www.sanity.io/docs/introduction/getting-started?utm_source=readme)
-- [Join the Sanity community](https://www.sanity.io/community/join?utm_source=readme)
-- [Extend and build plugins](https://www.sanity.io/docs/content-studio/extending?utm_source=readme)
+- Spanish and English text is edited inline with `sanity-plugin-internationalized-array`.
+- Project disciplines are free-form string labels; there is no category taxonomy.
+- Project and archive galleries accept images only.
+- The first gallery image is the listing image; there is no separate preview image.
+- External website and source-code links are optional URL fields.
+- The legacy generic Page schema remains registered for data compatibility but is hidden
+  from the Studio structure.
+
+## Commands
+
+From the repository root:
+
+```bash
+pnpm run dev:studio
+pnpm run typegen
+pnpm run seed
+pnpm run build:studio
+```
+
+The seed command uses the authenticated Sanity CLI user and can safely be rerun. Configure
+`studio/.env.local` from `studio/.env.example` before starting the Studio.
