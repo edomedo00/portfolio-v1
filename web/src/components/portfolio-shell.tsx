@@ -33,10 +33,6 @@ function getNavigationState(pathname: string): {
     return { activeItem: "archive", isCompact: true };
   }
 
-  if (pathname.startsWith("/cells") || pathname.startsWith("/organismo")) {
-    return { activeItem: "cells", isCompact: false };
-  }
-
   if (pathname.startsWith("/acerca-de")) {
     return { activeItem: "about", isCompact: false };
   }
@@ -53,12 +49,14 @@ function getNavigationState(pathname: string): {
 }
 
 type PortfolioShellProps = {
+  backgroundSettingsJson?: string | null;
   children: ReactNode;
   content: SiteChromeContent;
   language: Locale;
 };
 
 export function PortfolioShell({
+  backgroundSettingsJson,
   children,
   content,
   language,
@@ -71,7 +69,12 @@ export function PortfolioShell({
 
   return (
     <main className={styles.canvas}>
-      <OrganismExperience background language={language} />
+      <OrganismExperience
+        background
+        key={backgroundSettingsJson ?? "default-background-settings"}
+        language={language}
+        settingsJson={backgroundSettingsJson}
+      />
       <div className={styles.grid} aria-hidden="true">
         {verticalLines.map((position) => (
           <span

@@ -477,6 +477,7 @@ export const CELLS_PAGE_QUERY = defineQuery(`
   *[_id == "cellsPage"][0] {
     "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),
     "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),
+    backgroundSettingsJson,
     seo {
       "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),
       "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),

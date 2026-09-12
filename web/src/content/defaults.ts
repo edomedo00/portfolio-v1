@@ -137,5 +137,9 @@ export function defaultContact(language: Locale): ContactContent {
 }
 
 export function defaultCells(language: Locale): CellsContent {
-  return {title: 'CELLS', description: copy[language].cellsDescription}
+  return {
+    title: 'CELLS',
+    description: copy[language].cellsDescription,
+    backgroundSettingsJson: null,
+  }
 }

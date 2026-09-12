@@ -11,6 +11,7 @@
   --color-background: var(--color-white);
   --color-foreground: var(--color-black);
   --color-projects: #4eb77e;
+  /* --color-projects: #4eb77e; */
   /* --color-projects: #ff7a00; */
 
   --font-family-display: var(--font-montreal), Arial, sans-serif;
@@ -24,7 +25,7 @@
   --font-size-h2: 3.5rem;
   --line-height-h2: normal;
   --font-size-body: 0.875rem;
-  --line-height-body: 1.0625rem;
+  --line-height-body: 1.25rem;
   --font-size-navigation: 0.875rem;
   --line-height-navigation: 1.125rem;
 

@@ -49,22 +49,22 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
         dialog
         labelledBy="project-detail-title"
       >
-        <Link
-          aria-label={copy.close}
-          className={styles.modalClose}
-          href="/proyectos"
-          scroll={false}
-        >
-          <Image
-            alt=""
-            className={styles.modalCloseIcon}
-            height={14}
-            src="/icons/cross.svg"
-            width={14}
-          />
-        </Link>
-
         <div className={styles.projectDetail}>
+          <Link
+            aria-label={copy.close}
+            className={styles.modalClose}
+            href="/proyectos"
+            scroll={false}
+          >
+            <Image
+              alt=""
+              className={styles.modalCloseIcon}
+              height={14}
+              src="/icons/cross.svg"
+              width={14}
+            />
+          </Link>
+
           <h2 className={styles.projectDetailTitle} id="project-detail-title">
             {project.title}
           </h2>

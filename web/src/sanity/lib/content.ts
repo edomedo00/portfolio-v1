@@ -1,5 +1,6 @@
 import 'server-only'
 
+import {stegaClean} from '@sanity/client/stega'
 import {
   defaultAbout,
   defaultArchive,
@@ -107,7 +108,14 @@ export async function getCellsContent(language: Locale): Promise<CellsContent> {
   return withFallback(fallback, async () => {
     const {data} = await sanityFetch({query: CELLS_PAGE_QUERY, params: {language}})
     const value = data as unknown as CellsContent | null
-    return value?.title && value.description ? value : null
+    return value?.title && value.description
+      ? {
+          ...value,
+          backgroundSettingsJson: value.backgroundSettingsJson
+            ? stegaClean(value.backgroundSettingsJson)
+            : null,
+        }
+      : null
   })
 }
 

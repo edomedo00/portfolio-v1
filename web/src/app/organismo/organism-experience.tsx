@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import type { Locale } from "@/content/types";
 import {
@@ -54,6 +54,9 @@ const interfaceCopy = {
     cursorFade: "Desaparición del cursor",
     spacing: "Espaciado",
     showGrid: "Mostrar matriz",
+    copySettings: "Copiar ajustes",
+    copied: "Copiado",
+    copyFailed: "No se pudo copiar",
     resume: "Reanudar",
     pause: "Pausar",
     reset: "Restablecer",
@@ -101,6 +104,9 @@ const interfaceCopy = {
     cursorFade: "Cursor fade",
     spacing: "Spacing",
     showGrid: "Show grid",
+    copySettings: "Copy settings",
+    copied: "Copied",
+    copyFailed: "Copy failed",
     resume: "Resume",
     pause: "Pause",
     reset: "Reset",
@@ -115,8 +121,19 @@ type OrganismExperienceProps = {
   displayName?: string;
   language?: Locale;
   navigation?: ReactNode;
+  settingsJson?: string | null;
   title?: string;
 };
+
+function getConfiguredSettings(settingsJson?: string | null): OrganismSettings {
+  if (!settingsJson?.trim()) return DEFAULT_SETTINGS;
+
+  try {
+    return { ...DEFAULT_SETTINGS, ...JSON.parse(settingsJson) } as OrganismSettings;
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+}
 
 function subscribePreferences(onChange: () => void) {
   const queries = mediaQueries.map((query) => window.matchMedia(query));
@@ -184,11 +201,18 @@ export function OrganismExperience({
   description = "Interactive Cells visualization",
   displayName = "EDMUNDO MEDEL",
   language = "es",
+  settingsJson,
   title = "CELLS",
 }: OrganismExperienceProps) {
+  const configuredSettings = useMemo(
+    () => getConfiguredSettings(settingsJson),
+    [settingsJson],
+  );
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<ReturnType<typeof createOrganism>>(null);
-  const [settings, setSettings] = useState<OrganismSettings>(DEFAULT_SETTINGS);
+  const copyStatusTimer = useRef<number | null>(null);
+  const [settings, setSettings] = useState<OrganismSettings>(() => configuredSettings);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
   const [unavailable, setUnavailable] = useState(false);
   const preferences = useSyncExternalStore(subscribePreferences, getPreferences, getServerPreferences);
   const reducedMotion = Boolean(preferences & 1);
@@ -205,7 +229,7 @@ export function OrganismExperience({
     if (!canvas) return;
     const engine = createOrganism(
       canvas,
-      { ...DEFAULT_SETTINGS, paused: media.matches },
+      { ...configuredSettings, paused: configuredSettings.paused || media.matches },
       setUnavailable,
       background ? document.documentElement : canvas,
     );
@@ -215,16 +239,48 @@ export function OrganismExperience({
       engine?.destroy();
       engineRef.current = null;
     };
-  }, [background]);
+  }, [background, configuredSettings]);
+
+  useEffect(() => {
+    return () => {
+      if (copyStatusTimer.current !== null) window.clearTimeout(copyStatusTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     engineRef.current?.update({ ...settings, paused });
   }, [settings, paused]);
 
   function reset() {
-    setSettings(DEFAULT_SETTINGS);
+    setSettings(configuredSettings);
     setMotionOverride(null);
     engineRef.current?.reset();
+  }
+
+  async function copySettings() {
+    const serializedSettings = JSON.stringify(settings, null, 2);
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(serializedSettings);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = serializedSettings;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.select();
+        const copied = document.execCommand("copy");
+        textArea.remove();
+        if (!copied) throw new Error("Clipboard copy failed");
+      }
+      setCopyStatus("copied");
+    } catch {
+      setCopyStatus("failed");
+    }
+
+    if (copyStatusTimer.current !== null) window.clearTimeout(copyStatusTimer.current);
+    copyStatusTimer.current = window.setTimeout(() => setCopyStatus("idle"), 2200);
   }
 
   function toggleMotion() {
@@ -253,6 +309,7 @@ export function OrganismExperience({
         <div className={styles.navigation}>{navigation}</div>
       </header>}
 
+      {!background ? (
       <aside className={styles.panel} aria-label={copy.settingsLabel} data-organism-controls>
         <button
           type="button"
@@ -344,9 +401,20 @@ export function OrganismExperience({
               <span aria-hidden="true">{isStill ? "▷" : "Ⅱ"}</span>{isStill ? copy.resume : copy.pause}
             </button>
             <button type="button" onClick={reset}>{copy.reset} <span aria-hidden="true">↺</span></button>
+            <button type="button" onClick={copySettings}>
+              <span aria-live="polite">
+                {copyStatus === "copied"
+                  ? copy.copied
+                  : copyStatus === "failed"
+                    ? copy.copyFailed
+                    : copy.copySettings}
+              </span>
+              <span aria-hidden="true">⧉</span>
+            </button>
           </div>
         </div>
       </aside>
+      ) : null}
 
       {!background && unavailable ? <p className={styles.fallback} role="status">{copy.unavailable}</p> : null}
       {!background && <noscript><p className={styles.fallback}>{copy.noscript}</p></noscript>}

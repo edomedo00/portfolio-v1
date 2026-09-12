@@ -78,5 +78,6 @@ export type ContactContent = {
 export type CellsContent = {
   title: string
   description: string
+  backgroundSettingsJson?: string | null
   seo?: ProjectSeo | null
 }

@@ -25,14 +25,15 @@ export default async function CellsPage() {
     <OrganismExperience
       description={content.description}
       displayName={chrome.settings.displayName}
+      key={content.backgroundSettingsJson ?? 'default-cells-settings'}
       language={language}
       navigation={
         <NavigationMenu
-          activeItem="cells"
           labels={chrome.navigation}
           language={language}
         />
       }
+      settingsJson={content.backgroundSettingsJson}
       title={content.title}
     />
   )
