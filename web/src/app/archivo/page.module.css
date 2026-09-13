@@ -337,6 +337,10 @@
   padding: var(--grid-margin);
 }
 
+.detailHeader {
+  display: contents;
+}
+
 .detailClose {
   position: absolute;
   top: var(--grid-margin);
@@ -476,4 +480,93 @@
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+}
+
+@media (max-width: 48rem) {
+  .archiveIntro {
+    display: block;
+    grid-column: 1 / -1;
+    margin-top: 5.25rem;
+    padding-right: 0.5rem;
+    white-space: normal;
+  }
+
+  .archiveFrame {
+    margin: 11.5rem 0 0;
+    grid-column: 1 / -1;
+  }
+
+  .archiveViewport {
+    overflow: visible;
+  }
+
+  .archiveTrack {
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 0;
+  }
+
+  .project {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .projectId {
+    min-height: 0;
+    padding-bottom: 0.125rem;
+  }
+
+  .projectMedia {
+    aspect-ratio: 16 / 9;
+  }
+
+  .projectCaption {
+    min-height: 0;
+    margin-top: 0.125rem;
+  }
+
+  .detailPanel {
+    clip-path: none;
+  }
+
+  .detailContent {
+    gap: 1.25rem;
+    padding: var(--grid-margin);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .detailHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .detailHeading {
+    margin-top: 0;
+    padding-bottom: 1.25rem;
+    font-size: var(--font-size-h2);
+  }
+
+  .detailCopy {
+    gap: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .detailActions {
+    gap: 0.75rem;
+  }
+
+  .detailGalleryViewport,
+  .detailGallery {
+    height: auto;
+    overflow: visible;
+  }
+
+  .detailClose {
+    position: static;
+    align-self: flex-end;
+  }
 }

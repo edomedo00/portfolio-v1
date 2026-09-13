@@ -161,6 +161,15 @@ video {
   }
 }
 
+@media (max-width: 48rem) {
+  :root {
+    --font-size-h1: 3rem;
+    --font-size-h2: 2.5rem;
+    --grid-margin: 1rem;
+    --grid-gutter: 0.5rem;
+  }
+}
+
 .routePanelGrow {
   transform-origin: top right;
   animation: route-panel-grow 900ms cubic-bezier(0.76, 0, 0.24, 1) both;
@@ -239,6 +248,44 @@ video {
 
   100% {
     clip-path: polygon(100% 0, 100% 0, 100% 3rem, 100% 3rem, 100% 3rem);
+  }
+}
+
+@media (max-width: 48rem) {
+  .routePanelGrow {
+    animation-name: route-panel-grow-mobile;
+  }
+
+  .routePanelClosing {
+    animation-name: route-panel-shrink-mobile;
+  }
+}
+
+@keyframes route-panel-grow-mobile {
+  0% {
+    clip-path: inset(0 0 calc(100% - 2.5rem) 100%);
+  }
+
+  50% {
+    clip-path: inset(0 0 calc(100% - 2.5rem) 0);
+  }
+
+  100% {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes route-panel-shrink-mobile {
+  0% {
+    clip-path: inset(0);
+  }
+
+  50% {
+    clip-path: inset(0 0 calc(100% - 2.5rem) 0);
+  }
+
+  100% {
+    clip-path: inset(0 0 calc(100% - 2.5rem) 100%);
   }
 }
 

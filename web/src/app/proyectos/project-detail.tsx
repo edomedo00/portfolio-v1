@@ -50,24 +50,26 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
         labelledBy="project-detail-title"
       >
         <div className={styles.projectDetail}>
-          <Link
-            aria-label={copy.close}
-            className={styles.modalClose}
-            href="/proyectos"
-            scroll={false}
-          >
-            <Image
-              alt=""
-              className={styles.modalCloseIcon}
-              height={14}
-              src="/icons/cross.svg"
-              width={14}
-            />
-          </Link>
+          <header className={styles.projectDetailHeader}>
+            <Link
+              aria-label={copy.close}
+              className={styles.modalClose}
+              href="/proyectos"
+              scroll={false}
+            >
+              <Image
+                alt=""
+                className={styles.modalCloseIcon}
+                height={14}
+                src="/icons/cross.svg"
+                width={14}
+              />
+            </Link>
 
-          <h2 className={styles.projectDetailTitle} id="project-detail-title">
-            {project.title}
-          </h2>
+            <h2 className={styles.projectDetailTitle} id="project-detail-title">
+              {project.title}
+            </h2>
+          </header>
 
           <div className={styles.projectDetailMeta}>
             <span>{disciplines}</span>

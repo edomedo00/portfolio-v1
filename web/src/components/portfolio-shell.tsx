@@ -6,18 +6,25 @@ import styles from "@/app/page.module.css";
 import { OrganismExperience } from "@/app/organismo/organism-experience";
 import type { Locale, SiteChromeContent } from "@/content/types";
 import { LanguageSwitcher } from "./language-switcher";
+import { MobileNavigation } from "./mobile-navigation";
 import { NavigationMenu, type NavigationItemId } from "./navigation-menu";
 import { NavigationIdentity } from "./scramble-text";
 
-const verticalLines = ["25%", "50%", "75%"];
+const verticalLines = [
+  { position: "25%", mobilePosition: "33.333333%" },
+  { position: "50%", mobilePosition: "66.666667%" },
+  { position: "75%", mobilePosition: null },
+] as const;
 const horizontalLines = ["33.333333%", "66.666667%"];
-const intersections = verticalLines.flatMap((x) =>
-  horizontalLines.map((y) => ({ x, y })),
+const intersections = verticalLines.flatMap(({ mobilePosition, position }) =>
+  horizontalLines.map((y) => ({ mobileX: mobilePosition, x: position, y })),
 );
 
 type GridPosition = CSSProperties & {
   "--grid-position"?: string;
+  "--grid-mobile-position"?: string;
   "--grid-x"?: string;
+  "--grid-mobile-x"?: string;
   "--grid-y"?: string;
 };
 
@@ -68,7 +75,11 @@ export function PortfolioShell({
   const compactIdentity = content.settings.displayName;
 
   return (
-    <main className={styles.canvas}>
+    <main
+      className={styles.canvas}
+      data-compact={isCompact || undefined}
+      data-route={activeItem}
+    >
       <OrganismExperience
         background
         key={backgroundSettingsJson ?? "default-background-settings"}
@@ -76,11 +87,15 @@ export function PortfolioShell({
         settingsJson={backgroundSettingsJson}
       />
       <div className={styles.grid} aria-hidden="true">
-        {verticalLines.map((position) => (
+        {verticalLines.map(({ mobilePosition, position }) => (
           <span
             className={styles.verticalLine}
+            data-mobile-hidden={!mobilePosition || undefined}
             key={`vertical-${position}`}
-            style={{ "--grid-position": position } as GridPosition}
+            style={{
+              "--grid-mobile-position": mobilePosition ?? undefined,
+              "--grid-position": position,
+            } as GridPosition}
           />
         ))}
 
@@ -92,14 +107,27 @@ export function PortfolioShell({
           />
         ))}
 
-        {intersections.map(({ x, y }) => (
+        {intersections.map(({ mobileX, x, y }) => (
           <span
             className={styles.cross}
+            data-mobile-hidden={!mobileX || undefined}
             key={`${x}-${y}`}
-            style={{ "--grid-x": x, "--grid-y": y } as GridPosition}
+            style={{
+              "--grid-mobile-x": mobileX ?? undefined,
+              "--grid-x": x,
+              "--grid-y": y,
+            } as GridPosition}
           />
         ))}
       </div>
+
+      {isCompact ? (
+        <MobileNavigation
+          activeItem={activeItem}
+          content={content}
+          language={language}
+        />
+      ) : null}
 
       <section
         className={styles.hero}

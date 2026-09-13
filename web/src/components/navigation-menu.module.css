@@ -30,3 +30,10 @@
   background-color: var(--color-white);
   color: var(--color-black);
 }
+
+@media (max-width: 48rem) {
+  .list {
+    width: 100%;
+    gap: 0.5rem;
+  }
+}

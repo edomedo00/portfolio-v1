@@ -16,18 +16,27 @@ type NavigationMenuProps = {
   activeItem?: NavigationItemId;
   labels: SiteChromeContent["navigation"];
   language: Locale;
+  listClassName?: string;
+  onNavigate?: () => void;
 };
 
-export function NavigationMenu({ activeItem, labels, language }: NavigationMenuProps) {
+export function NavigationMenu({
+  activeItem,
+  labels,
+  language,
+  listClassName,
+  onNavigate,
+}: NavigationMenuProps) {
   return (
     <nav aria-label={language === "es" ? "Navegación principal" : "Primary navigation"}>
-      <ul className={styles.list}>
+      <ul className={`${styles.list} ${listClassName ?? ""}`}>
         {navigationItems.map(({ href, id }) => (
           <li key={href}>
             <Link
               className={styles.link}
               data-current={id === activeItem || undefined}
               href={href}
+              onClick={onNavigate}
               aria-current={id === activeItem ? "page" : undefined}
             >
               {labels[id]}

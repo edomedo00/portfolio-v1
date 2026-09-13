@@ -201,3 +201,113 @@
   white-space: nowrap;
   opacity: 0.55;
 }
+
+@media (max-width: 48rem) {
+  .verticalLine {
+    left: var(--grid-mobile-position);
+  }
+
+  .horizontalLine {
+    background: linear-gradient(
+      to right,
+      var(--color-grid-dark) 0 calc(33.333333% - var(--cross-clearance)),
+      transparent 0 calc(33.333333% + var(--cross-clearance)),
+      var(--color-grid-dark) 0 calc(66.666667% - var(--cross-clearance)),
+      transparent 0 calc(66.666667% + var(--cross-clearance)),
+      var(--color-grid-dark) 0
+    );
+  }
+
+  .cross {
+    left: var(--grid-mobile-x);
+  }
+
+  .verticalLine[data-mobile-hidden="true"],
+  .cross[data-mobile-hidden="true"] {
+    display: none;
+  }
+
+  .canvas[data-compact="true"] {
+    height: auto;
+    min-height: 100svh;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  .canvas[data-compact="true"] .hero {
+    display: block;
+    pointer-events: none;
+    animation: mobile-home-hero-hide 1ms linear 900ms forwards;
+  }
+
+  .canvas[data-compact="true"] > .languageSelector {
+    display: none;
+  }
+
+  .hero {
+    padding-block: var(--grid-margin);
+  }
+
+  .intro {
+    width: 100%;
+    max-width: 20.5rem;
+  }
+
+  .titleSlot,
+  .titleSlotInner {
+    width: 100%;
+  }
+
+  .title {
+    max-width: 18rem;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .subtitle {
+    max-width: 20.5rem;
+    animation: mobile-home-copy-in 180ms ease-out 720ms both;
+  }
+
+  .navigation {
+    width: 100%;
+    margin-top: 0.625rem;
+    transition:
+      opacity 180ms ease-out,
+      transform 720ms cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  .canvas[data-compact="true"] .navigation {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+
+  .canvas[data-route="home"] .navigation {
+    animation: mobile-home-copy-in 180ms ease-out 720ms both;
+  }
+
+  .languageSelector {
+    bottom: var(--grid-margin);
+  }
+}
+
+@keyframes mobile-home-hero-hide {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes mobile-home-copy-in {
+  0%,
+  99% {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  100% {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

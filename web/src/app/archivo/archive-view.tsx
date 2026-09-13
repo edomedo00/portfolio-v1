@@ -77,18 +77,20 @@ export function ArchiveProjectDetail({
         labelledBy="archive-detail-title"
       >
         <div className={styles.detailContent}>
-          <Link
-            aria-label={copy.close}
-            className={styles.detailClose}
-            href="/archivo"
-            scroll={false}
-          >
-            <Image alt="" height={14} src="/icons/cross.svg" width={14} />
-          </Link>
+          <header className={styles.detailHeader}>
+            <Link
+              aria-label={copy.close}
+              className={styles.detailClose}
+              href="/archivo"
+              scroll={false}
+            >
+              <Image alt="" height={14} src="/icons/cross.svg" width={14} />
+            </Link>
 
-          <h2 className={styles.detailHeading} id="archive-detail-title">
-            {project.detailTitle}
-          </h2>
+            <h2 className={styles.detailHeading} id="archive-detail-title">
+              {project.detailTitle}
+            </h2>
+          </header>
 
           <div className={styles.detailCopy}>
             <RichText value={project.body} />

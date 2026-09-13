@@ -1,0 +1,130 @@
+.root {
+  display: none;
+}
+
+@media (max-width: 48rem) {
+  .root {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: block;
+    pointer-events: none;
+  }
+
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    border: 0;
+    padding: 0;
+    background: color-mix(in srgb, var(--color-black) 28%, transparent);
+    backdrop-filter: blur(0.25rem);
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .header {
+    position: absolute;
+    top: var(--grid-margin);
+    right: var(--grid-margin);
+    left: var(--grid-margin);
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    pointer-events: auto;
+    animation: mobile-navigation-header-in 180ms ease-out 720ms both;
+  }
+
+  .identity {
+    min-height: var(--line-height-navigation);
+    padding-top: 0.25rem;
+    color: var(--color-white);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-navigation);
+    line-height: var(--line-height-navigation);
+    letter-spacing: 0.5em;
+    white-space: nowrap;
+  }
+
+  .menuButton {
+    border: 0.0625rem solid var(--color-white);
+    padding: 0.25rem 1.5rem;
+    background: var(--color-black);
+    color: var(--color-white);
+    cursor: pointer;
+    font-family: var(--font-family-navigation);
+    font-size: var(--font-size-navigation);
+    line-height: var(--line-height-navigation);
+  }
+
+  .menu {
+    position: absolute;
+    top: calc(var(--grid-margin) + 2.125rem);
+    right: var(--grid-margin);
+    z-index: 2;
+    pointer-events: auto;
+  }
+
+  .menuList {
+    width: fit-content;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .menuList > li {
+    min-width: 7.75rem;
+  }
+
+  .menuList a {
+    width: 100%;
+  }
+
+  .languageSelector {
+    position: fixed;
+    right: var(--grid-margin);
+    bottom: var(--grid-margin);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-white);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    pointer-events: auto;
+  }
+
+  .languageOption {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.55;
+  }
+
+  .languageOption[data-active="true"] {
+    opacity: 1;
+  }
+
+  .languageDivider {
+    margin-inline: 0.5rem;
+    opacity: 0.55;
+  }
+
+  @keyframes mobile-navigation-header-in {
+    0%,
+    99% {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    100% {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
