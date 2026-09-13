@@ -31,8 +31,8 @@
   grid-column: 1 / -1;
   min-width: 0;
   align-self: start;
-  /* 20% through the space between the menu edge and bottom page margin. */
-  margin-top: calc(20svh + 6.5rem);
+  /* 17% through the space between the menu edge and bottom page margin. */
+  margin-top: calc(17svh + 6.5rem);
   margin-left: calc(0rem - var(--grid-margin));
   margin-right: calc(0rem - var(--grid-margin));
 }
@@ -92,11 +92,21 @@
   opacity: 1;
 }
 
-.archiveFrame[data-can-scroll-left="true"] { --fade-left: var(--scroll-fade-size); }
-.archiveFrame[data-can-scroll-right="true"] { --fade-right: var(--scroll-fade-size); }
+.archiveFrame[data-can-scroll-left="true"] {
+  --fade-left: var(--scroll-fade-size);
+}
+.archiveFrame[data-can-scroll-right="true"] {
+  --fade-right: var(--scroll-fade-size);
+}
 
 .archiveViewport {
-  mask-image: linear-gradient(to right, transparent, black var(--fade-left), black calc(100% - var(--fade-right)), transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--fade-left),
+    black calc(100% - var(--fade-right)),
+    transparent
+  );
   min-width: 0;
   overflow-x: auto;
   overscroll-behavior-inline: contain;

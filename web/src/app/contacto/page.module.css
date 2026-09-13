@@ -45,6 +45,8 @@
 .introduction {
   margin: 1.5rem 0 0;
   max-width: 32rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 0.0625rem solid var(--color-black);
 }
 
 .form {
