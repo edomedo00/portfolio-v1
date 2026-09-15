@@ -167,7 +167,7 @@ export function createOrganism(
   const pointer = { x: -1000, y: -1000, active: false, down: false };
   const observesPage = interactionTarget !== canvas;
   const ignoredTouchTarget =
-    "a, button, input, textarea, select, option, label, [contenteditable='true'], [data-organism-controls]";
+    "input, textarea, select, option, label, [contenteditable='true'], [data-organism-controls]";
   let activeTouchId: number | null = null;
   let touchOrigin: Point | null = null;
   let pendingTouch: Point | null = null;
@@ -551,10 +551,10 @@ export function createOrganism(
   interactionTarget.addEventListener("pointercancel", pointerLeave, { passive: true });
   interactionTarget.addEventListener("pointerleave", pointerLeave, { passive: true });
   if (observesPage) {
-    interactionTarget.addEventListener("touchstart", touchStart, { passive: true });
-    interactionTarget.addEventListener("touchmove", touchMove, { passive: true });
-    interactionTarget.addEventListener("touchend", touchEnd, { passive: true });
-    interactionTarget.addEventListener("touchcancel", touchEnd, { passive: true });
+    window.addEventListener("touchstart", touchStart, { passive: true, capture: true });
+    window.addEventListener("touchmove", touchMove, { passive: true, capture: true });
+    window.addEventListener("touchend", touchEnd, { passive: true, capture: true });
+    window.addEventListener("touchcancel", touchEnd, { passive: true, capture: true });
   }
   document.addEventListener("visibilitychange", visibility);
   canvas.addEventListener("webglcontextlost", loseContext);
@@ -599,10 +599,10 @@ export function createOrganism(
       interactionTarget.removeEventListener("pointerup", up);
       interactionTarget.removeEventListener("pointercancel", pointerLeave);
       interactionTarget.removeEventListener("pointerleave", pointerLeave);
-      interactionTarget.removeEventListener("touchstart", touchStart);
-      interactionTarget.removeEventListener("touchmove", touchMove);
-      interactionTarget.removeEventListener("touchend", touchEnd);
-      interactionTarget.removeEventListener("touchcancel", touchEnd);
+      window.removeEventListener("touchstart", touchStart, true);
+      window.removeEventListener("touchmove", touchMove, true);
+      window.removeEventListener("touchend", touchEnd, true);
+      window.removeEventListener("touchcancel", touchEnd, true);
       if (touchFrame) cancelAnimationFrame(touchFrame);
       document.removeEventListener("visibilitychange", visibility);
       canvas.removeEventListener("webglcontextlost", loseContext);

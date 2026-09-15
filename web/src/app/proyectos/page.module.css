@@ -349,7 +349,7 @@
   .collectionIntro {
     grid-column: 1 / -1;
     min-height: calc(var(--line-height-body) * 2);
-    margin-top: 5.25rem;
+    margin-top: 5.75rem;
     padding-right: 0.5rem;
     white-space: normal;
   }
@@ -357,7 +357,7 @@
   .projectViewport {
     grid-column: 1 / -1;
     height: auto;
-    margin-top: 10.25rem;
+    margin-top: 10.75rem;
     margin-bottom: 2.5rem;
     overflow: visible;
   }

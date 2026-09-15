@@ -496,13 +496,13 @@
     display: block;
     grid-column: 1 / -1;
     min-height: calc(var(--line-height-body) * 3);
-    margin-top: 5.25rem;
+    margin-top: 5.75rem;
     padding-right: 0.5rem;
     white-space: normal;
   }
 
   .archiveFrame {
-    margin: 11.5rem 0 2.5rem;
+    margin: 12rem 0 2.5rem;
     grid-column: 1 / -1;
   }
 
