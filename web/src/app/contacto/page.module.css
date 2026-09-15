@@ -93,11 +93,6 @@
   resize: vertical;
 }
 
-.field input:focus,
-.field textarea:focus {
-  box-shadow: inset 0 0 0 0.0625rem var(--color-black);
-}
-
 .field input:autofill,
 .field input:-webkit-autofill,
 .field input:-webkit-autofill:hover,

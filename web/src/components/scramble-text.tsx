@@ -8,6 +8,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react";
 import { prefersReducedMotion } from "@/motion-preference";
 
@@ -18,17 +19,61 @@ export const projectsDescription =
 export const archiveDescription =
   "UN ESPACIO PARA MOSTRAR CONCEPTOS, PROYECTOS SECUNDARIOS, EXPERIMENTOS, COLABORACIONES";
 
-const libraryScrambleParameters = {
+const mobileScrambleMediaQuery = "(max-width: 48rem)";
+
+const sharedScrambleParameters = {
   range: [65, 125] as [number, number],
-  speed: 0.84,
-  tick: 2,
-  step: 5,
-  scramble: 18,
-  seed: 4,
   chance: 1,
   overdrive: false,
   overflow: false,
 };
+
+const desktopScrambleParameters = {
+  ...sharedScrambleParameters,
+  speed: 0.4,
+  tick: 2,
+  step: 5,
+  scramble: 18,
+  seed: 4,
+};
+
+function subscribeMobileScramble(onChange: () => void) {
+  const media = window.matchMedia(mobileScrambleMediaQuery);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+
+function getMobileScrambleSnapshot() {
+  return window.matchMedia(mobileScrambleMediaQuery).matches;
+}
+
+function getServerMobileScrambleSnapshot() {
+  return false;
+}
+
+function useLibraryScrambleParameters(text: string) {
+  const isMobile = useSyncExternalStore(
+    subscribeMobileScramble,
+    getMobileScrambleSnapshot,
+    getServerMobileScrambleSnapshot,
+  );
+  const characterCount = Array.from(text).length;
+
+  return useMemo(
+    () =>
+      isMobile
+        ? {
+            ...sharedScrambleParameters,
+            speed: 0.6,
+            tick: 1,
+            step: characterCount > 56 ? 2 : 1,
+            scramble: 12,
+            seed: 6,
+          }
+        : desktopScrambleParameters,
+    [characterCount, isMobile],
+  );
+}
 
 const invisibleCharacter = "\u200B";
 const noop = () => undefined;
@@ -103,9 +148,10 @@ export function NavigationIdentity({
   text,
 }: NavigationIdentityProps) {
   const [initialText] = useState(text);
+  const scrambleParameters = useLibraryScrambleParameters(text);
   const { ref } = useScramble({
     text,
-    ...libraryScrambleParameters,
+    ...scrambleParameters,
     overflow: true,
     playOnMount: false,
   });
@@ -128,9 +174,10 @@ function ScrambleIn({
   text,
 }: ScrambleInProps) {
   const cursorRef = useRef<HTMLSpanElement>(null);
+  const scrambleParameters = useLibraryScrambleParameters(text);
   const { ref } = useScramble({
     text,
-    ...libraryScrambleParameters,
+    ...scrambleParameters,
     onAnimationEnd,
     onAnimationFrame(result) {
       onAnimationFrame(result);
@@ -168,6 +215,7 @@ function ScrambleOut({
 }: ScrambleOutProps) {
   const displayRef = useRef<HTMLSpanElement>(null);
   const cursorRef = useRef<HTMLSpanElement>(null);
+  const scrambleParameters = useLibraryScrambleParameters(text);
   const reversedSource = useMemo(() => Array.from(text).reverse(), [text]);
   const target = useMemo(
     () =>
@@ -180,7 +228,7 @@ function ScrambleOut({
   );
   const { ref: driverRef } = useScramble({
     text: target,
-    ...libraryScrambleParameters,
+    ...scrambleParameters,
     onAnimationEnd,
     onAnimationFrame(result) {
       const driverCharacters = Array.from(result);

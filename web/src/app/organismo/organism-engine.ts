@@ -165,6 +165,13 @@ export function createOrganism(
   let prismTrail: PrismProjection[] = [];
   let pointerTrail: PointerTrailPoint[] = [];
   const pointer = { x: -1000, y: -1000, active: false, down: false };
+  const observesPage = interactionTarget !== canvas;
+  const ignoredTouchTarget =
+    "a, button, input, textarea, select, option, label, [contenteditable='true'], [data-organism-controls]";
+  let activeTouchId: number | null = null;
+  let touchOrigin: Point | null = null;
+  let pendingTouch: Point | null = null;
+  let touchFrame = 0;
 
   function prismTrailLimit() {
     return settings.prismTraceAmount <= 0
@@ -386,19 +393,15 @@ export function createOrganism(
     }
   }
 
-  function move(event: PointerEvent) {
-    if (!event.isPrimary) return;
-    if (overControls(event)) {
-      leave();
-      return;
-    }
+  function samplePointer(clientX: number, clientY: number, pointerType: string, isDown: boolean) {
     const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
     const previous = pointer.active ? { x: pointer.x, y: pointer.y } : undefined;
     const distance = previous ? Math.hypot(x - previous.x, y - previous.y) : 0;
     const limit = pointerTrailLimit();
-    const acceptsPointerInput = !settings.paused || event.pointerType !== "mouse";
+    const acceptsPointerInput = !settings.paused || pointerType !== "mouse";
+    pointer.down = isDown;
     if (acceptsPointerInput && (settings.enabled || settings.squaresEnabled || settings.primaryEnabled) && settings.influence > 0 && limit > 0) {
       const sampleStep = Math.min(circleMatrix.spacing, glassMatrix.spacing, primaryMatrix.spacing) * 0.25;
       const segments = previous ? Math.min(limit, Math.ceil(distance / sampleStep)) : 1;
@@ -419,8 +422,17 @@ export function createOrganism(
     wake();
   }
 
+  function move(event: PointerEvent) {
+    if (!event.isPrimary || (observesPage && event.pointerType === "touch")) return;
+    if (overControls(event)) {
+      leave();
+      return;
+    }
+    samplePointer(event.clientX, event.clientY, event.pointerType, pointer.down);
+  }
+
   function down(event: PointerEvent) {
-    if (!event.isPrimary || overControls(event)) return;
+    if (!event.isPrimary || (observesPage && event.pointerType === "touch") || overControls(event)) return;
     pointer.down = true;
     // The background observes page input without taking capture from links,
     // scrolling panels, form fields, or the settings controls.
@@ -440,10 +452,64 @@ export function createOrganism(
     wake();
   }
 
+  function pointerLeave(event: PointerEvent) {
+    if (observesPage && event.pointerType === "touch") return;
+    leave();
+  }
+
   function up(event: PointerEvent) {
+    if (observesPage && event.pointerType === "touch") return;
     pointer.down = false;
     if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
     if (event.pointerType !== "mouse") leave();
+  }
+
+  function getTrackedTouch(touches: TouchList) {
+    if (activeTouchId === null) return null;
+    for (let index = 0; index < touches.length; index++) {
+      if (touches[index].identifier === activeTouchId) return touches[index];
+    }
+    return null;
+  }
+
+  function cancelTouchTracking() {
+    activeTouchId = null;
+    touchOrigin = null;
+    pendingTouch = null;
+    if (touchFrame) cancelAnimationFrame(touchFrame);
+    touchFrame = 0;
+    leave();
+  }
+
+  function flushTouchSample() {
+    touchFrame = 0;
+    if (!pendingTouch) return;
+    samplePointer(pendingTouch.x, pendingTouch.y, "touch", true);
+    pendingTouch = null;
+  }
+
+  function touchStart(event: TouchEvent) {
+    if (!observesPage || event.touches.length !== 1 || activeTouchId !== null) return;
+    if (event.target instanceof Element && event.target.closest(ignoredTouchTarget)) return;
+    const touch = event.touches[0];
+    activeTouchId = touch.identifier;
+    touchOrigin = { x: touch.clientX, y: touch.clientY };
+  }
+
+  function touchMove(event: TouchEvent) {
+    if (!observesPage || event.touches.length !== 1) {
+      if (activeTouchId !== null) cancelTouchTracking();
+      return;
+    }
+    const touch = getTrackedTouch(event.touches);
+    if (!touch || !touchOrigin) return;
+    if (Math.hypot(touch.clientX - touchOrigin.x, touch.clientY - touchOrigin.y) < 4) return;
+    pendingTouch = { x: touch.clientX, y: touch.clientY };
+    if (!touchFrame) touchFrame = requestAnimationFrame(flushTouchSample);
+  }
+
+  function touchEnd(event: TouchEvent) {
+    if (getTrackedTouch(event.changedTouches)) cancelTouchTracking();
   }
 
   function visibility() {
@@ -482,8 +548,14 @@ export function createOrganism(
   interactionTarget.addEventListener("pointermove", move, { passive: true });
   interactionTarget.addEventListener("pointerdown", down, { passive: true });
   interactionTarget.addEventListener("pointerup", up, { passive: true });
-  interactionTarget.addEventListener("pointercancel", leave, { passive: true });
-  interactionTarget.addEventListener("pointerleave", leave, { passive: true });
+  interactionTarget.addEventListener("pointercancel", pointerLeave, { passive: true });
+  interactionTarget.addEventListener("pointerleave", pointerLeave, { passive: true });
+  if (observesPage) {
+    interactionTarget.addEventListener("touchstart", touchStart, { passive: true });
+    interactionTarget.addEventListener("touchmove", touchMove, { passive: true });
+    interactionTarget.addEventListener("touchend", touchEnd, { passive: true });
+    interactionTarget.addEventListener("touchcancel", touchEnd, { passive: true });
+  }
   document.addEventListener("visibilitychange", visibility);
   canvas.addEventListener("webglcontextlost", loseContext);
   canvas.addEventListener("webglcontextrestored", restoreContext);
@@ -525,8 +597,13 @@ export function createOrganism(
       interactionTarget.removeEventListener("pointermove", move);
       interactionTarget.removeEventListener("pointerdown", down);
       interactionTarget.removeEventListener("pointerup", up);
-      interactionTarget.removeEventListener("pointercancel", leave);
-      interactionTarget.removeEventListener("pointerleave", leave);
+      interactionTarget.removeEventListener("pointercancel", pointerLeave);
+      interactionTarget.removeEventListener("pointerleave", pointerLeave);
+      interactionTarget.removeEventListener("touchstart", touchStart);
+      interactionTarget.removeEventListener("touchmove", touchMove);
+      interactionTarget.removeEventListener("touchend", touchEnd);
+      interactionTarget.removeEventListener("touchcancel", touchEnd);
+      if (touchFrame) cancelAnimationFrame(touchFrame);
       document.removeEventListener("visibilitychange", visibility);
       canvas.removeEventListener("webglcontextlost", loseContext);
       canvas.removeEventListener("webglcontextrestored", restoreContext);
