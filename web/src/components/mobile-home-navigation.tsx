@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import type { Locale, SiteChromeContent } from "@/content/types";
+import { prefersReducedMotion } from "@/motion-preference";
 import { LanguageSwitcher } from "./language-switcher";
 import { NavigationMenu } from "./navigation-menu";
 import {
@@ -57,7 +58,7 @@ export function MobileHomeNavigation({
     const animationFrame = window.requestAnimationFrame(() => {
       setTitleExpanded(true);
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (prefersReducedMotion()) {
         currentSubtitle.current = content.settings.role;
         setSubtitlePhase("visible");
         setMenuExpanded(true);
@@ -126,7 +127,7 @@ export function MobileHomeNavigation({
         return;
       }
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (prefersReducedMotion()) {
         return;
       }
 

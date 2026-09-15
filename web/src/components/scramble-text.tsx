@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { prefersReducedMotion } from "@/motion-preference";
 
 export const navigationSubtitle =
   "DESARROLLADOR WEB Y PROGRAMADOR CREATIVO";
@@ -355,7 +356,7 @@ export function RouteScrambleText({
       pendingRoute.current = `${destination.pathname}${destination.search}${destination.hash}`;
       onExitStart?.();
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (prefersReducedMotion()) {
         currentText.current = "";
         setPhase("empty");
         return;

@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ContentImage } from "@/components/content-image";
 import type { Locale } from "@/content/types";
 import { useDesktopWheelScroll } from "@/hooks/use-desktop-wheel-scroll";
+import { prefersReducedMotion } from "@/motion-preference";
 import {
   type ScrambleTextPhase,
   ScrambleTransitionText,
@@ -104,8 +105,7 @@ export function ProjectsGallery({
     updateRowsExpanded(false);
 
     if (
-      !rowsWereExpanded ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      !rowsWereExpanded || prefersReducedMotion()
     ) {
       onExitComplete();
       return;
@@ -159,7 +159,7 @@ export function ProjectsGallery({
     const animationFrame = window.requestAnimationFrame(() => {
       updateRowsExpanded(true);
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (prefersReducedMotion()) {
         updateCopyPhase("appearing");
         return;
       }

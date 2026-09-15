@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import type { Locale } from "@/content/types";
+import { reducedMotionQuery } from "@/motion-preference";
 import {
   createOrganism,
   DEFAULT_SETTINGS,
@@ -10,7 +11,7 @@ import {
 } from "./organism-engine";
 import styles from "./page.module.css";
 
-const mediaQueries = ["(prefers-reduced-motion: reduce)", "(max-width: 44rem)"];
+const mediaQueries = [reducedMotionQuery, "(max-width: 44rem)"];
 
 const interfaceCopy = {
   es: {
@@ -224,7 +225,7 @@ export function OrganismExperience({
   const copy = interfaceCopy[language];
 
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const media = window.matchMedia(reducedMotionQuery);
     const canvas = canvasRef.current;
     if (!canvas) return;
     const engine = createOrganism(

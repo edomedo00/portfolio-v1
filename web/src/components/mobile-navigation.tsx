@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import type { Locale, SiteChromeContent } from "@/content/types";
+import { prefersReducedMotion } from "@/motion-preference";
 import { LanguageSwitcher } from "./language-switcher";
 import { NavigationMenu, type NavigationItemId } from "./navigation-menu";
 import {
@@ -102,7 +103,7 @@ export function MobileNavigation({
         return;
       }
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (prefersReducedMotion()) {
         currentIdentity.current = "";
         setIdentityPhase("empty");
         return;

@@ -15,6 +15,7 @@ import {
 } from "@/components/scramble-text";
 import { ContentImage } from "@/components/content-image";
 import type { ArchiveProject, Locale } from "@/content/types";
+import { prefersReducedMotion } from "@/motion-preference";
 import styles from "./page.module.css";
 
 export type ArchiveProjectPreview = Pick<
@@ -145,7 +146,7 @@ export function ArchiveProjectsGallery({
       return;
     }
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (prefersReducedMotion()) {
       updateMediaPhase("empty");
       mediaExitComplete.current = true;
       finishCoordinatedExit();
@@ -197,7 +198,7 @@ export function ArchiveProjectsGallery({
     copyExitComplete.current = copyPhaseRef.current === "empty";
     mediaExitComplete.current = mediaPhaseRef.current === "empty";
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (prefersReducedMotion()) {
       updateCopyPhase("empty");
       updateMediaPhase("empty");
       copyExitComplete.current = true;
@@ -239,7 +240,7 @@ export function ArchiveProjectsGallery({
     visibleTextById.current.clear();
 
     const animationFrame = window.requestAnimationFrame(() => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (prefersReducedMotion()) {
         updateMediaPhase("visible");
         updateCopyPhase("visible");
         return;

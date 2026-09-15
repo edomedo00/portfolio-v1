@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import { prefersReducedMotion } from "@/motion-preference";
 
 const closeSequenceDuration = 1060;
 
@@ -67,11 +68,7 @@ export function AnimatedRoutePanel({
       if (closing.current) return;
 
       const nextRoute = `${destination.pathname}${destination.search}${destination.hash}`;
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-
-      if (reduceMotion) {
+      if (prefersReducedMotion()) {
         if (!navigationIsManaged) {
           router.push(nextRoute);
         }
