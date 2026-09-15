@@ -16,6 +16,7 @@ let drawn = [];
 let squares = [];
 let primaryCircles = [];
 let glassBlur;
+let layerGeometry;
 let frameId = 0;
 let now = 0;
 let resize;
@@ -37,6 +38,7 @@ function createOrganismRenderer(canvas) {
     },
     draw(circles, glass, primary, grid, blurRadius) {
       glassBlur = blurRadius;
+      layerGeometry = [circles, glass, primary].map(({ spacing, size, originX, originY }) => ({ spacing, size, originX, originY }));
       function decode({ data, columns, rows, originX, originY, spacing, size }) {
         assert.equal(data.length, columns * rows);
         const shapes = [];
@@ -96,10 +98,11 @@ function advance(frames = 1) {
     pending.clear();
     now += 1000 / 60;
     callbacks.forEach((callback) => callback(now));
-    for (const square of squares) assert.equal(square.side, settings.squareSize, "Glass size must remain fixed at its independent setting");
-    for (const circle of primaryCircles) assert.equal(circle.radius, settings.primarySize / 2, "Primary circles must keep their own fixed diameter");
+    const scale = viewport.width <= 768 ? 0.75 : 1;
+    for (const square of squares) assert.equal(square.side, settings.squareSize * scale, "Glass size must remain fixed at its independent setting");
+    for (const circle of primaryCircles) assert.equal(circle.radius, settings.primarySize * scale / 2, "Primary circles must keep their own fixed diameter");
     for (const circle of drawn) {
-      assert.equal(circle.radius, settings.size / 2, "Animation must never scale a circle");
+      assert.equal(circle.radius, settings.size * scale / 2, "Animation must never scale a circle");
       if (expectHomeOnly) {
         assert(circle.x >= viewport.width * 0.45, "The projected prism must stay in the original area");
         assert(circle.x <= viewport.width * 0.85);
@@ -379,10 +382,38 @@ assert.equal(drawn.length, 0);
 settings = { ...api.DEFAULT_SETTINGS };
 engine.update(settings);
 viewport = { width: 390, height: 844, left: 0, top: 0 };
+expectHomeOnly = false;
 resize();
 advance(240);
 assert.equal(canvas.width, 390);
 assert.equal(canvas.height, 844);
+assert(drawn.length > 0, "The mobile organism must remain visible");
+assert.deepEqual(layerGeometry.map(({ size, spacing }) => [size, spacing]), [[24, 24], [24, 24], [24, 24]]);
+settings = { ...settings, paused: true, size: 48, spacing: 10, squareSize: 80, squareSpacing: 22,
+  primarySize: 60, primarySpacing: 30, quantity: 100, rotationX: 0, rotationY: 0, rotationZ: 0 };
+engine.update(settings);
+engine.reset();
+advance();
+assert.deepEqual(layerGeometry.map(({ size, spacing }) => [size, spacing]), [[36, 7.5], [60, 16.5], [45, 22.5]],
+  "Mobile must use 75% sizes and spacing, including the minimum desktop spacing");
+const mobileY = drawn.map(({ y }) => y);
+assert(Math.abs((Math.min(...mobileY) + Math.max(...mobileY)) / 2 - viewport.height * 0.58) < 1e-6,
+  "Mobile organism must sit slightly below the vertical midpoint");
+assert(drawn.some(({ x }) => x < viewport.width / 2) && drawn.some(({ x }) => x > viewport.width / 2));
+for (const { originX, spacing } of layerGeometry) {
+  assert(Math.abs((viewport.width / 2 - originX) / spacing - Math.round((viewport.width / 2 - originX) / spacing)) < 1e-6,
+    "Mobile layers must share a centered lattice");
+}
+const savedSettings = JSON.stringify(settings);
+for (const width of [768, 769, 390, 1280]) {
+  viewport = { ...viewport, width };
+  resize();
+  advance();
+  const scale = width <= 768 ? 0.75 : 1;
+  assert.deepEqual(layerGeometry.map(({ size, spacing }) => [size, spacing]),
+    [[48, 10], [80, 22], [60, 30]].map(([size, spacing]) => [size * (width <= 768 ? 0.75 : 1), spacing * scale]));
+  assert.equal(JSON.stringify(settings), savedSettings, "Resizing must preserve the desktop configuration");
+}
 listeners.get("webglcontextlost")({ preventDefault() {} });
 assert.equal(pending.size, 0, "Context loss must stop rendering");
 listeners.get("webglcontextrestored")();

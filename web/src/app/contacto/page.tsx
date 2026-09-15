@@ -5,6 +5,7 @@ import {AnimatedRoutePanel} from '@/components/animated-route-panel'
 import {getLocale} from '@/i18n/locale'
 import {getContactContent, getSiteChrome} from '@/sanity/lib/content'
 import {buildMetadata} from '@/sanity/lib/metadata'
+import {ContactForm} from './contact-form'
 import styles from './page.module.css'
 
 const formCopy = {
@@ -14,6 +15,7 @@ const formCopy = {
     email: 'CORREO*',
     subject: 'ASUNTO*',
     message: 'MENSAJE*',
+    sending: 'ENVIANDO…',
   },
   en: {
     close: 'Close contact',
@@ -21,6 +23,7 @@ const formCopy = {
     email: 'EMAIL*',
     subject: 'SUBJECT*',
     message: 'MESSAGE*',
+    sending: 'SENDING…',
   },
 } as const
 
@@ -59,44 +62,11 @@ export default async function ContactPage() {
 
         <p className={styles.introduction}>{content.introduction}</p>
 
-        <form
-          action={`mailto:${content.email}`}
-          className={styles.form}
-          encType="text/plain"
-          method="post"
-        >
-          <div className={styles.fieldRow}>
-            <div className={styles.field}>
-              <label htmlFor="contact-name">{labels.name}</label>
-              <input autoComplete="name" id="contact-name" name="name" required type="text" />
-            </div>
-
-            <div className={styles.field}>
-              <label htmlFor="contact-email">{labels.email}</label>
-              <input
-                autoComplete="email"
-                id="contact-email"
-                name="email"
-                required
-                type="email"
-              />
-            </div>
-          </div>
-
-          <div className={styles.field}>
-            <label htmlFor="contact-subject">{labels.subject}</label>
-            <input id="contact-subject" name="subject" required type="text" />
-          </div>
-
-          <div className={styles.field}>
-            <label htmlFor="contact-message">{labels.message}</label>
-            <textarea id="contact-message" name="message" required />
-          </div>
-
-          <button className={styles.submit} type="submit">
-            {content.emailLabel}
-          </button>
-        </form>
+        <ContactForm
+          labels={labels}
+          language={language}
+          submitLabel={content.emailLabel}
+        />
       </div>
     </AnimatedRoutePanel>
   )

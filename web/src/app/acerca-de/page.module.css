@@ -97,6 +97,7 @@
     height: 100%;
     min-height: 100svh;
     padding: var(--grid-margin);
+    padding-bottom: 2.5rem;
   }
 
   .panelHeader {

@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ContentImage } from "@/components/content-image";
 import type { Locale } from "@/content/types";
+import { useDesktopWheelScroll } from "@/hooks/use-desktop-wheel-scroll";
 import {
   type ScrambleTextPhase,
   ScrambleTransitionText,
@@ -64,6 +66,7 @@ export function ProjectsGallery({
   onExitComplete,
   projects,
 }: ProjectsGalleryProps) {
+  const pathname = usePathname();
   const [activeSlug, setActiveSlug] = useState<string>();
   const [exitTexts, setExitTexts] = useState<Record<string, string>>({});
   const [copyPhase, setCopyPhase] = useState<ScrambleTextPhase>("empty");
@@ -72,8 +75,15 @@ export function ProjectsGallery({
   const rowsExpandedRef = useRef(false);
   const completedAnimations = useRef(new Set<string>());
   const rowTimer = useRef<number | null>(null);
+  const projectListRef = useRef<HTMLElement>(null);
   const visibleTextById = useRef(new Map<string, string>());
   const textAnimationCount = projects.length * 2;
+
+  useDesktopWheelScroll({
+    axis: "y",
+    enabled: pathname === "/proyectos",
+    targetRef: projectListRef,
+  });
 
   const updateCopyPhase = useCallback((nextPhase: ScrambleTextPhase) => {
     copyPhaseRef.current = nextPhase;
@@ -183,6 +193,7 @@ export function ProjectsGallery({
         <section
           aria-label={language === "es" ? "Lista de proyectos" : "Project list"}
           className={styles.projectList}
+          ref={projectListRef}
           tabIndex={0}
         >
           {projects.map((project) => (

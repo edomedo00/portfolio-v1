@@ -52,27 +52,21 @@ export type ArchiveProject = {
   order?: number;
   detailTitle?: InternationalizedArrayString;
   body?: InternationalizedArraySimpleBlockContent;
-  gallery?: Array<
-    {
-      _key: string;
-    } & ImageWithAlt
-  >;
+  gallery?: Array<{
+    _key: string;
+  } & ImageWithAlt>;
   websiteUrl?: string;
   codeUrl?: string;
   seo?: Seo;
 };
 
-export type InternationalizedArraySimpleBlockContent = Array<
-  {
-    _key: string;
-  } & InternationalizedArraySimpleBlockContentValue
->;
+export type InternationalizedArraySimpleBlockContent = Array<{
+  _key: string;
+} & InternationalizedArraySimpleBlockContentValue>;
 
-export type InternationalizedArrayString = Array<
-  {
-    _key: string;
-  } & InternationalizedArrayStringValue
->;
+export type InternationalizedArrayString = Array<{
+  _key: string;
+} & InternationalizedArrayStringValue>;
 
 export type Project = {
   _id: string;
@@ -87,11 +81,9 @@ export type Project = {
   disciplines?: Array<string>;
   projectType?: InternationalizedArrayString;
   body?: InternationalizedArraySimpleBlockContent;
-  gallery?: Array<
-    {
-      _key: string;
-    } & ImageWithAlt
-  >;
+  gallery?: Array<{
+    _key: string;
+  } & ImageWithAlt>;
   websiteUrl?: string;
   codeUrl?: string;
   seo?: Seo;
@@ -110,11 +102,9 @@ export type CellsPage = {
   seo?: Seo;
 };
 
-export type InternationalizedArrayText = Array<
-  {
-    _key: string;
-  } & InternationalizedArrayTextValue
->;
+export type InternationalizedArrayText = Array<{
+  _key: string;
+} & InternationalizedArrayTextValue>;
 
 export type ContactPage = {
   _id: string;
@@ -184,14 +174,13 @@ export type SiteSettings = {
   _updatedAt: string;
   _rev: string;
   displayName?: string;
+  compactTitle?: string;
   role?: InternationalizedArrayString;
   siteUrl?: string;
   defaultSeo?: Seo;
-  socialLinks?: Array<
-    {
-      _key: string;
-    } & ExternalLink
-  >;
+  socialLinks?: Array<{
+    _key: string;
+  } & ExternalLink>;
   timeZone?: string;
 };
 
@@ -369,71 +358,36 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes =
-  | Page
-  | Seo
-  | Slug
-  | ArchiveProject
-  | InternationalizedArraySimpleBlockContent
-  | InternationalizedArrayString
-  | Project
-  | CellsPage
-  | InternationalizedArrayText
-  | ContactPage
-  | AboutPage
-  | ArchivePage
-  | ProjectsPage
-  | HomePage
-  | SiteSettings
-  | SanityImageAssetReference
-  | ImageWithAlt
-  | ExternalLink
-  | SanityImageCrop
-  | SanityImageHotspot
-  | SimpleBlockContent
-  | InternationalizedArraySimpleBlockContentValue
-  | InternationalizedArrayTextValue
-  | InternationalizedArrayStringValue
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityImageMetadata
-  | SanityFileAsset
-  | SanityAssetSourceData
-  | SanityImageAsset
-  | Geopoint;
+export type AllSanitySchemaTypes = Page | Seo | Slug | ArchiveProject | InternationalizedArraySimpleBlockContent | InternationalizedArrayString | Project | CellsPage | InternationalizedArrayText | ContactPage | AboutPage | ArchivePage | ProjectsPage | HomePage | SiteSettings | SanityImageAssetReference | ImageWithAlt | ExternalLink | SanityImageCrop | SanityImageHotspot | SimpleBlockContent | InternationalizedArraySimpleBlockContentValue | InternationalizedArrayTextValue | InternationalizedArrayStringValue | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 
 // Source: ../web/src/sanity/lib/queries.ts
 // Variable: SITE_SETTINGS_QUERY
 // Query: *[_id == "siteSettings"][0] {    _id,    "siteTitle": displayName,    siteUrl,    defaultSeo {      "title": coalesce(title[language == "es"][0].value, title[0].value),      "description": coalesce(        description[language == "es"][0].value,        description[0].value      ),      image {        ...,        "alt": coalesce(alt[language == "es"][0].value, alt[0].value)      },      noIndex    }  }
-export type SITE_SETTINGS_QUERY_RESULT =
-  | {
-      _id: "siteSettings";
-      siteTitle: null;
-      siteUrl: null;
-      defaultSeo: null;
-    }
-  | {
-      _id: "siteSettings";
-      siteTitle: string | null;
-      siteUrl: string | null;
-      defaultSeo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _type: "imageWithAlt";
-          asset?: SanityImageAssetReference;
-          media?: unknown;
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          isDecorative?: boolean;
-          alt: string | null;
-          caption?: InternationalizedArrayString;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | null;
+export type SITE_SETTINGS_QUERY_RESULT = {
+  _id: "siteSettings";
+  siteTitle: null;
+  siteUrl: null;
+  defaultSeo: null;
+} | {
+  _id: "siteSettings";
+  siteTitle: string | null;
+  siteUrl: string | null;
+  defaultSeo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _type: "imageWithAlt";
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      isDecorative?: boolean;
+      alt: string | null;
+      caption?: InternationalizedArrayString;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | null;
 
 // Source: ../web/src/sanity/lib/queries.ts
 // Variable: PAGE_BY_SLUG_QUERY
@@ -463,67 +417,62 @@ export type PAGE_BY_SLUG_QUERY_RESULT = {
 // Variable: PROJECTS_CONTENT_QUERY
 // Query: {    "page": *[_id == "projectsPage"][0] {      "heading": coalesce(        heading[language == $language][0].value,        heading[language == "es"][0].value,        heading[0].value      ),      "introduction": coalesce(        introduction[language == $language][0].value,        introduction[language == "es"][0].value,        introduction[0].value      ),      seo {        "title": coalesce(          title[language == $language][0].value,          title[language == "es"][0].value,          title[0].value        ),        "description": coalesce(          description[language == $language][0].value,          description[language == "es"][0].value,          description[0].value        ),        image {          _key,          _type,          asset,          crop,          hotspot,          isDecorative,          "alt": coalesce(            alt[language == $language][0].value,            alt[language == "es"][0].value,            alt[0].value          )        },        noIndex      }    },    "projects": *[_type == "project" && defined(slug.current)]      | order(order asc, year desc, title asc) {        _id,        title,        "slug": slug.current,        order,        year,        disciplines,        "projectType": coalesce(          projectType[language == $language][0].value,          projectType[language == "es"][0].value,          projectType[0].value        ),        "body": coalesce(          body[language == $language][0].value,          body[language == "es"][0].value,          body[0].value        ),        websiteUrl,        codeUrl,        gallery[] {          _key,          _type,          asset,          crop,          hotspot,          isDecorative,          "alt": coalesce(            alt[language == $language][0].value,            alt[language == "es"][0].value,            alt[0].value          ),          "caption": coalesce(            caption[language == $language][0].value,            caption[language == "es"][0].value,            caption[0].value          )        },        seo {          "title": coalesce(            title[language == $language][0].value,            title[language == "es"][0].value,            title[0].value          ),          "description": coalesce(            description[language == $language][0].value,            description[language == "es"][0].value,            description[0].value          ),          image {            _key,            _type,            asset,            crop,            hotspot,            isDecorative,            "alt": coalesce(              alt[language == $language][0].value,              alt[language == "es"][0].value,              alt[0].value            )          },          noIndex        }      }  }
 export type PROJECTS_CONTENT_QUERY_RESULT = {
-  page:
-    | {
-        heading: null;
-        introduction: null;
-        seo: null;
-      }
-    | {
-        heading: null;
-        introduction: null;
-        seo: {
-          title: string | null;
-          description: string | null;
-          image: {
-            _key: null;
-            _type: "imageWithAlt";
-            asset: SanityImageAssetReference | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            isDecorative: boolean | null;
-            alt: string | null;
-          } | null;
-          noIndex: boolean | null;
-        } | null;
-      }
-    | {
-        heading: string | null;
-        introduction: null;
-        seo: {
-          title: string | null;
-          description: string | null;
-          image: {
-            _key: null;
-            _type: "imageWithAlt";
-            asset: SanityImageAssetReference | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            isDecorative: boolean | null;
-            alt: string | null;
-          } | null;
-          noIndex: boolean | null;
-        } | null;
-      }
-    | {
-        heading: string | null;
-        introduction: string | null;
-        seo: {
-          title: string | null;
-          description: string | null;
-          image: {
-            _key: null;
-            _type: "imageWithAlt";
-            asset: SanityImageAssetReference | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            isDecorative: boolean | null;
-            alt: string | null;
-          } | null;
-          noIndex: boolean | null;
-        } | null;
-      }
-    | null;
+  page: {
+    heading: null;
+    introduction: null;
+    seo: null;
+  } | {
+    heading: null;
+    introduction: null;
+    seo: {
+      title: string | null;
+      description: string | null;
+      image: {
+        _key: null;
+        _type: "imageWithAlt";
+        asset: SanityImageAssetReference | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        isDecorative: boolean | null;
+        alt: string | null;
+      } | null;
+      noIndex: boolean | null;
+    } | null;
+  } | {
+    heading: string | null;
+    introduction: null;
+    seo: {
+      title: string | null;
+      description: string | null;
+      image: {
+        _key: null;
+        _type: "imageWithAlt";
+        asset: SanityImageAssetReference | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        isDecorative: boolean | null;
+        alt: string | null;
+      } | null;
+      noIndex: boolean | null;
+    } | null;
+  } | {
+    heading: string | null;
+    introduction: string | null;
+    seo: {
+      title: string | null;
+      description: string | null;
+      image: {
+        _key: null;
+        _type: "imageWithAlt";
+        asset: SanityImageAssetReference | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        isDecorative: boolean | null;
+        alt: string | null;
+      } | null;
+      noIndex: boolean | null;
+    } | null;
+  } | null;
   projects: Array<{
     _id: string;
     title: string | null;
@@ -611,43 +560,42 @@ export type PROJECT_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../web/src/sanity/lib/queries.ts
 // Variable: SITE_CHROME_QUERY
-// Query: {    "settings": *[_id == "siteSettings"][0] {      displayName,      "role": coalesce(        role[language == $language][0].value,        role[language == "es"][0].value,        role[0].value      ),      siteUrl,      timeZone,      socialLinks[] {        _key,        url,        "label": coalesce(          label[language == $language][0].value,          label[language == "es"][0].value,          label[0].value        )      },      defaultSeo {        "title": coalesce(          title[language == $language][0].value,          title[language == "es"][0].value,          title[0].value        ),        "description": coalesce(          description[language == $language][0].value,          description[language == "es"][0].value,          description[0].value        ),        image {          _key,          _type,          asset,          crop,          hotspot,          isDecorative,          "alt": coalesce(            alt[language == $language][0].value,            alt[language == "es"][0].value,            alt[0].value          )        },        noIndex      }    },    "navigation": {      "home": coalesce(        *[_id == "homePage"][0].navigationLabel[language == $language][0].value,        *[_id == "homePage"][0].navigationLabel[language == "es"][0].value,        *[_id == "homePage"][0].navigationLabel[0].value      ),      "projects": coalesce(        *[_id == "projectsPage"][0].navigationLabel[language == $language][0].value,        *[_id == "projectsPage"][0].navigationLabel[language == "es"][0].value,        *[_id == "projectsPage"][0].navigationLabel[0].value      ),      "archive": coalesce(        *[_id == "archivePage"][0].navigationLabel[language == $language][0].value,        *[_id == "archivePage"][0].navigationLabel[language == "es"][0].value,        *[_id == "archivePage"][0].navigationLabel[0].value      ),      "cells": coalesce(        *[_id == "cellsPage"][0].navigationLabel[language == $language][0].value,        *[_id == "cellsPage"][0].navigationLabel[language == "es"][0].value,        *[_id == "cellsPage"][0].navigationLabel[0].value      ),      "about": coalesce(        *[_id == "aboutPage"][0].navigationLabel[language == $language][0].value,        *[_id == "aboutPage"][0].navigationLabel[language == "es"][0].value,        *[_id == "aboutPage"][0].navigationLabel[0].value      ),      "contact": coalesce(        *[_id == "contactPage"][0].navigationLabel[language == $language][0].value,        *[_id == "contactPage"][0].navigationLabel[language == "es"][0].value,        *[_id == "contactPage"][0].navigationLabel[0].value      )    }  }
+// Query: {    "settings": *[_id == "siteSettings"][0] {      displayName,      "compactTitle": coalesce(compactTitle, displayName),      "role": coalesce(        role[language == $language][0].value,        role[language == "es"][0].value,        role[0].value      ),      siteUrl,      timeZone,      socialLinks[] {        _key,        url,        "label": coalesce(          label[language == $language][0].value,          label[language == "es"][0].value,          label[0].value        )      },      defaultSeo {        "title": coalesce(          title[language == $language][0].value,          title[language == "es"][0].value,          title[0].value        ),        "description": coalesce(          description[language == $language][0].value,          description[language == "es"][0].value,          description[0].value        ),        image {          _key,          _type,          asset,          crop,          hotspot,          isDecorative,          "alt": coalesce(            alt[language == $language][0].value,            alt[language == "es"][0].value,            alt[0].value          )        },        noIndex      }    },    "navigation": {      "home": coalesce(        *[_id == "homePage"][0].navigationLabel[language == $language][0].value,        *[_id == "homePage"][0].navigationLabel[language == "es"][0].value,        *[_id == "homePage"][0].navigationLabel[0].value      ),      "projects": coalesce(        *[_id == "projectsPage"][0].navigationLabel[language == $language][0].value,        *[_id == "projectsPage"][0].navigationLabel[language == "es"][0].value,        *[_id == "projectsPage"][0].navigationLabel[0].value      ),      "archive": coalesce(        *[_id == "archivePage"][0].navigationLabel[language == $language][0].value,        *[_id == "archivePage"][0].navigationLabel[language == "es"][0].value,        *[_id == "archivePage"][0].navigationLabel[0].value      ),      "cells": coalesce(        *[_id == "cellsPage"][0].navigationLabel[language == $language][0].value,        *[_id == "cellsPage"][0].navigationLabel[language == "es"][0].value,        *[_id == "cellsPage"][0].navigationLabel[0].value      ),      "about": coalesce(        *[_id == "aboutPage"][0].navigationLabel[language == $language][0].value,        *[_id == "aboutPage"][0].navigationLabel[language == "es"][0].value,        *[_id == "aboutPage"][0].navigationLabel[0].value      ),      "contact": coalesce(        *[_id == "contactPage"][0].navigationLabel[language == $language][0].value,        *[_id == "contactPage"][0].navigationLabel[language == "es"][0].value,        *[_id == "contactPage"][0].navigationLabel[0].value      )    }  }
 export type SITE_CHROME_QUERY_RESULT = {
-  settings:
-    | {
-        displayName: null;
-        role: null;
-        siteUrl: null;
-        timeZone: null;
-        socialLinks: null;
-        defaultSeo: null;
-      }
-    | {
-        displayName: string | null;
-        role: string | null;
-        siteUrl: string | null;
-        timeZone: string | null;
-        socialLinks: Array<{
-          _key: string;
-          url: string | null;
-          label: string | null;
-        }> | null;
-        defaultSeo: {
-          title: string | null;
-          description: string | null;
-          image: {
-            _key: null;
-            _type: "imageWithAlt";
-            asset: SanityImageAssetReference | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            isDecorative: boolean | null;
-            alt: string | null;
-          } | null;
-          noIndex: boolean | null;
-        } | null;
-      }
-    | null;
+  settings: {
+    displayName: null;
+    compactTitle: null;
+    role: null;
+    siteUrl: null;
+    timeZone: null;
+    socialLinks: null;
+    defaultSeo: null;
+  } | {
+    displayName: string | null;
+    compactTitle: string | null;
+    role: string | null;
+    siteUrl: string | null;
+    timeZone: string | null;
+    socialLinks: Array<{
+      _key: string;
+      url: string | null;
+      label: string | null;
+    }> | null;
+    defaultSeo: {
+      title: string | null;
+      description: string | null;
+      image: {
+        _key: null;
+        _type: "imageWithAlt";
+        asset: SanityImageAssetReference | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        isDecorative: boolean | null;
+        alt: string | null;
+      } | null;
+      noIndex: boolean | null;
+    } | null;
+  } | null;
   navigation: {
     home: string | null;
     projects: string | null;
@@ -662,90 +610,84 @@ export type SITE_CHROME_QUERY_RESULT = {
 // Variable: ARCHIVE_QUERY
 // Query: {    "page": *[_id == "archivePage"][0] {      "heading": coalesce(        heading[language == $language][0].value,        heading[language == "es"][0].value,        heading[0].value      ),      "introduction": coalesce(        introduction[language == $language][0].value,        introduction[language == "es"][0].value,        introduction[0].value      ),      "comingSoonLabel": coalesce(        comingSoonLabel[language == $language][0].value,        comingSoonLabel[language == "es"][0].value,        comingSoonLabel[0].value      ),      seo {        "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),        "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),        image {          _key,          _type,          asset,          crop,          hotspot,          isDecorative,          "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)        },        noIndex      }    },    "projects": *[_type == "archiveProject" && defined(slug.current)]      | order(order asc, archiveId asc) {        _id,        archiveId,        title,        "slug": slug.current,        order,        "detailTitle": coalesce(          detailTitle[language == $language][0].value,          detailTitle[language == "es"][0].value,          detailTitle[0].value        ),        "body": coalesce(          body[language == $language][0].value,          body[language == "es"][0].value,          body[0].value        ),        websiteUrl,        codeUrl,        gallery[] {          _key,          _type,          asset,          crop,          hotspot,          isDecorative,          "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value),          "caption": coalesce(caption[language == $language][0].value, caption[language == "es"][0].value, caption[0].value)        },        seo {          "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),          "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),          image {            _key,            _type,            asset,            crop,            hotspot,            isDecorative,            "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)          },          noIndex        }      }  }
 export type ARCHIVE_QUERY_RESULT = {
-  page:
-    | {
-        heading: null;
-        introduction: null;
-        comingSoonLabel: null;
-        seo: null;
-      }
-    | {
-        heading: null;
-        introduction: null;
-        comingSoonLabel: null;
-        seo: {
-          title: string | null;
-          description: string | null;
-          image: {
-            _key: null;
-            _type: "imageWithAlt";
-            asset: SanityImageAssetReference | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            isDecorative: boolean | null;
-            alt: string | null;
-          } | null;
-          noIndex: boolean | null;
-        } | null;
-      }
-    | {
-        heading: string | null;
-        introduction: null;
-        comingSoonLabel: null;
-        seo: {
-          title: string | null;
-          description: string | null;
-          image: {
-            _key: null;
-            _type: "imageWithAlt";
-            asset: SanityImageAssetReference | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            isDecorative: boolean | null;
-            alt: string | null;
-          } | null;
-          noIndex: boolean | null;
-        } | null;
-      }
-    | {
-        heading: string | null;
-        introduction: string | null;
-        comingSoonLabel: null;
-        seo: {
-          title: string | null;
-          description: string | null;
-          image: {
-            _key: null;
-            _type: "imageWithAlt";
-            asset: SanityImageAssetReference | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            isDecorative: boolean | null;
-            alt: string | null;
-          } | null;
-          noIndex: boolean | null;
-        } | null;
-      }
-    | {
-        heading: string | null;
-        introduction: string | null;
-        comingSoonLabel: string | null;
-        seo: {
-          title: string | null;
-          description: string | null;
-          image: {
-            _key: null;
-            _type: "imageWithAlt";
-            asset: SanityImageAssetReference | null;
-            crop: SanityImageCrop | null;
-            hotspot: SanityImageHotspot | null;
-            isDecorative: boolean | null;
-            alt: string | null;
-          } | null;
-          noIndex: boolean | null;
-        } | null;
-      }
-    | null;
+  page: {
+    heading: null;
+    introduction: null;
+    comingSoonLabel: null;
+    seo: null;
+  } | {
+    heading: null;
+    introduction: null;
+    comingSoonLabel: null;
+    seo: {
+      title: string | null;
+      description: string | null;
+      image: {
+        _key: null;
+        _type: "imageWithAlt";
+        asset: SanityImageAssetReference | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        isDecorative: boolean | null;
+        alt: string | null;
+      } | null;
+      noIndex: boolean | null;
+    } | null;
+  } | {
+    heading: string | null;
+    introduction: null;
+    comingSoonLabel: null;
+    seo: {
+      title: string | null;
+      description: string | null;
+      image: {
+        _key: null;
+        _type: "imageWithAlt";
+        asset: SanityImageAssetReference | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        isDecorative: boolean | null;
+        alt: string | null;
+      } | null;
+      noIndex: boolean | null;
+    } | null;
+  } | {
+    heading: string | null;
+    introduction: string | null;
+    comingSoonLabel: null;
+    seo: {
+      title: string | null;
+      description: string | null;
+      image: {
+        _key: null;
+        _type: "imageWithAlt";
+        asset: SanityImageAssetReference | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        isDecorative: boolean | null;
+        alt: string | null;
+      } | null;
+      noIndex: boolean | null;
+    } | null;
+  } | {
+    heading: string | null;
+    introduction: string | null;
+    comingSoonLabel: string | null;
+    seo: {
+      title: string | null;
+      description: string | null;
+      image: {
+        _key: null;
+        _type: "imageWithAlt";
+        asset: SanityImageAssetReference | null;
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        isDecorative: boolean | null;
+        alt: string | null;
+      } | null;
+      noIndex: boolean | null;
+    } | null;
+  } | null;
   projects: Array<{
     _id: string;
     archiveId: number | null;
@@ -825,228 +767,212 @@ export type ARCHIVE_BY_SLUG_QUERY_RESULT = {
 // Source: ../web/src/sanity/lib/queries.ts
 // Variable: ABOUT_PAGE_QUERY
 // Query: *[_id == "aboutPage"][0] {    "heading": coalesce(heading[language == $language][0].value, heading[language == "es"][0].value, heading[0].value),    "body": coalesce(body[language == $language][0].value, body[language == "es"][0].value, body[0].value),    seo {      "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),      "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),      image {        _key,        _type,        asset,        crop,        hotspot,        isDecorative,        "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)      },      noIndex    }  }
-export type ABOUT_PAGE_QUERY_RESULT =
-  | {
-      heading: null;
-      body: null;
-      seo: null;
-    }
-  | {
-      heading: null;
-      body: null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | {
-      heading: string | null;
-      body: null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | {
-      heading: null;
-      body: SimpleBlockContent | null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | {
-      heading: string | null;
-      body: SimpleBlockContent | null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | null;
+export type ABOUT_PAGE_QUERY_RESULT = {
+  heading: null;
+  body: null;
+  seo: null;
+} | {
+  heading: null;
+  body: null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | {
+  heading: string | null;
+  body: null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | {
+  heading: null;
+  body: SimpleBlockContent | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | {
+  heading: string | null;
+  body: SimpleBlockContent | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | null;
 
 // Source: ../web/src/sanity/lib/queries.ts
 // Variable: CONTACT_PAGE_QUERY
 // Query: *[_id == "contactPage"][0] {    "heading": coalesce(heading[language == $language][0].value, heading[language == "es"][0].value, heading[0].value),    "introduction": coalesce(introduction[language == $language][0].value, introduction[language == "es"][0].value, introduction[0].value),    email,    "emailLabel": coalesce(emailLabel[language == $language][0].value, emailLabel[language == "es"][0].value, emailLabel[0].value),    seo {      "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),      "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),      image {        _key,        _type,        asset,        crop,        hotspot,        isDecorative,        "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)      },      noIndex    }  }
-export type CONTACT_PAGE_QUERY_RESULT =
-  | {
-      heading: null;
-      introduction: null;
-      email: null;
-      emailLabel: null;
-      seo: null;
-    }
-  | {
-      heading: null;
-      introduction: null;
-      email: null;
-      emailLabel: null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | {
-      heading: string | null;
-      introduction: null;
-      email: null;
-      emailLabel: null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | {
-      heading: string | null;
-      introduction: string | null;
-      email: null;
-      emailLabel: null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | {
-      heading: string | null;
-      introduction: string | null;
-      email: string | null;
-      emailLabel: string | null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | null;
+export type CONTACT_PAGE_QUERY_RESULT = {
+  heading: null;
+  introduction: null;
+  email: null;
+  emailLabel: null;
+  seo: null;
+} | {
+  heading: null;
+  introduction: null;
+  email: null;
+  emailLabel: null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | {
+  heading: string | null;
+  introduction: null;
+  email: null;
+  emailLabel: null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | {
+  heading: string | null;
+  introduction: string | null;
+  email: null;
+  emailLabel: null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | {
+  heading: string | null;
+  introduction: string | null;
+  email: string | null;
+  emailLabel: string | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | null;
 
 // Source: ../web/src/sanity/lib/queries.ts
 // Variable: CELLS_PAGE_QUERY
 // Query: *[_id == "cellsPage"][0] {    "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),    "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),    backgroundSettingsJson,    seo {      "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),      "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),      image {        _key,        _type,        asset,        crop,        hotspot,        isDecorative,        "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)      },      noIndex    }  }
-export type CELLS_PAGE_QUERY_RESULT =
-  | {
-      title: null;
-      description: null;
-      backgroundSettingsJson: null;
-      seo: null;
-    }
-  | {
-      title: null;
-      description: null;
-      backgroundSettingsJson: null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | {
-      title: string | null;
-      description: string | null;
-      backgroundSettingsJson: string | null;
-      seo: {
-        title: string | null;
-        description: string | null;
-        image: {
-          _key: null;
-          _type: "imageWithAlt";
-          asset: SanityImageAssetReference | null;
-          crop: SanityImageCrop | null;
-          hotspot: SanityImageHotspot | null;
-          isDecorative: boolean | null;
-          alt: string | null;
-        } | null;
-        noIndex: boolean | null;
-      } | null;
-    }
-  | null;
+export type CELLS_PAGE_QUERY_RESULT = {
+  title: null;
+  description: null;
+  backgroundSettingsJson: null;
+  seo: null;
+} | {
+  title: null;
+  description: null;
+  backgroundSettingsJson: null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | {
+  title: string | null;
+  description: string | null;
+  backgroundSettingsJson: string | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      _key: null;
+      _type: "imageWithAlt";
+      asset: SanityImageAssetReference | null;
+      crop: SanityImageCrop | null;
+      hotspot: SanityImageHotspot | null;
+      isDecorative: boolean | null;
+      alt: string | null;
+    } | null;
+    noIndex: boolean | null;
+  } | null;
+} | null;
 
 // Source: ../web/src/sanity/lib/queries.ts
 // Variable: ARCHIVE_SLUGS_QUERY
@@ -1059,17 +985,18 @@ export type ARCHIVE_SLUGS_QUERY_RESULT = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_id == "siteSettings"][0] {\n    _id,\n    "siteTitle": displayName,\n    siteUrl,\n    defaultSeo {\n      "title": coalesce(title[language == "es"][0].value, title[0].value),\n      "description": coalesce(\n        description[language == "es"][0].value,\n        description[0].value\n      ),\n      image {\n        ...,\n        "alt": coalesce(alt[language == "es"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT;
-    '\n  *[_type == "page" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    seo {\n      "title": coalesce(title[language == "es"][0].value, title[0].value),\n      "description": coalesce(\n        description[language == "es"][0].value,\n        description[0].value\n      ),\n      image {\n        ...,\n        "alt": coalesce(alt[language == "es"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n': PAGE_BY_SLUG_QUERY_RESULT;
-    '\n  {\n    "page": *[_id == "projectsPage"][0] {\n      "heading": coalesce(\n        heading[language == $language][0].value,\n        heading[language == "es"][0].value,\n        heading[0].value\n      ),\n      "introduction": coalesce(\n        introduction[language == $language][0].value,\n        introduction[language == "es"][0].value,\n        introduction[0].value\n      ),\n      seo {\n        "title": coalesce(\n          title[language == $language][0].value,\n          title[language == "es"][0].value,\n          title[0].value\n        ),\n        "description": coalesce(\n          description[language == $language][0].value,\n          description[language == "es"][0].value,\n          description[0].value\n        ),\n        image {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          "alt": coalesce(\n            alt[language == $language][0].value,\n            alt[language == "es"][0].value,\n            alt[0].value\n          )\n        },\n        noIndex\n      }\n    },\n    "projects": *[_type == "project" && defined(slug.current)]\n      | order(order asc, year desc, title asc) {\n        _id,\n        title,\n        "slug": slug.current,\n        order,\n        year,\n        disciplines,\n        "projectType": coalesce(\n          projectType[language == $language][0].value,\n          projectType[language == "es"][0].value,\n          projectType[0].value\n        ),\n        "body": coalesce(\n          body[language == $language][0].value,\n          body[language == "es"][0].value,\n          body[0].value\n        ),\n        websiteUrl,\n        codeUrl,\n        gallery[] {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          "alt": coalesce(\n            alt[language == $language][0].value,\n            alt[language == "es"][0].value,\n            alt[0].value\n          ),\n          "caption": coalesce(\n            caption[language == $language][0].value,\n            caption[language == "es"][0].value,\n            caption[0].value\n          )\n        },\n        seo {\n          "title": coalesce(\n            title[language == $language][0].value,\n            title[language == "es"][0].value,\n            title[0].value\n          ),\n          "description": coalesce(\n            description[language == $language][0].value,\n            description[language == "es"][0].value,\n            description[0].value\n          ),\n          image {\n            _key,\n            _type,\n            asset,\n            crop,\n            hotspot,\n            isDecorative,\n            "alt": coalesce(\n              alt[language == $language][0].value,\n              alt[language == "es"][0].value,\n              alt[0].value\n            )\n          },\n          noIndex\n        }\n      }\n  }\n': PROJECTS_CONTENT_QUERY_RESULT;
-    '\n  *[_type == "project" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    order,\n    year,\n    disciplines,\n    "projectType": coalesce(\n      projectType[language == $language][0].value,\n      projectType[language == "es"][0].value,\n      projectType[0].value\n    ),\n    "body": coalesce(\n      body[language == $language][0].value,\n      body[language == "es"][0].value,\n      body[0].value\n    ),\n    websiteUrl,\n    codeUrl,\n    gallery[] {\n      _key,\n      _type,\n      asset,\n      crop,\n      hotspot,\n      isDecorative,\n      "alt": coalesce(\n        alt[language == $language][0].value,\n        alt[language == "es"][0].value,\n        alt[0].value\n      ),\n      "caption": coalesce(\n        caption[language == $language][0].value,\n        caption[language == "es"][0].value,\n        caption[0].value\n      )\n    },\n    seo {\n      "title": coalesce(\n        title[language == $language][0].value,\n        title[language == "es"][0].value,\n        title[0].value\n      ),\n      "description": coalesce(\n        description[language == $language][0].value,\n        description[language == "es"][0].value,\n        description[0].value\n      ),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        "alt": coalesce(\n          alt[language == $language][0].value,\n          alt[language == "es"][0].value,\n          alt[0].value\n        )\n      },\n      noIndex\n    }\n  }\n': PROJECT_BY_SLUG_QUERY_RESULT;
-    '\n  *[_type == "project" && defined(slug.current)] | order(order asc) {\n    "slug": slug.current\n  }\n': PROJECT_SLUGS_QUERY_RESULT;
-    '\n  {\n    "settings": *[_id == "siteSettings"][0] {\n      displayName,\n      "role": coalesce(\n        role[language == $language][0].value,\n        role[language == "es"][0].value,\n        role[0].value\n      ),\n      siteUrl,\n      timeZone,\n      socialLinks[] {\n        _key,\n        url,\n        "label": coalesce(\n          label[language == $language][0].value,\n          label[language == "es"][0].value,\n          label[0].value\n        )\n      },\n      defaultSeo {\n        "title": coalesce(\n          title[language == $language][0].value,\n          title[language == "es"][0].value,\n          title[0].value\n        ),\n        "description": coalesce(\n          description[language == $language][0].value,\n          description[language == "es"][0].value,\n          description[0].value\n        ),\n        image {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          "alt": coalesce(\n            alt[language == $language][0].value,\n            alt[language == "es"][0].value,\n            alt[0].value\n          )\n        },\n        noIndex\n      }\n    },\n    "navigation": {\n      "home": coalesce(\n        *[_id == "homePage"][0].navigationLabel[language == $language][0].value,\n        *[_id == "homePage"][0].navigationLabel[language == "es"][0].value,\n        *[_id == "homePage"][0].navigationLabel[0].value\n      ),\n      "projects": coalesce(\n        *[_id == "projectsPage"][0].navigationLabel[language == $language][0].value,\n        *[_id == "projectsPage"][0].navigationLabel[language == "es"][0].value,\n        *[_id == "projectsPage"][0].navigationLabel[0].value\n      ),\n      "archive": coalesce(\n        *[_id == "archivePage"][0].navigationLabel[language == $language][0].value,\n        *[_id == "archivePage"][0].navigationLabel[language == "es"][0].value,\n        *[_id == "archivePage"][0].navigationLabel[0].value\n      ),\n      "cells": coalesce(\n        *[_id == "cellsPage"][0].navigationLabel[language == $language][0].value,\n        *[_id == "cellsPage"][0].navigationLabel[language == "es"][0].value,\n        *[_id == "cellsPage"][0].navigationLabel[0].value\n      ),\n      "about": coalesce(\n        *[_id == "aboutPage"][0].navigationLabel[language == $language][0].value,\n        *[_id == "aboutPage"][0].navigationLabel[language == "es"][0].value,\n        *[_id == "aboutPage"][0].navigationLabel[0].value\n      ),\n      "contact": coalesce(\n        *[_id == "contactPage"][0].navigationLabel[language == $language][0].value,\n        *[_id == "contactPage"][0].navigationLabel[language == "es"][0].value,\n        *[_id == "contactPage"][0].navigationLabel[0].value\n      )\n    }\n  }\n': SITE_CHROME_QUERY_RESULT;
-    '\n  {\n    "page": *[_id == "archivePage"][0] {\n      "heading": coalesce(\n        heading[language == $language][0].value,\n        heading[language == "es"][0].value,\n        heading[0].value\n      ),\n      "introduction": coalesce(\n        introduction[language == $language][0].value,\n        introduction[language == "es"][0].value,\n        introduction[0].value\n      ),\n      "comingSoonLabel": coalesce(\n        comingSoonLabel[language == $language][0].value,\n        comingSoonLabel[language == "es"][0].value,\n        comingSoonLabel[0].value\n      ),\n      seo {\n        "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),\n        "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),\n        image {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)\n        },\n        noIndex\n      }\n    },\n    "projects": *[_type == "archiveProject" && defined(slug.current)]\n      | order(order asc, archiveId asc) {\n        _id,\n        archiveId,\n        title,\n        "slug": slug.current,\n        order,\n        "detailTitle": coalesce(\n          detailTitle[language == $language][0].value,\n          detailTitle[language == "es"][0].value,\n          detailTitle[0].value\n        ),\n        "body": coalesce(\n          body[language == $language][0].value,\n          body[language == "es"][0].value,\n          body[0].value\n        ),\n        websiteUrl,\n        codeUrl,\n        gallery[] {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value),\n          "caption": coalesce(caption[language == $language][0].value, caption[language == "es"][0].value, caption[0].value)\n        },\n        seo {\n          "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),\n          "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),\n          image {\n            _key,\n            _type,\n            asset,\n            crop,\n            hotspot,\n            isDecorative,\n            "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)\n          },\n          noIndex\n        }\n      }\n  }\n': ARCHIVE_QUERY_RESULT;
-    '\n  *[_type == "archiveProject" && slug.current == $slug][0] {\n    _id,\n    archiveId,\n    title,\n    "slug": slug.current,\n    order,\n    "detailTitle": coalesce(\n      detailTitle[language == $language][0].value,\n      detailTitle[language == "es"][0].value,\n      detailTitle[0].value\n    ),\n    "body": coalesce(\n      body[language == $language][0].value,\n      body[language == "es"][0].value,\n      body[0].value\n    ),\n    websiteUrl,\n    codeUrl,\n    gallery[] {\n      _key,\n      _type,\n      asset,\n      crop,\n      hotspot,\n      isDecorative,\n      "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value),\n      "caption": coalesce(caption[language == $language][0].value, caption[language == "es"][0].value, caption[0].value)\n    },\n    seo {\n      "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),\n      "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n': ARCHIVE_BY_SLUG_QUERY_RESULT;
-    '\n  *[_id == "aboutPage"][0] {\n    "heading": coalesce(heading[language == $language][0].value, heading[language == "es"][0].value, heading[0].value),\n    "body": coalesce(body[language == $language][0].value, body[language == "es"][0].value, body[0].value),\n    seo {\n      "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),\n      "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n': ABOUT_PAGE_QUERY_RESULT;
-    '\n  *[_id == "contactPage"][0] {\n    "heading": coalesce(heading[language == $language][0].value, heading[language == "es"][0].value, heading[0].value),\n    "introduction": coalesce(introduction[language == $language][0].value, introduction[language == "es"][0].value, introduction[0].value),\n    email,\n    "emailLabel": coalesce(emailLabel[language == $language][0].value, emailLabel[language == "es"][0].value, emailLabel[0].value),\n    seo {\n      "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),\n      "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n': CONTACT_PAGE_QUERY_RESULT;
-    '\n  *[_id == "cellsPage"][0] {\n    "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),\n    "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),\n    backgroundSettingsJson,\n    seo {\n      "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),\n      "description": coalesce(description[language == $language][0].value, description[language == "es"][0].value, description[0].value),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n': CELLS_PAGE_QUERY_RESULT;
-    '\n  *[_type == "archiveProject" && defined(slug.current)] | order(order asc) {\n    "slug": slug.current\n  }\n': ARCHIVE_SLUGS_QUERY_RESULT;
+    "\n  *[_id == \"siteSettings\"][0] {\n    _id,\n    \"siteTitle\": displayName,\n    siteUrl,\n    defaultSeo {\n      \"title\": coalesce(title[language == \"es\"][0].value, title[0].value),\n      \"description\": coalesce(\n        description[language == \"es\"][0].value,\n        description[0].value\n      ),\n      image {\n        ...,\n        \"alt\": coalesce(alt[language == \"es\"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n": SITE_SETTINGS_QUERY_RESULT;
+    "\n  *[_type == \"page\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    seo {\n      \"title\": coalesce(title[language == \"es\"][0].value, title[0].value),\n      \"description\": coalesce(\n        description[language == \"es\"][0].value,\n        description[0].value\n      ),\n      image {\n        ...,\n        \"alt\": coalesce(alt[language == \"es\"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n": PAGE_BY_SLUG_QUERY_RESULT;
+    "\n  {\n    \"page\": *[_id == \"projectsPage\"][0] {\n      \"heading\": coalesce(\n        heading[language == $language][0].value,\n        heading[language == \"es\"][0].value,\n        heading[0].value\n      ),\n      \"introduction\": coalesce(\n        introduction[language == $language][0].value,\n        introduction[language == \"es\"][0].value,\n        introduction[0].value\n      ),\n      seo {\n        \"title\": coalesce(\n          title[language == $language][0].value,\n          title[language == \"es\"][0].value,\n          title[0].value\n        ),\n        \"description\": coalesce(\n          description[language == $language][0].value,\n          description[language == \"es\"][0].value,\n          description[0].value\n        ),\n        image {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          \"alt\": coalesce(\n            alt[language == $language][0].value,\n            alt[language == \"es\"][0].value,\n            alt[0].value\n          )\n        },\n        noIndex\n      }\n    },\n    \"projects\": *[_type == \"project\" && defined(slug.current)]\n      | order(order asc, year desc, title asc) {\n        _id,\n        title,\n        \"slug\": slug.current,\n        order,\n        year,\n        disciplines,\n        \"projectType\": coalesce(\n          projectType[language == $language][0].value,\n          projectType[language == \"es\"][0].value,\n          projectType[0].value\n        ),\n        \"body\": coalesce(\n          body[language == $language][0].value,\n          body[language == \"es\"][0].value,\n          body[0].value\n        ),\n        websiteUrl,\n        codeUrl,\n        gallery[] {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          \"alt\": coalesce(\n            alt[language == $language][0].value,\n            alt[language == \"es\"][0].value,\n            alt[0].value\n          ),\n          \"caption\": coalesce(\n            caption[language == $language][0].value,\n            caption[language == \"es\"][0].value,\n            caption[0].value\n          )\n        },\n        seo {\n          \"title\": coalesce(\n            title[language == $language][0].value,\n            title[language == \"es\"][0].value,\n            title[0].value\n          ),\n          \"description\": coalesce(\n            description[language == $language][0].value,\n            description[language == \"es\"][0].value,\n            description[0].value\n          ),\n          image {\n            _key,\n            _type,\n            asset,\n            crop,\n            hotspot,\n            isDecorative,\n            \"alt\": coalesce(\n              alt[language == $language][0].value,\n              alt[language == \"es\"][0].value,\n              alt[0].value\n            )\n          },\n          noIndex\n        }\n      }\n  }\n": PROJECTS_CONTENT_QUERY_RESULT;
+    "\n  *[_type == \"project\" && slug.current == $slug][0] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    order,\n    year,\n    disciplines,\n    \"projectType\": coalesce(\n      projectType[language == $language][0].value,\n      projectType[language == \"es\"][0].value,\n      projectType[0].value\n    ),\n    \"body\": coalesce(\n      body[language == $language][0].value,\n      body[language == \"es\"][0].value,\n      body[0].value\n    ),\n    websiteUrl,\n    codeUrl,\n    gallery[] {\n      _key,\n      _type,\n      asset,\n      crop,\n      hotspot,\n      isDecorative,\n      \"alt\": coalesce(\n        alt[language == $language][0].value,\n        alt[language == \"es\"][0].value,\n        alt[0].value\n      ),\n      \"caption\": coalesce(\n        caption[language == $language][0].value,\n        caption[language == \"es\"][0].value,\n        caption[0].value\n      )\n    },\n    seo {\n      \"title\": coalesce(\n        title[language == $language][0].value,\n        title[language == \"es\"][0].value,\n        title[0].value\n      ),\n      \"description\": coalesce(\n        description[language == $language][0].value,\n        description[language == \"es\"][0].value,\n        description[0].value\n      ),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        \"alt\": coalesce(\n          alt[language == $language][0].value,\n          alt[language == \"es\"][0].value,\n          alt[0].value\n        )\n      },\n      noIndex\n    }\n  }\n": PROJECT_BY_SLUG_QUERY_RESULT;
+    "\n  *[_type == \"project\" && defined(slug.current)] | order(order asc) {\n    \"slug\": slug.current\n  }\n": PROJECT_SLUGS_QUERY_RESULT;
+    "\n  {\n    \"settings\": *[_id == \"siteSettings\"][0] {\n      displayName,\n      \"compactTitle\": coalesce(compactTitle, displayName),\n      \"role\": coalesce(\n        role[language == $language][0].value,\n        role[language == \"es\"][0].value,\n        role[0].value\n      ),\n      siteUrl,\n      timeZone,\n      socialLinks[] {\n        _key,\n        url,\n        \"label\": coalesce(\n          label[language == $language][0].value,\n          label[language == \"es\"][0].value,\n          label[0].value\n        )\n      },\n      defaultSeo {\n        \"title\": coalesce(\n          title[language == $language][0].value,\n          title[language == \"es\"][0].value,\n          title[0].value\n        ),\n        \"description\": coalesce(\n          description[language == $language][0].value,\n          description[language == \"es\"][0].value,\n          description[0].value\n        ),\n        image {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          \"alt\": coalesce(\n            alt[language == $language][0].value,\n            alt[language == \"es\"][0].value,\n            alt[0].value\n          )\n        },\n        noIndex\n      }\n    },\n    \"navigation\": {\n      \"home\": coalesce(\n        *[_id == \"homePage\"][0].navigationLabel[language == $language][0].value,\n        *[_id == \"homePage\"][0].navigationLabel[language == \"es\"][0].value,\n        *[_id == \"homePage\"][0].navigationLabel[0].value\n      ),\n      \"projects\": coalesce(\n        *[_id == \"projectsPage\"][0].navigationLabel[language == $language][0].value,\n        *[_id == \"projectsPage\"][0].navigationLabel[language == \"es\"][0].value,\n        *[_id == \"projectsPage\"][0].navigationLabel[0].value\n      ),\n      \"archive\": coalesce(\n        *[_id == \"archivePage\"][0].navigationLabel[language == $language][0].value,\n        *[_id == \"archivePage\"][0].navigationLabel[language == \"es\"][0].value,\n        *[_id == \"archivePage\"][0].navigationLabel[0].value\n      ),\n      \"cells\": coalesce(\n        *[_id == \"cellsPage\"][0].navigationLabel[language == $language][0].value,\n        *[_id == \"cellsPage\"][0].navigationLabel[language == \"es\"][0].value,\n        *[_id == \"cellsPage\"][0].navigationLabel[0].value\n      ),\n      \"about\": coalesce(\n        *[_id == \"aboutPage\"][0].navigationLabel[language == $language][0].value,\n        *[_id == \"aboutPage\"][0].navigationLabel[language == \"es\"][0].value,\n        *[_id == \"aboutPage\"][0].navigationLabel[0].value\n      ),\n      \"contact\": coalesce(\n        *[_id == \"contactPage\"][0].navigationLabel[language == $language][0].value,\n        *[_id == \"contactPage\"][0].navigationLabel[language == \"es\"][0].value,\n        *[_id == \"contactPage\"][0].navigationLabel[0].value\n      )\n    }\n  }\n": SITE_CHROME_QUERY_RESULT;
+    "\n  {\n    \"page\": *[_id == \"archivePage\"][0] {\n      \"heading\": coalesce(\n        heading[language == $language][0].value,\n        heading[language == \"es\"][0].value,\n        heading[0].value\n      ),\n      \"introduction\": coalesce(\n        introduction[language == $language][0].value,\n        introduction[language == \"es\"][0].value,\n        introduction[0].value\n      ),\n      \"comingSoonLabel\": coalesce(\n        comingSoonLabel[language == $language][0].value,\n        comingSoonLabel[language == \"es\"][0].value,\n        comingSoonLabel[0].value\n      ),\n      seo {\n        \"title\": coalesce(title[language == $language][0].value, title[language == \"es\"][0].value, title[0].value),\n        \"description\": coalesce(description[language == $language][0].value, description[language == \"es\"][0].value, description[0].value),\n        image {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          \"alt\": coalesce(alt[language == $language][0].value, alt[language == \"es\"][0].value, alt[0].value)\n        },\n        noIndex\n      }\n    },\n    \"projects\": *[_type == \"archiveProject\" && defined(slug.current)]\n      | order(order asc, archiveId asc) {\n        _id,\n        archiveId,\n        title,\n        \"slug\": slug.current,\n        order,\n        \"detailTitle\": coalesce(\n          detailTitle[language == $language][0].value,\n          detailTitle[language == \"es\"][0].value,\n          detailTitle[0].value\n        ),\n        \"body\": coalesce(\n          body[language == $language][0].value,\n          body[language == \"es\"][0].value,\n          body[0].value\n        ),\n        websiteUrl,\n        codeUrl,\n        gallery[] {\n          _key,\n          _type,\n          asset,\n          crop,\n          hotspot,\n          isDecorative,\n          \"alt\": coalesce(alt[language == $language][0].value, alt[language == \"es\"][0].value, alt[0].value),\n          \"caption\": coalesce(caption[language == $language][0].value, caption[language == \"es\"][0].value, caption[0].value)\n        },\n        seo {\n          \"title\": coalesce(title[language == $language][0].value, title[language == \"es\"][0].value, title[0].value),\n          \"description\": coalesce(description[language == $language][0].value, description[language == \"es\"][0].value, description[0].value),\n          image {\n            _key,\n            _type,\n            asset,\n            crop,\n            hotspot,\n            isDecorative,\n            \"alt\": coalesce(alt[language == $language][0].value, alt[language == \"es\"][0].value, alt[0].value)\n          },\n          noIndex\n        }\n      }\n  }\n": ARCHIVE_QUERY_RESULT;
+    "\n  *[_type == \"archiveProject\" && slug.current == $slug][0] {\n    _id,\n    archiveId,\n    title,\n    \"slug\": slug.current,\n    order,\n    \"detailTitle\": coalesce(\n      detailTitle[language == $language][0].value,\n      detailTitle[language == \"es\"][0].value,\n      detailTitle[0].value\n    ),\n    \"body\": coalesce(\n      body[language == $language][0].value,\n      body[language == \"es\"][0].value,\n      body[0].value\n    ),\n    websiteUrl,\n    codeUrl,\n    gallery[] {\n      _key,\n      _type,\n      asset,\n      crop,\n      hotspot,\n      isDecorative,\n      \"alt\": coalesce(alt[language == $language][0].value, alt[language == \"es\"][0].value, alt[0].value),\n      \"caption\": coalesce(caption[language == $language][0].value, caption[language == \"es\"][0].value, caption[0].value)\n    },\n    seo {\n      \"title\": coalesce(title[language == $language][0].value, title[language == \"es\"][0].value, title[0].value),\n      \"description\": coalesce(description[language == $language][0].value, description[language == \"es\"][0].value, description[0].value),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        \"alt\": coalesce(alt[language == $language][0].value, alt[language == \"es\"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n": ARCHIVE_BY_SLUG_QUERY_RESULT;
+    "\n  *[_id == \"aboutPage\"][0] {\n    \"heading\": coalesce(heading[language == $language][0].value, heading[language == \"es\"][0].value, heading[0].value),\n    \"body\": coalesce(body[language == $language][0].value, body[language == \"es\"][0].value, body[0].value),\n    seo {\n      \"title\": coalesce(title[language == $language][0].value, title[language == \"es\"][0].value, title[0].value),\n      \"description\": coalesce(description[language == $language][0].value, description[language == \"es\"][0].value, description[0].value),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        \"alt\": coalesce(alt[language == $language][0].value, alt[language == \"es\"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n": ABOUT_PAGE_QUERY_RESULT;
+    "\n  *[_id == \"contactPage\"][0] {\n    \"heading\": coalesce(heading[language == $language][0].value, heading[language == \"es\"][0].value, heading[0].value),\n    \"introduction\": coalesce(introduction[language == $language][0].value, introduction[language == \"es\"][0].value, introduction[0].value),\n    email,\n    \"emailLabel\": coalesce(emailLabel[language == $language][0].value, emailLabel[language == \"es\"][0].value, emailLabel[0].value),\n    seo {\n      \"title\": coalesce(title[language == $language][0].value, title[language == \"es\"][0].value, title[0].value),\n      \"description\": coalesce(description[language == $language][0].value, description[language == \"es\"][0].value, description[0].value),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        \"alt\": coalesce(alt[language == $language][0].value, alt[language == \"es\"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n": CONTACT_PAGE_QUERY_RESULT;
+    "\n  *[_id == \"cellsPage\"][0] {\n    \"title\": coalesce(title[language == $language][0].value, title[language == \"es\"][0].value, title[0].value),\n    \"description\": coalesce(description[language == $language][0].value, description[language == \"es\"][0].value, description[0].value),\n    backgroundSettingsJson,\n    seo {\n      \"title\": coalesce(title[language == $language][0].value, title[language == \"es\"][0].value, title[0].value),\n      \"description\": coalesce(description[language == $language][0].value, description[language == \"es\"][0].value, description[0].value),\n      image {\n        _key,\n        _type,\n        asset,\n        crop,\n        hotspot,\n        isDecorative,\n        \"alt\": coalesce(alt[language == $language][0].value, alt[language == \"es\"][0].value, alt[0].value)\n      },\n      noIndex\n    }\n  }\n": CELLS_PAGE_QUERY_RESULT;
+    "\n  *[_type == \"archiveProject\" && defined(slug.current)] | order(order asc) {\n    \"slug\": slug.current\n  }\n": ARCHIVE_SLUGS_QUERY_RESULT;
   }
 }
+

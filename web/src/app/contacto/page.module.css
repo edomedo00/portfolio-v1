@@ -118,6 +118,32 @@
   color: var(--color-black);
 }
 
+.submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.honeypot {
+  position: absolute;
+  width: 0.0625rem;
+  height: 0.0625rem;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.formStatus {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  text-transform: uppercase;
+}
+
+.formStatus[data-status='error'] {
+  font-weight: 700;
+}
+
 @media (max-width: 48rem) {
   .panel {
     grid-column: 1 / -1;
@@ -142,6 +168,7 @@
   .panelContent {
     min-height: 100svh;
     padding: var(--grid-margin);
+    padding-bottom: 2.5rem;
   }
 
   .panelHeader {
@@ -174,6 +201,6 @@
   }
 
   .submit {
-    margin-top: 0;
+    margin-top: 0.75rem;
   }
 }

@@ -1,6 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useDesktopWheelScroll } from "@/hooks/use-desktop-wheel-scroll";
 
 type ArchiveCarouselProps = {
   children: ReactNode;
@@ -15,9 +17,16 @@ export function ArchiveCarousel({
   className,
   frameClassName,
 }: ArchiveCarouselProps) {
+  const pathname = usePathname();
   const carouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+
+  useDesktopWheelScroll({
+    axis: "x",
+    enabled: pathname === "/archivo",
+    targetRef: carouselRef,
+  });
 
   useEffect(() => {
     const carousel = carouselRef.current;
@@ -34,26 +43,8 @@ export function ArchiveCarousel({
       setCanScrollRight(carousel.scrollLeft < maximumScrollLeft - 1);
     }
 
-    function handleWheel(event: WheelEvent) {
-      const isDesktop = window.matchMedia("(min-width: 48.0625rem)").matches;
-      const isVerticalWheel = Math.abs(event.deltaY) > Math.abs(event.deltaX);
-
-      if (!isDesktop || !isVerticalWheel || !carousel) return;
-
-      const multiplier =
-        event.deltaMode === WheelEvent.DOM_DELTA_LINE
-          ? 80
-          : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
-            ? carousel.clientWidth
-            : 1;
-
-      event.preventDefault();
-      carousel.scrollLeft += event.deltaY * multiplier;
-    }
-
     const resizeObserver = new ResizeObserver(updateEdgeFades);
 
-    carousel.addEventListener("wheel", handleWheel, { passive: false });
     carousel.addEventListener("scroll", updateEdgeFades, { passive: true });
     resizeObserver.observe(carousel);
 
@@ -64,7 +55,6 @@ export function ArchiveCarousel({
     updateEdgeFades();
 
     return () => {
-      carousel.removeEventListener("wheel", handleWheel);
       carousel.removeEventListener("scroll", updateEdgeFades);
       resizeObserver.disconnect();
     };

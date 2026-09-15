@@ -1,0 +1,137 @@
+.hero {
+  display: none;
+}
+
+@media (max-width: 48rem) {
+  .hero {
+    position: relative;
+    z-index: 1;
+    display: block;
+    grid-row: 1;
+    grid-column: 1 / -1;
+    min-height: 100svh;
+    padding-block: var(--grid-margin);
+  }
+
+  .intro {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    backdrop-filter: blur(var(--glass-blur));
+  }
+
+  .titleSlot {
+    display: grid;
+    width: 100%;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 720ms cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  .titleSlotExpanded {
+    grid-template-rows: 1fr;
+  }
+
+  .titleSlotInner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .title {
+    width: 100%;
+    line-height: 1;
+    white-space: normal;
+  }
+
+  .subtitleSlot {
+    position: relative;
+    width: 100%;
+    margin-bottom: 0.625rem;
+  }
+
+  .subtitle {
+    width: 100%;
+  }
+
+  .subtitleMeasure {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .subtitleAnimation {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .menuSlot {
+    display: grid;
+    width: 100%;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      grid-template-rows 360ms cubic-bezier(0.76, 0, 0.24, 1),
+      opacity 180ms ease-out;
+  }
+
+  .menuSlot[data-expanded="true"] {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .menuSlotInner {
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .languageSlot {
+    position: fixed;
+    right: var(--grid-margin);
+    bottom: var(--grid-margin);
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 180ms ease-out,
+      visibility 0s linear 360ms;
+  }
+
+  .languageSlot[data-expanded="true"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+
+  .languageSelector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-white);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    white-space: nowrap;
+    backdrop-filter: blur(var(--glass-blur));
+  }
+
+  .languageOption {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.55;
+  }
+
+  .languageOption[data-active="true"] {
+    opacity: 1;
+  }
+
+  .languageDivider {
+    opacity: 0.55;
+  }
+}

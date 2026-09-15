@@ -22,6 +22,7 @@
     "next-sanity": "^13.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "resend": "^6.28.0",
     "use-scramble": "2.2.15"
   },
   "devDependencies": {

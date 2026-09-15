@@ -165,8 +165,9 @@ video {
   :root {
     --font-size-h1: 3rem;
     --font-size-h2: 2.5rem;
+    --grid-column-count: 4;
     --grid-margin: 1rem;
-    --grid-gutter: 0.5rem;
+    --grid-gutter: 0.75rem;
   }
 }
 

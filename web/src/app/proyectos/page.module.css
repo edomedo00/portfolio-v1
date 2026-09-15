@@ -343,6 +343,7 @@
 @media (max-width: 48rem) {
   .collectionIntro {
     grid-column: 1 / -1;
+    min-height: calc(var(--line-height-body) * 2);
     margin-top: 5.25rem;
     padding-right: 0.5rem;
     white-space: normal;
@@ -352,8 +353,8 @@
     grid-column: 1 / -1;
     height: auto;
     margin-top: 10.25rem;
+    margin-bottom: 2.5rem;
     overflow: visible;
-    backdrop-filter: none;
   }
 
   .projectViewport::before,
@@ -467,7 +468,7 @@
   }
 
   .projectMediaViewport {
-    padding: 0 var(--grid-margin) var(--grid-margin);
+    padding: 0 var(--grid-margin) 2.5rem;
   }
 
   .projectDetailMedia {

@@ -44,6 +44,7 @@ export function defaultSiteChrome(language: Locale): SiteChromeContent {
   return {
     settings: {
       displayName: 'EDMUNDO MEDEL',
+      compactTitle: 'EDMUNDO MEDEL',
       role: copy[language].role,
       timeZone: 'America/Mexico_City',
       socialLinks: [

@@ -1,11 +1,14 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { Locale, SiteChromeContent } from "@/content/types";
 import { LanguageSwitcher } from "./language-switcher";
 import { NavigationMenu, type NavigationItemId } from "./navigation-menu";
-import { NavigationIdentity } from "./scramble-text";
+import {
+  type ScrambleTextPhase,
+  ScrambleTransitionText,
+} from "./scramble-text";
 import styles from "./mobile-navigation.module.css";
 
 type MobileNavigationProps = {
@@ -13,6 +16,15 @@ type MobileNavigationProps = {
   content: SiteChromeContent;
   language: Locale;
 };
+
+function isCompactPath(pathname: string) {
+  return (
+    pathname === "/proyectos" ||
+    pathname.startsWith("/proyectos/") ||
+    pathname === "/archivo" ||
+    pathname.startsWith("/archivo/")
+  );
+}
 
 export function MobileNavigation({
   activeItem,
@@ -22,6 +34,12 @@ export function MobileNavigation({
   const menuId = useId();
   const pathname = usePathname();
   const [openPathname, setOpenPathname] = useState<string | null>(null);
+  const [identityPhase, setIdentityPhase] =
+    useState<ScrambleTextPhase>("appearing");
+  const [identityExitText, setIdentityExitText] = useState(
+    content.settings.compactTitle,
+  );
+  const currentIdentity = useRef("");
   const isOpen = openPathname === pathname;
   const menuLabel =
     language === "es"
@@ -50,23 +68,99 @@ export function MobileNavigation({
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    const handleNavigation = (event: MouseEvent) => {
+      if (
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        !(event.target instanceof Element)
+      ) {
+        return;
+      }
+
+      const anchor = event.target.closest<HTMLAnchorElement>("a[href]");
+      if (
+        !anchor ||
+        anchor.hasAttribute("download") ||
+        (anchor.target && anchor.target !== "_self")
+      ) {
+        return;
+      }
+
+      const destination = new URL(anchor.href, window.location.href);
+      if (
+        destination.origin !== window.location.origin ||
+        destination.pathname === pathname ||
+        isCompactPath(destination.pathname) ||
+        identityPhase === "exiting" ||
+        identityPhase === "empty"
+      ) {
+        return;
+      }
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        currentIdentity.current = "";
+        setIdentityPhase("empty");
+        return;
+      }
+
+      const visibleText =
+        currentIdentity.current || content.settings.compactTitle;
+      setIdentityExitText(visibleText);
+      setIdentityPhase("exiting");
+    };
+
+    window.addEventListener("click", handleNavigation, true);
+    return () => window.removeEventListener("click", handleNavigation, true);
+  }, [content.settings.compactTitle, identityPhase, pathname]);
+
+  const handleIdentityAnimationEnd = () => {
+    if (identityPhase === "appearing") {
+      currentIdentity.current = content.settings.compactTitle;
+      setIdentityPhase("visible");
+      return;
+    }
+
+    if (identityPhase === "exiting") {
+      currentIdentity.current = "";
+      setIdentityPhase("empty");
+    }
+  };
+
   return (
-    <div className={styles.root} data-open={isOpen || undefined}>
-      {isOpen ? (
-        <button
-          aria-hidden="true"
-          aria-label={language === "es" ? "Cerrar menú" : "Close menu"}
-          className={styles.backdrop}
-          onClick={() => setOpenPathname(null)}
-          tabIndex={-1}
-          type="button"
-        />
-      ) : null}
+    <div
+      className={styles.root}
+      data-identity-exiting={
+        identityPhase === "exiting" || identityPhase === "empty" || undefined
+      }
+      data-open={isOpen || undefined}
+    >
+      <button
+        aria-hidden={isOpen ? undefined : true}
+        aria-label={language === "es" ? "Cerrar menú" : "Close menu"}
+        className={styles.backdrop}
+        onClick={() => setOpenPathname(null)}
+        tabIndex={-1}
+        type="button"
+      />
 
       <header className={styles.header}>
-        <NavigationIdentity
+        <ScrambleTransitionText
+          accessibleText={content.settings.compactTitle}
           className={styles.identity}
-          text={content.settings.displayName}
+          onAnimationEnd={handleIdentityAnimationEnd}
+          onAnimationFrame={(value) => {
+            currentIdentity.current = value;
+          }}
+          phase={identityPhase}
+          text={
+            identityPhase === "exiting"
+              ? identityExitText
+              : content.settings.compactTitle
+          }
         />
         <button
           aria-controls={menuId}
@@ -80,25 +174,30 @@ export function MobileNavigation({
         </button>
       </header>
 
-      {isOpen ? (
-        <>
-          <div className={styles.menu} id={menuId}>
-            <NavigationMenu
-              activeItem={activeItem}
-              labels={content.navigation}
-              language={language}
-              listClassName={styles.menuList}
-              onNavigate={() => setOpenPathname(null)}
-            />
-          </div>
-
-          <LanguageSwitcher
-            className={styles.languageSelector}
-            dividerClassName={styles.languageDivider}
-            initialLanguage={language}
-            optionClassName={styles.languageOption}
+      <div
+        aria-hidden={!isOpen}
+        className={styles.menu}
+        data-open={isOpen || undefined}
+        id={menuId}
+      >
+        <div className={styles.menuInner}>
+          <NavigationMenu
+            activeItem={activeItem}
+            labels={content.navigation}
+            language={language}
+            listClassName={styles.menuList}
+            onNavigate={() => setOpenPathname(null)}
           />
-        </>
+        </div>
+      </div>
+
+      {isOpen ? (
+        <LanguageSwitcher
+          className={styles.languageSelector}
+          dividerClassName={styles.languageDivider}
+          initialLanguage={language}
+          optionClassName={styles.languageOption}
+        />
       ) : null}
     </div>
   );

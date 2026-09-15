@@ -6,6 +6,7 @@ import styles from "@/app/page.module.css";
 import { OrganismExperience } from "@/app/organismo/organism-experience";
 import type { Locale, SiteChromeContent } from "@/content/types";
 import { LanguageSwitcher } from "./language-switcher";
+import { MobileHomeNavigation } from "./mobile-home-navigation";
 import { MobileNavigation } from "./mobile-navigation";
 import { NavigationMenu, type NavigationItemId } from "./navigation-menu";
 import { NavigationIdentity } from "./scramble-text";
@@ -72,7 +73,7 @@ export function PortfolioShell({
   if (pathname === "/cells" || pathname === "/organismo") return children;
 
   const { activeItem, isCompact } = getNavigationState(pathname);
-  const compactIdentity = content.settings.displayName;
+  const compactIdentity = content.settings.compactTitle;
 
   return (
     <main
@@ -129,8 +130,12 @@ export function PortfolioShell({
         />
       ) : null}
 
+      {pathname === "/" ? (
+        <MobileHomeNavigation content={content} language={language} />
+      ) : null}
+
       <section
-        className={styles.hero}
+        className={`${styles.hero} ${styles.desktopHero}`}
         aria-label={
           isCompact
             ? language === "es"

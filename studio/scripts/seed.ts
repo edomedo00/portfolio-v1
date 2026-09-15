@@ -120,6 +120,7 @@ async function seed() {
     _id: 'siteSettings',
     _type: 'siteSettings',
     displayName: 'EDMUNDO MEDEL',
+    compactTitle: 'EDMUNDO MEDEL',
     role: localized(
       'String',
       'DESARROLLADOR WEB Y PROGRAMADOR CREATIVO',

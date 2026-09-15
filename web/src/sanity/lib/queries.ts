@@ -225,6 +225,7 @@ export const SITE_CHROME_QUERY = defineQuery(`
   {
     "settings": *[_id == "siteSettings"][0] {
       displayName,
+      "compactTitle": coalesce(compactTitle, displayName),
       "role": coalesce(
         role[language == $language][0].value,
         role[language == "es"][0].value,

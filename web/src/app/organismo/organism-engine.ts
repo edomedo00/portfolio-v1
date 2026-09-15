@@ -149,7 +149,9 @@ export function createOrganism(
   let settings = initialSettings;
   let width = 0;
   let height = 0;
-  let step = settings.spacing;
+  let spacingScale = 1;
+  let centerX = 0;
+  let centerY = 0;
   let circleMatrix: Matrix;
   let glassMatrix: Matrix;
   let primaryMatrix: Matrix;
@@ -178,12 +180,13 @@ export function createOrganism(
 
   // The lattice spans the viewport so the cursor can draw beyond the prism.
   function buildLayer(spacing: number, size: number, seed: number, offsetX = 0, offsetY = 0): Matrix {
-    spacing = Math.max(10, spacing);
+    spacing = Math.max(10, spacing) * spacingScale;
+    size *= width <= 768 ? 0.75 : 1;
     const radius = size * 0.8 + 6;
-    const firstColumn = -Math.ceil((width * 0.65 + radius + Math.max(0, offsetX)) / spacing);
-    const firstRow = -Math.ceil((height * 0.5 + radius + Math.max(0, offsetY)) / spacing);
-    const lastColumn = Math.ceil((width * 0.35 + radius + Math.max(0, -offsetX)) / spacing);
-    const lastRow = Math.ceil((height * 0.5 + radius + Math.max(0, -offsetY)) / spacing);
+    const firstColumn = -Math.ceil((centerX + radius + Math.max(0, offsetX)) / spacing);
+    const firstRow = -Math.ceil((centerY + radius + Math.max(0, offsetY)) / spacing);
+    const lastColumn = Math.ceil(((width - centerX) + radius + Math.max(0, -offsetX)) / spacing);
+    const lastRow = Math.ceil(((height - centerY) + radius + Math.max(0, -offsetY)) / spacing);
     const columns = lastColumn - firstColumn + 1;
     const rows = lastRow - firstRow + 1;
     const cells: Cell[] = [];
@@ -191,20 +194,20 @@ export function createOrganism(
       for (let column = firstColumn; column <= lastColumn; column++) {
         cells.push({
           index: (row - firstRow) * columns + column - firstColumn,
-          x: width * 0.65 + column * spacing,
-          y: height * 0.5 + row * spacing,
+          x: centerX + column * spacing,
+          y: centerY + row * spacing,
           population: hash(column, row, seed),
         });
       }
     }
     return { cells, data: new Uint8Array(columns * rows), columns, rows,
       // Sample the original sources, then translate the rendered layer.
-      originX: width * 0.65 + firstColumn * spacing + offsetX,
-      originY: height * 0.5 + firstRow * spacing + offsetY, spacing, size };
+      originX: centerX + firstColumn * spacing + offsetX,
+      originY: centerY + firstRow * spacing + offsetY, spacing, size };
   }
 
   function buildMatrix() {
-    step = Math.max(10, settings.spacing);
+
     circleMatrix = buildLayer(settings.spacing, settings.size, 4);
     glassMatrix = buildLayer(settings.squareSpacing, settings.squareSize, 19, settings.squareOffsetX, settings.squareOffsetY);
     primaryMatrix = buildLayer(settings.primarySpacing, settings.primarySize, 31, settings.primaryOffsetX, settings.primaryOffsetY);
@@ -222,7 +225,9 @@ export function createOrganism(
     const cosY = Math.cos(angleY);
     const sinZ = Math.sin(angleZ);
     const cosZ = Math.cos(angleZ);
-    const scale = Math.min(width * 0.3, height * 0.6) * 0.28;
+    // Give the smaller mobile shapes a broader source region to populate.
+    const prismWidthRatio = width <= 768 ? 0.6 : 0.3;
+    const scale = Math.min(width * prismWidthRatio, height * 0.6) * 0.28 * (width <= 768 ? 1.25 : 1);
     function project(baseX: number, baseZ: number, end: number): Point {
       const x = baseX * settings.prismWidth / 100;
       const y = end * 0.58 * settings.prismHeight / 100;
@@ -232,8 +237,8 @@ export function createOrganism(
       const xY = x * cosY + zX * sinY;
       const yZ = xY * sinZ + yX * cosZ;
       return {
-        x: width * 0.65 + (xY * cosZ - yX * sinZ) * scale,
-        y: height * 0.5 + yZ * scale,
+        x: centerX + (xY * cosZ - yX * sinZ) * scale,
+        y: centerY + yZ * scale,
       };
     }
 
@@ -260,6 +265,10 @@ export function createOrganism(
     const rect = canvas.getBoundingClientRect();
     width = Math.max(1, rect.width);
     height = Math.max(1, rect.height);
+    // Match the portfolio mobile breakpoint without changing saved settings.
+    spacingScale = width <= 768 ? 0.75 : 1;
+    centerX = width * (width <= 768 ? 0.5 : 0.65);
+    centerY = height * (width <= 768 ? 0.58 : 0.5);
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     if (!contextLost) renderer.resize(width, height, dpr);
     buildMatrix();
@@ -390,7 +399,7 @@ export function createOrganism(
     const distance = previous ? Math.hypot(x - previous.x, y - previous.y) : 0;
     const limit = pointerTrailLimit();
     if (!settings.paused && settings.speed > 0 && (settings.enabled || settings.squaresEnabled || settings.primaryEnabled) && settings.influence > 0 && limit > 0) {
-      const sampleStep = Math.min(step, settings.squareSpacing, settings.primarySpacing) * 0.25;
+      const sampleStep = Math.min(circleMatrix.spacing, glassMatrix.spacing, primaryMatrix.spacing) * 0.25;
       const segments = previous ? Math.min(limit, Math.ceil(distance / sampleStep)) : 1;
       for (let index = 1; index <= segments; index++) {
         pointerTrail.push({

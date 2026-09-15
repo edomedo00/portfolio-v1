@@ -14,6 +14,12 @@ export const siteSettings = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'compactTitle',
+      title: 'Compact menu title',
+      description: 'Shown in the compact navigation on Projects and Archive.',
+      type: 'string',
+    }),
+    defineField({
       name: 'role',
       title: 'Professional role',
       type: 'internationalizedArrayString',

@@ -21,6 +21,7 @@ export type SocialLink = {
 export type SiteChromeContent = {
   settings: {
     displayName: string
+    compactTitle: string
     role: string
     siteUrl?: string | null
     timeZone: string
