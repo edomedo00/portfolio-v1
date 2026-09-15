@@ -167,7 +167,7 @@ export function createOrganism(
   const pointer = { x: -1000, y: -1000, active: false, down: false };
   const observesPage = interactionTarget !== canvas;
   const ignoredTouchTarget =
-    "input, textarea, select, option, label, [contenteditable='true'], [data-organism-controls]";
+    "a, button, input, textarea, select, option, label, [contenteditable='true'], [data-organism-controls]";
   let activeTouchId: number | null = null;
   let touchOrigin: Point | null = null;
   let pendingTouch: Point | null = null;
@@ -270,8 +270,20 @@ export function createOrganism(
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
-    width = Math.max(1, rect.width);
-    height = Math.max(1, rect.height);
+    const nextWidth = Math.max(1, rect.width);
+    const nextHeight = Math.max(1, rect.height);
+    const widthChanged = Math.abs(nextWidth - width) > 0.5;
+    const heightChanged = Math.abs(nextHeight - height) > 0.5;
+
+    if (!widthChanged && !heightChanged) return;
+
+    // Mobile browser chrome and the software keyboard change the dynamic
+    // viewport height while scrolling. Keep the simulation dimensions stable
+    // until the width changes, which still handles genuine orientation changes.
+    if (nextWidth <= 768 && width > 0 && !widthChanged) return;
+
+    width = nextWidth;
+    height = nextHeight;
     // Match the portfolio mobile breakpoint without changing saved settings.
     spacingScale = width <= 768 ? 0.75 : 1;
     centerX = width * (width <= 768 ? 0.5 : 0.65);
@@ -288,6 +300,12 @@ export function createOrganism(
   }
 
   function cursorSources(spacing: number): Source[] {
+    if (pointerTraceIsDisabled()) {
+      pointerTrail = [];
+      pointer.active = false;
+      pointer.down = false;
+      return [];
+    }
     const influence = settings.influence / 100;
     if (influence <= 0) return [];
     const result: Source[] = [];
@@ -393,10 +411,20 @@ export function createOrganism(
     }
   }
 
+  function pointerTraceIsDisabled() {
+    return observesPage && /^\/(projects|archive|proyectos|archivo)(\/|$)/.test(window.location.pathname);
+  }
+
   function samplePointer(clientX: number, clientY: number, pointerType: string, isDown: boolean) {
+    if (pointerTraceIsDisabled()) {
+      pointerTrail = [];
+      pointer.active = false;
+      pointer.down = false;
+      return;
+    }
     const rect = canvas.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
+    const x = (clientX - rect.left) * (width / rect.width);
+    const y = (clientY - rect.top) * (height / rect.height);
     const previous = pointer.active ? { x: pointer.x, y: pointer.y } : undefined;
     const distance = previous ? Math.hypot(x - previous.x, y - previous.y) : 0;
     const limit = pointerTrailLimit();
@@ -489,7 +517,7 @@ export function createOrganism(
   }
 
   function touchStart(event: TouchEvent) {
-    if (!observesPage || event.touches.length !== 1 || activeTouchId !== null) return;
+    if (!observesPage || pointerTraceIsDisabled() || event.touches.length !== 1 || activeTouchId !== null) return;
     if (event.target instanceof Element && event.target.closest(ignoredTouchTarget)) return;
     const touch = event.touches[0];
     activeTouchId = touch.identifier;
