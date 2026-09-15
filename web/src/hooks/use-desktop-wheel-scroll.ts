@@ -10,7 +10,7 @@ type DesktopWheelScrollOptions = {
   targetRef: RefObject<HTMLElement | null>;
 };
 
-const desktopMediaQuery = "(min-width: 48.0625rem)";
+const desktopMediaQuery = "(min-width: 48rem)";
 
 function getPixelDelta(event: WheelEvent, axis: ScrollAxis, viewportSize: number) {
   const delta =

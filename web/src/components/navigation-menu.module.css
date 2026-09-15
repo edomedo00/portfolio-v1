@@ -31,7 +31,7 @@
   color: var(--color-black);
 }
 
-@media (max-width: 48rem) {
+@media (max-width: 47.999rem) {
   .list {
     width: 100%;
     gap: 0.5rem;

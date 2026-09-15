@@ -345,11 +345,79 @@
   border: 0;
 }
 
-@media (max-width: 48rem) {
+@media (min-width: 48rem) and (max-width: 74.999rem) {
+  .collectionIntro {
+    grid-column: 6 / -1;
+  }
+
+  .projectTitle,
+  .projectMeta,
+  .projectDescription {
+    white-space: normal;
+  }
+
+  .preview {
+    grid-column: 6 / span 3;
+  }
+
+  .modalLayer {
+    padding-inline: var(--grid-margin);
+  }
+
+  .projectModal {
+    margin-right: calc(0rem - var(--grid-margin));
+  }
+}
+
+@media (min-width: 48rem) and (max-width: 74.999rem) and (orientation: portrait) {
+  .projectModal {
+    grid-column: 1 / -1;
+  }
+
+  .projectModalContent {
+    display: block;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .projectDetail {
+    padding-bottom: var(--grid-margin);
+  }
+
+  .projectMediaViewport {
+    padding: 0 var(--grid-margin) var(--grid-margin);
+  }
+
+  .projectMediaCarousel {
+    height: auto;
+    overflow: visible;
+  }
+}
+
+@media (min-width: 48rem) and (max-width: 74.999rem) and (orientation: landscape) {
+  .projectModal {
+    grid-column: 2 / -1;
+  }
+
+  .projectModalContent {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .projectDetail {
+    grid-column: 1 / span 3;
+  }
+
+  .projectMediaViewport {
+    grid-column: 4 / -1;
+  }
+}
+
+@media (max-width: 47.999rem) {
   .collectionIntro {
     grid-column: 1 / -1;
     min-height: calc(var(--line-height-body) * 2);
-    margin-top: 5.75rem;
+    margin-top: 7rem;
     padding-right: 0.5rem;
     white-space: normal;
   }
@@ -357,7 +425,7 @@
   .projectViewport {
     grid-column: 1 / -1;
     height: auto;
-    margin-top: 10.75rem;
+    margin-top: 13.25rem;
     margin-bottom: 2.5rem;
     overflow: visible;
   }

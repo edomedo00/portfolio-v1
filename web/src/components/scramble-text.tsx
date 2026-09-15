@@ -12,14 +12,13 @@ import {
 } from "react";
 import { prefersReducedMotion } from "@/motion-preference";
 
-export const navigationSubtitle =
-  "DESARROLLADOR WEB Y PROGRAMADOR CREATIVO";
+export const navigationSubtitle = "DESARROLLADOR WEB Y PROGRAMADOR CREATIVO";
 export const projectsDescription =
   "UNA COLECCIÓN DE PROYECTOS DE DISEÑO Y DESARROLLO WEB";
 export const archiveDescription =
   "UN ESPACIO PARA MOSTRAR CONCEPTOS, PROYECTOS SECUNDARIOS, EXPERIMENTOS, COLABORACIONES";
 
-const mobileScrambleMediaQuery = "(max-width: 48rem)";
+const mobileScrambleMediaQuery = "(max-width: 47.999rem)";
 
 const sharedScrambleParameters = {
   range: [65, 125] as [number, number],
@@ -30,7 +29,7 @@ const sharedScrambleParameters = {
 
 const desktopScrambleParameters = {
   ...sharedScrambleParameters,
-  speed: 0.4,
+  speed: 0.6,
   tick: 2,
   step: 5,
   scramble: 18,
@@ -89,11 +88,7 @@ const visuallyHiddenText: CSSProperties = {
   border: 0,
 };
 
-export type ScrambleTextPhase =
-  | "appearing"
-  | "visible"
-  | "exiting"
-  | "empty";
+export type ScrambleTextPhase = "appearing" | "visible" | "exiting" | "empty";
 
 type RouteScrambleTextProps = {
   className?: string;
@@ -220,9 +215,7 @@ function ScrambleOut({
   const target = useMemo(
     () =>
       reversedSource
-        .map((character) =>
-          character === " " ? " " : invisibleCharacter,
-        )
+        .map((character) => (character === " " ? " " : invisibleCharacter))
         .join(""),
     [reversedSource],
   );
@@ -343,11 +336,7 @@ export function RouteScrambleText({
   const [phase, setPhase] = useState<ScrambleTextPhase>("appearing");
 
   useEffect(() => {
-    if (
-      phase !== "empty" ||
-      !navigationReady ||
-      !pendingRoute.current
-    ) {
+    if (phase !== "empty" || !navigationReady || !pendingRoute.current) {
       return;
     }
 

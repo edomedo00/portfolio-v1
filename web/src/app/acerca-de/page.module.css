@@ -82,7 +82,13 @@
   color: var(--color-about);
 }
 
-@media (max-width: 48rem) {
+@media (min-width: 48rem) and (max-width: 74.999rem) {
+  .panel {
+    grid-column: 4 / -1;
+  }
+}
+
+@media (max-width: 47.999rem) {
   .panel {
     grid-column: 1 / -1;
     width: auto;

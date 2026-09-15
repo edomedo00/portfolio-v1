@@ -339,7 +339,7 @@ export function ArchiveProjectsGallery({
                     src: "/projects/placeholders/proyecto-05.svg",
                   }}
                   loading={index === 0 ? "eager" : "lazy"}
-                  sizes="(max-width: 48rem) calc(100vw - 2.5rem), calc(25vw - 2.1875rem)"
+                  sizes="(max-width: 47.999rem) calc(100vw - 2.5rem), (max-width: 74.999rem) calc(37.5vw - 2.65625rem), calc(25vw - 2.1875rem)"
                 />
               </div>
 
@@ -394,7 +394,7 @@ export function ArchiveProjectsGallery({
                 alt: accessibility.pending,
                 src: "/projects/placeholders/proyecto-05.svg",
               }}
-              sizes="(max-width: 48rem) calc(100vw - 2.5rem), calc(25vw - 2.1875rem)"
+              sizes="(max-width: 47.999rem) calc(100vw - 2.5rem), (max-width: 74.999rem) calc(37.5vw - 2.65625rem), calc(25vw - 2.1875rem)"
             />
           </div>
 

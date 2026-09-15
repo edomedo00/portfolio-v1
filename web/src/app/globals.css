@@ -155,13 +155,19 @@ video {
   }
 }
 
-@media (prefers-reduced-motion: reduce) and (min-width: 48.0625rem) {
+@media (prefers-reduced-motion: reduce) and (min-width: 48rem) {
   .terminalCursor {
     animation: none;
   }
 }
 
-@media (max-width: 48rem) {
+@media (min-width: 48rem) and (max-width: 74.999rem) {
+  :root {
+    --grid-column-count: 8;
+  }
+}
+
+@media (max-width: 47.999rem) {
   :root {
     --font-size-h1: 3rem;
     --font-size-h2: 2.5rem;
@@ -256,7 +262,7 @@ video {
   }
 }
 
-@media (max-width: 48rem) {
+@media (max-width: 47.999rem) {
   .routePanelGrow {
     animation-name: route-panel-grow-mobile;
   }
@@ -294,7 +300,7 @@ video {
   }
 }
 
-@media (prefers-reduced-motion: reduce) and (min-width: 48.0625rem) {
+@media (prefers-reduced-motion: reduce) and (min-width: 48rem) {
   *,
   *::before,
   *::after {
