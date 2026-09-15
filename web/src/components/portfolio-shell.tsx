@@ -33,19 +33,19 @@ function getNavigationState(pathname: string): {
   activeItem?: NavigationItemId;
   isCompact: boolean;
 } {
-  if (pathname.startsWith("/proyectos")) {
+  if (pathname.startsWith("/projects")) {
     return { activeItem: "projects", isCompact: true };
   }
 
-  if (pathname.startsWith("/archivo")) {
+  if (pathname.startsWith("/archive")) {
     return { activeItem: "archive", isCompact: true };
   }
 
-  if (pathname.startsWith("/acerca-de")) {
+  if (pathname.startsWith("/about")) {
     return { activeItem: "about", isCompact: false };
   }
 
-  if (pathname.startsWith("/contacto")) {
+  if (pathname.startsWith("/contact")) {
     return { activeItem: "contact", isCompact: false };
   }
 

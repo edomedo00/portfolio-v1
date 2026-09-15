@@ -308,7 +308,7 @@ export function ArchiveProjectsGallery({
       {projects.map((project, index) => (
         <Link
           className={styles.project}
-          href={`/archivo/${project.slug}`}
+          href={`/archive/${project.slug}`}
           key={project.slug}
           scroll={false}
         >

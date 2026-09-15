@@ -98,6 +98,17 @@
   box-shadow: inset 0 0 0 0.0625rem var(--color-black);
 }
 
+.field input:autofill,
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus {
+  background-color: var(--color-about);
+  color: var(--color-black);
+  caret-color: var(--color-black);
+  -webkit-text-fill-color: var(--color-black);
+  box-shadow: inset 0 0 0 62.5rem var(--color-about);
+}
+
 .submit {
   width: fit-content;
   margin-top: 0.5rem;
@@ -159,6 +170,7 @@
   .panel {
     width: auto;
     min-height: 100svh;
+    min-height: 100dvh;
     margin: 0 calc(0rem - var(--grid-margin));
     overflow-x: hidden;
     overflow-y: auto;
@@ -167,6 +179,7 @@
 
   .panelContent {
     min-height: 100svh;
+    min-height: 100dvh;
     padding: var(--grid-margin);
     padding-bottom: 2.5rem;
   }

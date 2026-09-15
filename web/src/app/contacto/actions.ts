@@ -12,16 +12,20 @@ export type ContactFormState = {
 
 const responseCopy = {
   es: {
+    configuration: 'EL FORMULARIO DE CONTACTO AÚN NO ESTÁ CONFIGURADO.',
     error: 'NO SE PUDO ENVIAR EL MENSAJE. INTÉNTALO DE NUEVO.',
     invalid: 'REVISA LOS CAMPOS E INTÉNTALO DE NUEVO.',
     success: 'MENSAJE ENVIADO. GRACIAS POR ESCRIBIRME.',
   },
   en: {
+    configuration: 'THE CONTACT FORM IS NOT CONFIGURED YET.',
     error: 'THE MESSAGE COULD NOT BE SENT. PLEASE TRY AGAIN.',
     invalid: 'CHECK THE FIELDS AND TRY AGAIN.',
     success: 'MESSAGE SENT. THANK YOU FOR REACHING OUT.',
   },
 } as const
+
+const defaultSender = 'Portfolio <contact@edmmd.xyz>'
 
 function getFormValue(formData: FormData, key: string) {
   const value = formData.get(key)
@@ -30,6 +34,12 @@ function getFormValue(formData: FormData, key: string) {
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function usesVerifiedSenderDomain(value: string) {
+  const match = value.match(/<([^<>]+)>$/)
+  const email = (match?.[1] ?? value).trim().toLowerCase()
+  return email.endsWith('@edmmd.xyz')
 }
 
 function escapeHtml(value: string) {
@@ -76,10 +86,15 @@ export async function sendContactEmail(
   }
 
   const apiKey = process.env.RESEND_API_KEY?.trim()
-  const from = process.env.RESEND_FROM_EMAIL?.trim()
+  const configuredFrom = process.env.RESEND_FROM_EMAIL?.trim()
+  const from =
+    configuredFrom && usesVerifiedSenderDomain(configuredFrom)
+      ? configuredFrom
+      : defaultSender
 
-  if (!apiKey || !from) {
-    return {message: copy.error, status: 'error'}
+  if (!apiKey) {
+    console.error('Contact form: RESEND_API_KEY is missing.')
+    return {message: copy.configuration, status: 'error'}
   }
 
   try {
@@ -111,10 +126,14 @@ export async function sendContactEmail(
       to: [recipient],
     })
 
-    if (error) return {message: copy.error, status: 'error'}
+    if (error) {
+      console.error('Contact form: Resend rejected the email.', error)
+      return {message: copy.error, status: 'error'}
+    }
 
     return {message: copy.success, status: 'success'}
-  } catch {
+  } catch (error) {
+    console.error('Contact form: email delivery failed.', error)
     return {message: copy.error, status: 'error'}
   }
 }

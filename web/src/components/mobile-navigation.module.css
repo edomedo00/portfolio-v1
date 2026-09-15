@@ -64,6 +64,11 @@
     white-space: nowrap;
   }
 
+  .identityLink {
+    color: inherit;
+    text-decoration: none;
+  }
+
   .menuButton {
     border: 0.0625rem solid currentColor;
     padding: 0.25rem 1.5rem;

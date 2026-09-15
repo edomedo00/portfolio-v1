@@ -38,7 +38,7 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
       <Link
         aria-hidden="true"
         className={styles.modalBackdrop}
-        href="/proyectos"
+        href="/projects"
         scroll={false}
         tabIndex={-1}
       />
@@ -54,7 +54,7 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
             <Link
               aria-label={copy.close}
               className={styles.modalClose}
-              href="/proyectos"
+              href="/projects"
               scroll={false}
             >
               <Image

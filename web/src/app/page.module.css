@@ -203,6 +203,11 @@
 }
 
 @media (max-width: 48rem) {
+  .canvas {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
   .verticalLine {
     left: var(--grid-mobile-position);
   }
@@ -230,6 +235,7 @@
   .canvas[data-compact="true"] {
     height: auto;
     min-height: 100svh;
+    min-height: 100dvh;
     overflow-x: hidden;
     overflow-y: visible;
   }

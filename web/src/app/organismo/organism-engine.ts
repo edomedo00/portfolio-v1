@@ -268,7 +268,7 @@ export function createOrganism(
     // Match the portfolio mobile breakpoint without changing saved settings.
     spacingScale = width <= 768 ? 0.75 : 1;
     centerX = width * (width <= 768 ? 0.5 : 0.65);
-    centerY = height * (width <= 768 ? 0.58 : 0.5);
+    centerY = height * 0.5;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     if (!contextLost) renderer.resize(width, height, dpr);
     buildMatrix();
@@ -398,7 +398,8 @@ export function createOrganism(
     const previous = pointer.active ? { x: pointer.x, y: pointer.y } : undefined;
     const distance = previous ? Math.hypot(x - previous.x, y - previous.y) : 0;
     const limit = pointerTrailLimit();
-    if (!settings.paused && settings.speed > 0 && (settings.enabled || settings.squaresEnabled || settings.primaryEnabled) && settings.influence > 0 && limit > 0) {
+    const acceptsPointerInput = !settings.paused || event.pointerType !== "mouse";
+    if (acceptsPointerInput && (settings.enabled || settings.squaresEnabled || settings.primaryEnabled) && settings.influence > 0 && limit > 0) {
       const sampleStep = Math.min(circleMatrix.spacing, glassMatrix.spacing, primaryMatrix.spacing) * 0.25;
       const segments = previous ? Math.min(limit, Math.ceil(distance / sampleStep)) : 1;
       for (let index = 1; index <= segments; index++) {
@@ -414,10 +415,8 @@ export function createOrganism(
     pointer.x = x;
     pointer.y = y;
     pointer.active = true;
-    if (!settings.paused) {
-      dirty = true;
-      wake();
-    }
+    dirty = true;
+    wake();
   }
 
   function down(event: PointerEvent) {
@@ -437,10 +436,8 @@ export function createOrganism(
   function leave() {
     pointer.active = false;
     pointer.down = false;
-    if (!settings.paused) {
-      dirty = true;
-      wake();
-    }
+    dirty = true;
+    wake();
   }
 
   function up(event: PointerEvent) {

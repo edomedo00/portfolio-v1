@@ -4,10 +4,10 @@ import styles from "./navigation-menu.module.css";
 
 const navigationItems = [
   { href: "/", id: "home" },
-  { href: "/proyectos", id: "projects" },
-  { href: "/archivo", id: "archive" },
-  { href: "/acerca-de", id: "about" },
-  { href: "/contacto", id: "contact" },
+  { href: "/projects", id: "projects" },
+  { href: "/archive", id: "archive" },
+  { href: "/about", id: "about" },
+  { href: "/contact", id: "contact" },
 ] as const;
 
 export type NavigationItemId = (typeof navigationItems)[number]["id"];

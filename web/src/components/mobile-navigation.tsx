@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import type { Locale, SiteChromeContent } from "@/content/types";
 import { LanguageSwitcher } from "./language-switcher";
@@ -19,10 +20,10 @@ type MobileNavigationProps = {
 
 function isCompactPath(pathname: string) {
   return (
-    pathname === "/proyectos" ||
-    pathname.startsWith("/proyectos/") ||
-    pathname === "/archivo" ||
-    pathname.startsWith("/archivo/")
+    pathname === "/projects" ||
+    pathname.startsWith("/projects/") ||
+    pathname === "/archive" ||
+    pathname.startsWith("/archive/")
   );
 }
 
@@ -148,20 +149,22 @@ export function MobileNavigation({
       />
 
       <header className={styles.header}>
-        <ScrambleTransitionText
-          accessibleText={content.settings.compactTitle}
-          className={styles.identity}
-          onAnimationEnd={handleIdentityAnimationEnd}
-          onAnimationFrame={(value) => {
-            currentIdentity.current = value;
-          }}
-          phase={identityPhase}
-          text={
-            identityPhase === "exiting"
-              ? identityExitText
-              : content.settings.compactTitle
-          }
-        />
+        <Link className={styles.identityLink} href="/">
+          <ScrambleTransitionText
+            accessibleText={content.settings.compactTitle}
+            className={styles.identity}
+            onAnimationEnd={handleIdentityAnimationEnd}
+            onAnimationFrame={(value) => {
+              currentIdentity.current = value;
+            }}
+            phase={identityPhase}
+            text={
+              identityPhase === "exiting"
+                ? identityExitText
+                : content.settings.compactTitle
+            }
+          />
+        </Link>
         <button
           aria-controls={menuId}
           aria-expanded={isOpen}

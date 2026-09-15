@@ -81,7 +81,7 @@ export function ProjectsGallery({
 
   useDesktopWheelScroll({
     axis: "y",
-    enabled: pathname === "/proyectos",
+    enabled: pathname === "/projects",
     targetRef: projectListRef,
   });
 
@@ -199,7 +199,7 @@ export function ProjectsGallery({
           {projects.map((project) => (
             <Link
               className={styles.projectLink}
-              href={`/proyectos/${project.slug}`}
+              href={`/projects/${project.slug}`}
               key={project.slug}
               onBlur={() => setActiveSlug(undefined)}
               onFocus={() => setActiveSlug(project.slug)}

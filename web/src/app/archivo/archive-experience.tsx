@@ -35,7 +35,7 @@ export function ArchiveExperience({
         className={styles.archiveIntro}
         navigationReady={galleryExitReady}
         onExitStart={handleExitStart}
-        routePrefix="/archivo"
+        routePrefix="/archive"
         showCursor
         text={introduction}
       />

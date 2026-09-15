@@ -24,7 +24,7 @@ export function ArchiveCarousel({
 
   useDesktopWheelScroll({
     axis: "x",
-    enabled: pathname === "/archivo",
+    enabled: pathname === "/archive",
     targetRef: carouselRef,
   });
 

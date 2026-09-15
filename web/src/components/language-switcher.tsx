@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import type { Locale } from "@/content/types";
 
 type LanguageSwitcherProps = {
@@ -16,15 +15,14 @@ export function LanguageSwitcher({
   initialLanguage,
   optionClassName,
 }: LanguageSwitcherProps) {
-  const router = useRouter();
-
   const selectLanguage = async (language: Locale) => {
-    await fetch("/api/language", {
+    const response = await fetch("/api/language", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ language }),
     });
-    router.refresh();
+
+    if (response.ok) window.location.reload();
   };
 
   return (

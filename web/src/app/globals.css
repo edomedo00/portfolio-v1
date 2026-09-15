@@ -169,6 +169,10 @@ video {
     --grid-margin: 1rem;
     --grid-gutter: 0.75rem;
   }
+
+  body {
+    min-height: 100dvh;
+  }
 }
 
 .routePanelGrow {
@@ -296,7 +300,20 @@ video {
   *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .routePanelGrow,
+  .routePanelClosing {
+    clip-path: none !important;
+  }
+
+  .routePanelContent,
+  .routePanelClosing .routePanelContent {
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }

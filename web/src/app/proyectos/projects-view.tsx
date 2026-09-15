@@ -34,7 +34,7 @@ export function ProjectsView({
         className={styles.collectionIntro}
         navigationReady={listExitReady}
         onExitStart={handleExitStart}
-        routePrefix="/proyectos"
+        routePrefix="/projects"
         showCursor
         text={introduction}
       />

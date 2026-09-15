@@ -67,7 +67,7 @@ export function ArchiveProjectDetail({
       <Link
         aria-hidden="true"
         className={styles.modalBackdrop}
-        href="/archivo"
+        href="/archive"
         scroll={false}
         tabIndex={-1}
       />
@@ -81,7 +81,7 @@ export function ArchiveProjectDetail({
             <Link
               aria-label={copy.close}
               className={styles.detailClose}
-              href="/archivo"
+              href="/archive"
               scroll={false}
             >
               <Image alt="" height={14} src="/icons/cross.svg" width={14} />

@@ -87,6 +87,7 @@
     grid-column: 1 / -1;
     width: auto;
     height: 100svh;
+    height: 100dvh;
     margin: 0 calc(0rem - var(--grid-margin));
     overflow-x: hidden;
     overflow-y: auto;
@@ -96,6 +97,7 @@
   .panelContent {
     height: 100%;
     min-height: 100svh;
+    min-height: 100dvh;
     padding: var(--grid-margin);
     padding-bottom: 2.5rem;
   }
