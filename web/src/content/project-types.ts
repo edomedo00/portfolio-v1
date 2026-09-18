@@ -35,6 +35,7 @@ export type Project = {
 }
 
 export type ProjectsPageContent = {
+  navigationLabel: string
   heading: string
   introduction: string
   seo?: ProjectSeo | null

@@ -25,6 +25,7 @@ const fallbackDescription = (title: string) => [
 ]
 
 export const projectsPageFallback: ProjectsPageContent = {
+  navigationLabel: 'Proyectos',
   heading: 'Proyectos',
   introduction: 'UNA COLECCIÓN DE PROYECTOS DE DISEÑO Y DESARROLLO WEB',
 }

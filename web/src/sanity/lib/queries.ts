@@ -43,6 +43,14 @@ export const PAGE_BY_SLUG_QUERY = defineQuery(`
 export const PROJECTS_CONTENT_QUERY = defineQuery(`
   {
     "page": *[_id == "projectsPage"][0] {
+      "navigationLabel": coalesce(
+        navigationLabel[language == $language][0].value,
+        navigationLabel[language == "es"][0].value,
+        navigationLabel[0].value,
+        heading[language == $language][0].value,
+        heading[language == "es"][0].value,
+        heading[0].value
+      ),
       "heading": coalesce(
         heading[language == $language][0].value,
         heading[language == "es"][0].value,
@@ -307,6 +315,14 @@ export const SITE_CHROME_QUERY = defineQuery(`
 export const ARCHIVE_QUERY = defineQuery(`
   {
     "page": *[_id == "archivePage"][0] {
+      "navigationLabel": coalesce(
+        navigationLabel[language == $language][0].value,
+        navigationLabel[language == "es"][0].value,
+        navigationLabel[0].value,
+        heading[language == $language][0].value,
+        heading[language == "es"][0].value,
+        heading[0].value
+      ),
       "heading": coalesce(
         heading[language == $language][0].value,
         heading[language == "es"][0].value,

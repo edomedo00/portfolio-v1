@@ -17,9 +17,9 @@ export default async function ProjectsLayout({ children }: { children: ReactNode
 
   return (
     <ProjectsView
-      heading={page.heading}
       introduction={page.introduction}
       language={language}
+      navigationLabel={page.navigationLabel}
       projects={projects}
     >
       {children}

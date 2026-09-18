@@ -55,6 +55,7 @@ export type ArchiveProject = {
 
 export type ArchiveContent = {
   page: {
+    navigationLabel: string
     heading: string
     introduction: string
     comingSoonLabel: string

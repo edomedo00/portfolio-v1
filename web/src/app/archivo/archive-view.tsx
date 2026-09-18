@@ -24,7 +24,7 @@ export function ArchiveView({children, content, language}: ArchiveViewProps) {
 
   return (
     <>
-      <SectionHeading>{content.page.heading}</SectionHeading>
+      <SectionHeading>{content.page.navigationLabel}</SectionHeading>
 
       <ArchiveExperience
         comingSoonLabel={content.page.comingSoonLabel}
@@ -89,7 +89,7 @@ export function ArchiveProjectDetail({
             </Link>
 
             <h2 className={styles.detailHeading} id="archive-detail-title">
-              {project.detailTitle}
+              <span className={styles.detailHeadingText}>{project.detailTitle}</span>
             </h2>
           </header>
 
@@ -154,7 +154,8 @@ export function ArchiveProjectDetail({
                     fill
                     image={image}
                     loading={index === 0 ? 'eager' : 'lazy'}
-                    quality={90}
+                    quality={95}
+                    resolutionScale={2}
                     sizes="(max-width: 47.999rem) calc(100vw - 2rem), (max-width: 74.999rem) and (orientation: portrait) calc(100vw - 7.5rem), (max-width: 74.999rem) calc(62.5vw - 6.09375rem), calc(41.666667vw - 5.3125rem)"
                   />
                 </figure>

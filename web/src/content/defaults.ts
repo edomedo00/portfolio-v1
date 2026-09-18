@@ -102,6 +102,7 @@ export function defaultArchive(language: Locale): ArchiveContent {
 
   return {
     page: {
+      navigationLabel: isSpanish ? 'Archivo' : 'Archive',
       heading: isSpanish ? 'Archivo' : 'Archive',
       introduction: copy[language].archiveIntro,
       comingSoonLabel: isSpanish ? 'PRÓXIMAMENTE...' : 'COMING SOON...',

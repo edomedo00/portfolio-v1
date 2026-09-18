@@ -68,7 +68,7 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
             </Link>
 
             <h2 className={styles.projectDetailTitle} id="project-detail-title">
-              {project.title}
+              <span className={styles.projectDetailTitleText}>{project.title}</span>
             </h2>
           </header>
 
@@ -136,6 +136,8 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
                   fill
                   image={image}
                   loading={index === 0 ? "eager" : "lazy"}
+                  quality={95}
+                  resolutionScale={1.5}
                   sizes="(max-width: 47.999rem) calc(100vw - 2rem), (max-width: 74.999rem) and (orientation: portrait) calc(100vw - 7.5rem), (max-width: 74.999rem) 50vw, 42vw"
                 />
               </figure>

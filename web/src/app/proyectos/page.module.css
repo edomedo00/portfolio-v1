@@ -228,7 +228,7 @@
   grid-column: 1 / span 4;
   flex-direction: column;
   gap: var(--project-detail-gap);
-  padding: 4.0625rem var(--grid-margin) var(--grid-margin);
+  padding: 4.0625rem var(--grid-margin);
 }
 
 .projectDetailHeader {
@@ -236,11 +236,16 @@
 }
 
 .projectDetailTitle {
-  padding: 0 3rem var(--project-detail-gap) 0;
+  padding: 0 0 var(--project-detail-gap);
   border-bottom: 0.0625rem solid var(--color-black);
   font-size: var(--font-size-h2);
   line-height: 1.2;
   text-transform: uppercase;
+}
+
+.projectDetailTitleText {
+  display: block;
+  padding-right: 4rem;
 }
 
 .projectDetailMeta {
@@ -370,11 +375,11 @@
   }
 
   .projectDetail {
-    padding-bottom: var(--grid-margin);
+    padding-bottom: 4.0625rem;
   }
 
   .projectMediaViewport {
-    padding: 0 var(--grid-margin) var(--grid-margin);
+    padding: 0 var(--grid-margin) 4.0625rem;
   }
 
   .projectMediaCarousel {
@@ -514,7 +519,7 @@
 
   .projectDetail {
     gap: 1.25rem;
-    padding: var(--grid-margin) var(--grid-margin) 1.25rem;
+    padding: var(--grid-margin);
   }
 
   .projectDetailHeader {
@@ -541,7 +546,7 @@
   }
 
   .projectMediaViewport {
-    padding: 0 var(--grid-margin) 2.5rem;
+    padding: 0 var(--grid-margin) var(--grid-margin);
   }
 
   .modalClose {

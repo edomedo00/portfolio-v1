@@ -10,17 +10,17 @@ import styles from "./page.module.css";
 
 type ProjectsViewProps = {
   children: ReactNode;
-  heading: string;
   introduction: string;
   language: Locale;
+  navigationLabel: string;
   projects: Project[];
 };
 
 export function ProjectsView({
   children,
-  heading,
   introduction,
   language,
+  navigationLabel,
   projects,
 }: ProjectsViewProps) {
   const [listExitReady, setListExitReady] = useState(true);
@@ -29,7 +29,7 @@ export function ProjectsView({
 
   return (
     <>
-      <SectionHeading>{heading}</SectionHeading>
+      <SectionHeading>{navigationLabel}</SectionHeading>
 
       <RouteScrambleText
         className={styles.collectionIntro}
