@@ -1,35 +1,35 @@
-import type {Metadata} from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
-import {AnimatedRoutePanel} from '@/components/animated-route-panel'
-import {RichText} from '@/components/rich-text'
-import {getLocale} from '@/i18n/locale'
-import {getAboutContent, getSiteChrome} from '@/sanity/lib/content'
-import {buildMetadata} from '@/sanity/lib/metadata'
-import styles from './page.module.css'
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { AnimatedRoutePanel } from "@/components/animated-route-panel";
+import { RichText } from "@/components/rich-text";
+import { getLocale } from "@/i18n/locale";
+import { getAboutContent, getSiteChrome } from "@/sanity/lib/content";
+import { buildMetadata } from "@/sanity/lib/metadata";
+import styles from "./page.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const language = await getLocale()
-  const [content, {settings}] = await Promise.all([
+  const language = await getLocale();
+  const [content, { settings }] = await Promise.all([
     getAboutContent(language),
     getSiteChrome(language),
-  ])
+  ]);
   return buildMetadata({
     fallbackTitle: content.heading,
     titleOverride: content.browserTitle,
     seo: content.seo,
     site: settings,
-  })
+  });
 }
 
 export default async function AboutPage() {
-  const language = await getLocale()
+  const language = await getLocale();
   const [content, chrome] = await Promise.all([
     getAboutContent(language),
     getSiteChrome(language),
-  ])
-  const closeLabel = language === 'es' ? 'Cerrar acerca de' : 'Close about'
-  const socialsLabel = language === 'es' ? 'Redes sociales' : 'Social links'
+  ]);
+  const closeLabel = language === "es" ? "Cerrar acerca de" : "Close about";
+  const socialsLabel = language === "es" ? "Redes sociales" : "Social links";
 
   return (
     <AnimatedRoutePanel className={styles.panel} labelledBy="about-title">
@@ -64,10 +64,17 @@ export default async function AboutPage() {
               rel="noreferrer"
             >
               {link.label}
+
+              <Image
+                alt=""
+                height={17}
+                src="/icons/up-right-arrow.svg"
+                width={17}
+              />
             </a>
           ))}
         </div>
       </div>
     </AnimatedRoutePanel>
-  )
+  );
 }

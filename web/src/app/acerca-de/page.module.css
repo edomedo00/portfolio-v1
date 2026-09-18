@@ -68,7 +68,8 @@
 }
 
 .socialLink {
-  display: block;
+  display: flex;
+  gap: 0.375rem;
   border: 0.0625rem solid var(--color-black);
   padding: 0.25rem 1.5rem;
   color: var(--color-black);

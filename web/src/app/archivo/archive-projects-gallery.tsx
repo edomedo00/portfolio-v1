@@ -71,10 +71,10 @@ function ArchiveProjectText({
 }
 
 export function ArchiveProjectsGallery({
-  comingSoonLabel,
+  // comingSoonLabel,
   exitRequested,
   language,
-  nextArchiveId,
+  // nextArchiveId,
   onExitComplete,
   projects,
 }: ArchiveProjectsGalleryProps) {
@@ -89,7 +89,8 @@ export function ArchiveProjectsGallery({
   const exitReported = useRef(false);
   const mediaTimer = useRef<number | null>(null);
   const visibleTextById = useRef(new Map<string, string>());
-  const textAnimationCount = (projects.length + 1) * 2;
+  // Restore `(projects.length + 1) * 2` when the Coming soon project is enabled again.
+  const textAnimationCount = projects.length * 2;
 
   const clearMediaTimer = useCallback(() => {
     if (mediaTimer.current !== null) {
@@ -368,6 +369,7 @@ export function ArchiveProjectsGallery({
         </Link>
       ))}
 
+      {/* Coming soon project — keep this block commented until another archive slot is needed.
       <article
         aria-label={`${accessibility.next}, ${nextArchiveId}`}
         className={styles.project}
@@ -412,6 +414,7 @@ export function ArchiveProjectsGallery({
           </figcaption>
         </figure>
       </article>
+      */}
     </section>
   );
 }
