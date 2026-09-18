@@ -76,8 +76,8 @@
   font-family: var(--font-family-navigation);
   font-size: var(--font-size-navigation);
   line-height: var(--line-height-navigation);
-  text-decoration: none;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .socialLink:hover {
