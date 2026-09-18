@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type {ReactNode} from 'react'
 import {AnimatedRoutePanel} from '@/components/animated-route-panel'
 import {ContentImage} from '@/components/content-image'
+import {SectionHeading} from '@/components/section-heading'
 import {RichText} from '@/components/rich-text'
 import type {ArchiveContent, ArchiveProject, Locale} from '@/content/types'
 import {ArchiveExperience} from './archive-experience'
@@ -23,7 +24,7 @@ export function ArchiveView({children, content, language}: ArchiveViewProps) {
 
   return (
     <>
-      <h1 className={styles.visuallyHidden}>{content.page.heading}</h1>
+      <SectionHeading>{content.page.heading}</SectionHeading>
 
       <ArchiveExperience
         comingSoonLabel={content.page.comingSoonLabel}
@@ -144,13 +145,17 @@ export function ArchiveProjectDetail({
               tabIndex={0}
             >
               {project.gallery.map((image, index) => (
-                <figure className={styles.detailMedia} key={image._key}>
+                <figure
+                  className={styles.detailMedia}
+                  key={image._key}
+                >
                   <ContentImage
                     className={styles.detailImage}
                     fill
                     image={image}
                     loading={index === 0 ? 'eager' : 'lazy'}
-                    sizes="36vw"
+                    quality={90}
+                    sizes="(max-width: 47.999rem) calc(100vw - 2rem), (max-width: 74.999rem) and (orientation: portrait) calc(100vw - 7.5rem), (max-width: 74.999rem) calc(62.5vw - 6.09375rem), calc(41.666667vw - 5.3125rem)"
                   />
                 </figure>
               ))}

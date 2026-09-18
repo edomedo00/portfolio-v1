@@ -29,7 +29,7 @@ const sharedScrambleParameters = {
 
 const desktopScrambleParameters = {
   ...sharedScrambleParameters,
-  speed: 0.6,
+  speed: 0.8,
   tick: 2,
   step: 5,
   scramble: 18,

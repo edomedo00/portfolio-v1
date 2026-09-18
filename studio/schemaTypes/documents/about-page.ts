@@ -20,6 +20,13 @@ export const aboutPage = defineType({
       validation: (rule) => rule.required().min(2),
     }),
     defineField({
+      name: 'browserTitle',
+      title: 'Browser tab title',
+      description: 'Title shown in the browser tab for the About page.',
+      type: 'internationalizedArrayString',
+      validation: (rule) => rule.required().min(2),
+    }),
+    defineField({
       name: 'body',
       title: 'Biography',
       type: 'internationalizedArraySimpleBlockContent',

@@ -116,6 +116,7 @@ export function defaultArchive(language: Locale): ArchiveContent {
       body,
       websiteUrl: 'https://github.com/edomedo00/portfolio-v1',
       codeUrl: 'https://github.com/edomedo00/portfolio-v1',
+      previewImage: {_key: `archive-preview-${index + 1}`, src, alt: 'ASCII Garden'},
       gallery: [{_key: `archive-${index + 1}`, src, alt: 'ASCII Garden'}],
     })),
   }
@@ -124,6 +125,7 @@ export function defaultArchive(language: Locale): ArchiveContent {
 export function defaultAbout(language: Locale): AboutContent {
   return {
     heading: language === 'es' ? 'ACERCA DE' : 'ABOUT',
+    browserTitle: language === 'es' ? 'Acerca de — Edmundo Medel' : 'About — Edmundo Medel',
     body: [paragraph('about', copy[language].about)],
   }
 }

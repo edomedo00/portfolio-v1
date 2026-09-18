@@ -48,6 +48,7 @@ export type ArchiveProject = {
   body: PortableTextBlock[]
   websiteUrl?: string | null
   codeUrl?: string | null
+  previewImage?: ContentImageData | null
   gallery: ContentImageData[]
   seo?: ProjectSeo | null
 }
@@ -64,6 +65,7 @@ export type ArchiveContent = {
 
 export type AboutContent = {
   heading: string
+  browserTitle: string
   body: PortableTextBlock[]
   seo?: ProjectSeo | null
 }

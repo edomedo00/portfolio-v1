@@ -284,18 +284,6 @@
   }
 }
 
-.visuallyHidden {
-  position: absolute;
-  width: 0.0625rem;
-  height: 0.0625rem;
-  padding: 0;
-  margin: -0.0625rem;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 .modalLayer {
   position: fixed;
   inset: 0;
@@ -429,7 +417,7 @@
   position: relative;
   width: 100%;
   flex: 0 0 auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 8 / 5;
   margin: 0;
   overflow: hidden;
   background-color: var(--color-black);
@@ -524,15 +512,17 @@
   .archiveIntro {
     display: block;
     grid-column: 1 / -1;
+    grid-row: 2;
     min-height: calc(var(--line-height-body) * 3);
-    margin-top: 7rem;
+    margin-top: 0.75rem;
     padding-right: 0.5rem;
     white-space: normal;
   }
 
   .archiveFrame {
-    margin: 14.5rem 0 2.5rem;
+    margin: 2.5rem 0;
     grid-column: 1 / -1;
+    grid-row: 3;
   }
 
   .archiveViewport {
@@ -555,10 +545,6 @@
   .projectId {
     min-height: 0;
     padding-bottom: 0.125rem;
-  }
-
-  .projectMedia {
-    aspect-ratio: 4 / 3;
   }
 
   .projectCaption {
@@ -588,10 +574,6 @@
     margin-top: 0;
     padding-bottom: 1.25rem;
     font-size: var(--font-size-h2);
-  }
-
-  .detailMedia {
-    aspect-ratio: 4 / 3;
   }
 
   .detailCopy {

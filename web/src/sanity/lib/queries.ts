@@ -356,6 +356,16 @@ export const ARCHIVE_QUERY = defineQuery(`
         ),
         websiteUrl,
         codeUrl,
+        "previewImage": coalesce(previewImage, gallery[0]) {
+          _key,
+          _type,
+          asset,
+          crop,
+          hotspot,
+          isDecorative,
+          "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value),
+          "caption": coalesce(caption[language == $language][0].value, caption[language == "es"][0].value, caption[0].value)
+        },
         gallery[] {
           _key,
           _type,
@@ -403,6 +413,16 @@ export const ARCHIVE_BY_SLUG_QUERY = defineQuery(`
     ),
     websiteUrl,
     codeUrl,
+    "previewImage": coalesce(previewImage, gallery[0]) {
+      _key,
+      _type,
+      asset,
+      crop,
+      hotspot,
+      isDecorative,
+      "alt": coalesce(alt[language == $language][0].value, alt[language == "es"][0].value, alt[0].value),
+      "caption": coalesce(caption[language == $language][0].value, caption[language == "es"][0].value, caption[0].value)
+    },
     gallery[] {
       _key,
       _type,
@@ -433,6 +453,14 @@ export const ARCHIVE_BY_SLUG_QUERY = defineQuery(`
 export const ABOUT_PAGE_QUERY = defineQuery(`
   *[_id == "aboutPage"][0] {
     "heading": coalesce(heading[language == $language][0].value, heading[language == "es"][0].value, heading[0].value),
+    "browserTitle": coalesce(
+      browserTitle[language == $language][0].value,
+      browserTitle[language == "es"][0].value,
+      browserTitle[0].value,
+      heading[language == $language][0].value,
+      heading[language == "es"][0].value,
+      heading[0].value
+    ),
     "body": coalesce(body[language == $language][0].value, body[language == "es"][0].value, body[0].value),
     seo {
       "title": coalesce(title[language == $language][0].value, title[language == "es"][0].value, title[0].value),

@@ -305,14 +305,14 @@
   position: relative;
   width: 100%;
   flex: 0 0 auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 8 / 5;
   margin: 0;
   overflow: hidden;
   background-color: var(--color-grid-dark);
 }
 
 .projectDetailImage {
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .modalClose {
@@ -331,18 +331,6 @@
 .modalCloseIcon {
   width: 0.875rem;
   height: 0.875rem;
-}
-
-.visuallyHidden {
-  position: absolute;
-  width: 0.0625rem;
-  height: 0.0625rem;
-  padding: 0;
-  margin: -0.0625rem;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 
 @media (min-width: 48rem) and (max-width: 74.999rem) {
@@ -416,16 +404,18 @@
 @media (max-width: 47.999rem) {
   .collectionIntro {
     grid-column: 1 / -1;
+    grid-row: 2;
     min-height: calc(var(--line-height-body) * 2);
-    margin-top: 7rem;
+    margin-top: 0.75rem;
     padding-right: 0.5rem;
     white-space: normal;
   }
 
   .projectViewport {
     grid-column: 1 / -1;
+    grid-row: 3;
     height: auto;
-    margin-top: 13.25rem;
+    margin-top: 2.5rem;
     margin-bottom: 2.5rem;
     overflow: visible;
   }
@@ -552,10 +542,6 @@
 
   .projectMediaViewport {
     padding: 0 var(--grid-margin) 2.5rem;
-  }
-
-  .projectDetailMedia {
-    aspect-ratio: 4 / 3;
   }
 
   .modalClose {

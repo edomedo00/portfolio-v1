@@ -200,6 +200,7 @@ async function seedRemainingSingletons() {
     _type: 'aboutPage',
     navigationLabel: localized('String', 'ACERCA DE MÍ', 'ABOUT'),
     heading: localized('String', 'ACERCA DE', 'ABOUT'),
+    browserTitle: localized('String', 'Acerca de — Edmundo Medel', 'About — Edmundo Medel'),
     body: localizedBlocks(
       [
         'SOY UN DESARROLLADOR WEB Y PROGRAMADOR CREATIVO. TRABAJO EN LA INTERSECCIÓN ENTRE TECNOLOGÍA, DISEÑO Y EXPERIMENTACIÓN VISUAL PARA CREAR EXPERIENCIAS DIGITALES QUE NO SOLO FUNCIONAN BIEN, SINO QUE TAMBIÉN DESPIERTAN CURIOSIDAD.',
@@ -341,6 +342,7 @@ async function seedArchive(
       ),
       websiteUrl: 'https://github.com/edomedo00/portfolio-v1',
       codeUrl: 'https://github.com/edomedo00/portfolio-v1',
+      previewImage: images[index],
       gallery: [images[index]],
     })
   }

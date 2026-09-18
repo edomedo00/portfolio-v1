@@ -300,12 +300,6 @@ export function createOrganism(
   }
 
   function cursorSources(spacing: number): Source[] {
-    if (pointerTraceIsDisabled()) {
-      pointerTrail = [];
-      pointer.active = false;
-      pointer.down = false;
-      return [];
-    }
     const influence = settings.influence / 100;
     if (influence <= 0) return [];
     const result: Source[] = [];
@@ -411,17 +405,7 @@ export function createOrganism(
     }
   }
 
-  function pointerTraceIsDisabled() {
-    return observesPage && /^\/(projects|archive|proyectos|archivo)(\/|$)/.test(window.location.pathname);
-  }
-
   function samplePointer(clientX: number, clientY: number, pointerType: string, isDown: boolean) {
-    if (pointerTraceIsDisabled()) {
-      pointerTrail = [];
-      pointer.active = false;
-      pointer.down = false;
-      return;
-    }
     const rect = canvas.getBoundingClientRect();
     const x = (clientX - rect.left) * (width / rect.width);
     const y = (clientY - rect.top) * (height / rect.height);
@@ -517,7 +501,7 @@ export function createOrganism(
   }
 
   function touchStart(event: TouchEvent) {
-    if (!observesPage || pointerTraceIsDisabled() || event.touches.length !== 1 || activeTouchId !== null) return;
+    if (!observesPage || event.touches.length !== 1 || activeTouchId !== null) return;
     if (event.target instanceof Element && event.target.closest(ignoredTouchTarget)) return;
     const touch = event.touches[0];
     activeTouchId = touch.identifier;

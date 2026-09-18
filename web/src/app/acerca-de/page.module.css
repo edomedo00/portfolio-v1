@@ -45,6 +45,8 @@
 }
 
 .description {
+  display: grid;
+  gap: 1.25rem;
   padding-block: 1.5rem;
   border-bottom: 0.0625rem solid var(--color-black);
   text-transform: uppercase;

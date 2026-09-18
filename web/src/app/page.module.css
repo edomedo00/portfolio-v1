@@ -233,6 +233,7 @@
   }
 
   .canvas[data-compact="true"] {
+    align-content: start;
     height: auto;
     min-height: 100svh;
     min-height: 100dvh;

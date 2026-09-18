@@ -4,12 +4,18 @@ import {urlFor} from './image'
 
 type MetadataOptions = {
   fallbackTitle: string
+  titleOverride?: string
   seo?: SeoContent | null
   site: SiteChromeContent['settings']
 }
 
-export function buildMetadata({fallbackTitle, seo, site}: MetadataOptions): Metadata {
-  const title = seo?.title ?? fallbackTitle ?? site.defaultSeo?.title ?? site.displayName
+export function buildMetadata({
+  fallbackTitle,
+  titleOverride,
+  seo,
+  site,
+}: MetadataOptions): Metadata {
+  const title = titleOverride ?? seo?.title ?? fallbackTitle ?? site.defaultSeo?.title ?? site.displayName
   const description = seo?.description ?? site.defaultSeo?.description ?? site.role
   const seoImage = seo?.image ?? site.defaultSeo?.image
   const image = seoImage?.asset

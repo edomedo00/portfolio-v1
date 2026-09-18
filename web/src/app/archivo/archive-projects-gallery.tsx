@@ -20,7 +20,7 @@ import styles from "./page.module.css";
 
 export type ArchiveProjectPreview = Pick<
   ArchiveProject,
-  "archiveId" | "gallery" | "slug" | "title"
+  "archiveId" | "gallery" | "previewImage" | "slug" | "title"
 >;
 
 type ArchiveProjectsGalleryProps = {
@@ -333,13 +333,14 @@ export function ArchiveProjectsGallery({
                   aria-label={`${accessibility.preview} ${project.title}`}
                   className={styles.projectImage}
                   fill
-                  image={project.gallery[0] ?? {
+                  image={project.previewImage ?? project.gallery[0] ?? {
                     _key: `${project.slug}-fallback`,
                     alt: project.title,
                     src: "/projects/placeholders/proyecto-05.svg",
                   }}
                   loading={index === 0 ? "eager" : "lazy"}
-                  sizes="(max-width: 47.999rem) calc(100vw - 2.5rem), (max-width: 74.999rem) calc(37.5vw - 2.65625rem), calc(25vw - 2.1875rem)"
+                  quality={90}
+                  sizes="(max-width: 47.999rem) calc(100vw - 2rem), (max-width: 74.999rem) calc(37.5vw - 2.65625rem), calc(25vw - 2.1875rem)"
                 />
               </div>
 
@@ -394,7 +395,7 @@ export function ArchiveProjectsGallery({
                 alt: accessibility.pending,
                 src: "/projects/placeholders/proyecto-05.svg",
               }}
-              sizes="(max-width: 47.999rem) calc(100vw - 2.5rem), (max-width: 74.999rem) calc(37.5vw - 2.65625rem), calc(25vw - 2.1875rem)"
+              sizes="(max-width: 47.999rem) calc(100vw - 2rem), (max-width: 74.999rem) calc(37.5vw - 2.65625rem), calc(25vw - 2.1875rem)"
             />
           </div>
 

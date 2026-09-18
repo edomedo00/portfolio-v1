@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatedRoutePanel } from "@/components/animated-route-panel";
 import { ContentImage } from "@/components/content-image";
+import { getContentImageAspectRatio } from "@/content/image-presentation";
 import { RichText } from "@/components/rich-text";
 import type { Locale } from "@/content/types";
 import type { Project } from "./projects";
@@ -127,6 +128,7 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
             {project.gallery.map((image, index) => (
               <figure
                 className={styles.projectDetailMedia}
+                style={{ aspectRatio: getContentImageAspectRatio(image) }}
                 key={image._key ?? `${project.slug}-${index}`}
               >
                 <ContentImage
@@ -134,7 +136,7 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
                   fill
                   image={image}
                   loading={index === 0 ? "eager" : "lazy"}
-                  sizes="45vw"
+                  sizes="(max-width: 47.999rem) calc(100vw - 2rem), (max-width: 74.999rem) and (orientation: portrait) calc(100vw - 7.5rem), (max-width: 74.999rem) 50vw, 42vw"
                 />
               </figure>
             ))}

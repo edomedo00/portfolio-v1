@@ -60,9 +60,17 @@ export const archiveProject = defineType({
       validation: (rule) => rule.required().min(2),
     }),
     defineField({
+      name: 'previewImage',
+      title: 'Preview image',
+      description:
+        'Square cover used in the archive overview. If empty, the first gallery image is used.',
+      type: 'imageWithAlt',
+      group: 'media',
+    }),
+    defineField({
       name: 'gallery',
       title: 'Image gallery',
-      description: 'The first image is used in the archive overview.',
+      description: 'Images shown on the project detail page in an 8:5 frame.',
       type: 'array',
       group: 'media',
       of: [defineArrayMember({type: 'imageWithAlt'})],
@@ -98,14 +106,15 @@ export const archiveProject = defineType({
     select: {
       title: 'title',
       archiveId: 'archiveId',
-      media: 'gallery.0',
+      previewImage: 'previewImage',
+      galleryImage: 'gallery.0',
     },
-    prepare({title, archiveId, media}) {
+    prepare({title, archiveId, previewImage, galleryImage}) {
       const id = typeof archiveId === 'number' ? String(archiveId).padStart(3, '0') : '---'
       return {
         title: title || 'Untitled archive project',
         subtitle: `[${id}]`,
-        media,
+        media: previewImage ?? galleryImage,
       }
     },
   },

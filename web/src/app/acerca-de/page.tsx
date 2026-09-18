@@ -14,7 +14,12 @@ export async function generateMetadata(): Promise<Metadata> {
     getAboutContent(language),
     getSiteChrome(language),
   ])
-  return buildMetadata({fallbackTitle: content.heading, seo: content.seo, site: settings})
+  return buildMetadata({
+    fallbackTitle: content.heading,
+    titleOverride: content.browserTitle,
+    seo: content.seo,
+    site: settings,
+  })
 }
 
 export default async function AboutPage() {

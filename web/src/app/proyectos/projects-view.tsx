@@ -2,6 +2,7 @@
 
 import { type ReactNode, useCallback, useState } from "react";
 import { RouteScrambleText } from "@/components/scramble-text";
+import { SectionHeading } from "@/components/section-heading";
 import type { Locale } from "@/content/types";
 import { ProjectsGallery } from "./projects-gallery";
 import type { Project } from "./projects";
@@ -28,7 +29,7 @@ export function ProjectsView({
 
   return (
     <>
-      <h1 className={styles.visuallyHidden}>{heading}</h1>
+      <SectionHeading>{heading}</SectionHeading>
 
       <RouteScrambleText
         className={styles.collectionIntro}
