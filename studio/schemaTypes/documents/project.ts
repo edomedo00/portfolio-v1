@@ -45,13 +45,47 @@ export const project = defineType({
       validation: (rule) => rule.required().integer().min(1900).max(2200),
     }),
     defineField({
+      name: 'disciplineTags',
+      title: 'Discipline tags',
+      description: 'Add each tag once and provide its Spanish and English labels.',
+      type: 'array',
+      group: 'content',
+      of: [
+        defineArrayMember({
+          name: 'disciplineTag',
+          title: 'Discipline tag',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'es',
+              title: 'Spanish label',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'en',
+              title: 'English label',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
+          ],
+          preview: {
+            select: {title: 'es', subtitle: 'en'},
+          },
+        }),
+      ],
+      validation: (rule) => rule.required().min(1).unique(),
+    }),
+    defineField({
       name: 'disciplines',
-      title: 'Disciplines',
-      description: 'Simple display labels, not categories.',
+      title: 'Legacy discipline tags',
+      description: 'Used as a fallback until translated discipline tags are added.',
       type: 'array',
       group: 'content',
       of: [defineArrayMember({type: 'string'})],
-      validation: (rule) => rule.required().min(1).unique(),
+      hidden: true,
+      readOnly: true,
+      validation: (rule) => rule.unique(),
     }),
     defineField({
       name: 'projectType',

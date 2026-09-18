@@ -7,7 +7,7 @@ Project documents.
 ## Content rules
 
 - Spanish and English text is edited inline with `sanity-plugin-internationalized-array`.
-- Project disciplines are free-form string labels; there is no category taxonomy.
+- Project discipline tags store Spanish and English labels together; there is no category taxonomy.
 - Project and archive galleries accept images only.
 - The first gallery image is the listing image; there is no separate preview image.
 - External website and source-code links are optional URL fields.

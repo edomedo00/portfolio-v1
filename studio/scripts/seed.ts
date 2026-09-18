@@ -245,6 +245,10 @@ async function seedProjects(kaomaxiPreview: Record<string, unknown>, kaomaxiHero
       title: 'KAOMAXI',
       year: 2026,
       disciplines: ['DISEÑO', 'DESARROLLO'],
+      disciplineTags: [
+        {es: 'DISEÑO', en: 'DESIGN'},
+        {es: 'DESARROLLO', en: 'DEVELOPMENT'},
+      ],
       typeEs: 'SITIO WEB',
       typeEn: 'WEBSITE',
       websiteUrl: 'https://kaomaxi.com',
@@ -255,6 +259,7 @@ async function seedProjects(kaomaxiPreview: Record<string, unknown>, kaomaxiHero
       title: 'STUDIO TEST',
       year: 2026,
       disciplines: ['DESARROLLO'],
+      disciplineTags: [{es: 'DESARROLLO', en: 'DEVELOPMENT'}],
       typeEs: 'PLAYGROUND INTERACTIVO',
       typeEn: 'INTERACTIVE PLAYGROUND',
       image: '/projects/placeholders/studio-test.svg',
@@ -264,6 +269,10 @@ async function seedProjects(kaomaxiPreview: Record<string, unknown>, kaomaxiHero
       title: 'PERIQUES',
       year: 2026,
       disciplines: ['DESARROLLO', 'DISEÑO'],
+      disciplineTags: [
+        {es: 'DESARROLLO', en: 'DEVELOPMENT'},
+        {es: 'DISEÑO', en: 'DESIGN'},
+      ],
       typeEs: 'SITIO WEB',
       typeEn: 'WEBSITE',
       image: '/projects/placeholders/periques.svg',
@@ -273,6 +282,10 @@ async function seedProjects(kaomaxiPreview: Record<string, unknown>, kaomaxiHero
       title: 'PAULO RAMIREZ',
       year: 2026,
       disciplines: ['DESARROLLO', 'DISEÑO'],
+      disciplineTags: [
+        {es: 'DESARROLLO', en: 'DEVELOPMENT'},
+        {es: 'DISEÑO', en: 'DESIGN'},
+      ],
       typeEs: 'PORTAFOLIO',
       typeEn: 'PORTFOLIO',
       image: '/projects/placeholders/paulo-ramirez.svg',
@@ -282,6 +295,10 @@ async function seedProjects(kaomaxiPreview: Record<string, unknown>, kaomaxiHero
       title: 'PROYECTO 05',
       year: 2026,
       disciplines: ['DISEÑO', 'DESARROLLO'],
+      disciplineTags: [
+        {es: 'DISEÑO', en: 'DESIGN'},
+        {es: 'DESARROLLO', en: 'DEVELOPMENT'},
+      ],
       typeEs: 'SITIO WEB',
       typeEn: 'WEBSITE',
       image: '/projects/placeholders/proyecto-05.svg',
@@ -304,6 +321,11 @@ async function seedProjects(kaomaxiPreview: Record<string, unknown>, kaomaxiHero
       order: index + 1,
       year: definition.year,
       disciplines: definition.disciplines,
+      disciplineTags: definition.disciplineTags.map((tag, tagIndex) => ({
+        _key: `discipline-${tagIndex + 1}`,
+        _type: 'disciplineTag',
+        ...tag,
+      })),
       projectType: localized('String', definition.typeEs, definition.typeEn),
       body: localizedBlocks(
         spanishProjectBody(definition.title),

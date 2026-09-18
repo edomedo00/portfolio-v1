@@ -95,7 +95,15 @@ export const PROJECTS_CONTENT_QUERY = defineQuery(`
         "slug": slug.current,
         order,
         year,
-        disciplines,
+        "disciplines": select(
+          count(disciplineTags) > 0 => disciplineTags[]{
+            "label": select(
+              $language == "en" => coalesce(en, es),
+              coalesce(es, en)
+            )
+          }.label,
+          disciplines
+        ),
         "projectType": coalesce(
           projectType[language == $language][0].value,
           projectType[language == "es"][0].value,
@@ -163,7 +171,15 @@ export const PROJECT_BY_SLUG_QUERY = defineQuery(`
     "slug": slug.current,
     order,
     year,
-    disciplines,
+    "disciplines": select(
+      count(disciplineTags) > 0 => disciplineTags[]{
+        "label": select(
+          $language == "en" => coalesce(en, es),
+          coalesce(es, en)
+        )
+      }.label,
+      disciplines
+    ),
     "projectType": coalesce(
       projectType[language == $language][0].value,
       projectType[language == "es"][0].value,
