@@ -63,7 +63,7 @@ function useLibraryScrambleParameters(text: string) {
       isMobile
         ? {
             ...sharedScrambleParameters,
-            speed: 0.7,
+            speed: 0.85,
             tick: 1,
             step: characterCount > 56 ? 2 : 1,
             scramble: 12,
