@@ -65,12 +65,12 @@ export default async function AboutPage() {
             >
               {link.label}
 
-              <Image
+              {/* <Image
                 alt=""
                 height={17}
                 src="/icons/up-right-arrow.svg"
                 width={17}
-              />
+              /> */}
             </a>
           ))}
         </div>
