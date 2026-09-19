@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import type { Locale } from "@/content/types";
 import { RouteScrambleText } from "@/components/scramble-text";
+import { SectionHeading } from "@/components/section-heading";
 import { ArchiveCarousel } from "./archive-carousel";
 import {
   type ArchiveProjectPreview,
@@ -12,6 +13,7 @@ import styles from "./page.module.css";
 
 type ArchiveExperienceProps = {
   comingSoonLabel: string;
+  heading: string;
   introduction: string;
   language: Locale;
   nextArchiveId: string;
@@ -20,20 +22,31 @@ type ArchiveExperienceProps = {
 
 export function ArchiveExperience({
   comingSoonLabel,
+  heading,
   introduction,
   language,
   nextArchiveId,
   projects,
 }: ArchiveExperienceProps) {
   const [galleryExitReady, setGalleryExitReady] = useState(true);
-  const handleExitStart = useCallback(() => setGalleryExitReady(false), []);
+  const [headingExitReady, setHeadingExitReady] = useState(true);
+  const [headingExiting, setHeadingExiting] = useState(false);
+  const handleExitStart = useCallback(() => {
+    setGalleryExitReady(false);
+    setHeadingExitReady(false);
+    setHeadingExiting(true);
+  }, []);
   const handleExitComplete = useCallback(() => setGalleryExitReady(true), []);
+  const handleHeadingExitComplete = useCallback(() => setHeadingExitReady(true), []);
 
   return (
     <>
+      <SectionHeading exiting={headingExiting} onExitComplete={handleHeadingExitComplete}>
+        {heading}
+      </SectionHeading>
       <RouteScrambleText
         className={styles.archiveIntro}
-        navigationReady={galleryExitReady}
+        navigationReady={galleryExitReady && headingExitReady}
         onExitStart={handleExitStart}
         routePrefix="/archive"
         showCursor
@@ -45,7 +58,7 @@ export function ArchiveExperience({
           <div className={styles.archiveTextBackdrop} aria-hidden="true">
             <div className={styles.archiveBackdropTrack}>
               {projects.map((project) => <span className={styles.archiveCardBackdrop} key={project.slug} />)}
-              <span className={styles.archiveCardBackdrop} />
+              {/* Restore the extra backdrop when the Coming soon card is enabled again. */}
             </div>
           </div>
         }

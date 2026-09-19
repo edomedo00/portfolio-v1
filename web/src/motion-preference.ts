@@ -1,6 +1,4 @@
-export const reducedMotionQuery =
-  "(prefers-reduced-motion: reduce) and (min-width: 48rem)";
-
 export function prefersReducedMotion() {
-  return window.matchMedia(reducedMotionQuery).matches;
+  // Motion is part of this portfolio's navigation and is kept enabled by design.
+  return false;
 }

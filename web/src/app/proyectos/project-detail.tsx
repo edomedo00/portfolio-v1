@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { AnimatedRoutePanel } from "@/components/animated-route-panel";
 import { ContentImage } from "@/components/content-image";
@@ -58,13 +57,7 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
               href="/projects"
               scroll={false}
             >
-              <Image
-                alt=""
-                className={styles.modalCloseIcon}
-                height={14}
-                src="/icons/cross.svg"
-                width={14}
-              />
+              <span aria-hidden="true" className={styles.modalCloseIcon} />
             </Link>
 
             <h2 className={styles.projectDetailTitle} id="project-detail-title">
@@ -90,12 +83,7 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
               target="_blank"
             >
               {copy.visit}
-              <Image
-                alt=""
-                height={17}
-                src="/icons/up-right-arrow.svg"
-                width={17}
-              />
+              <span aria-hidden="true" className={styles.projectDetailActionIcon} />
             </a>
           ) : null}
 
@@ -108,12 +96,7 @@ export function ProjectDetail({ language, project }: ProjectDetailProps) {
               target="_blank"
             >
               {copy.code}
-              <Image
-                alt=""
-                height={17}
-                src="/icons/up-right-arrow.svg"
-                width={17}
-              />
+              <span aria-hidden="true" className={styles.projectDetailActionIcon} />
             </a>
           ) : null}
         </div>

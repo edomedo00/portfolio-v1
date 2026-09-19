@@ -1,9 +1,7 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import type {ReactNode} from 'react'
 import {AnimatedRoutePanel} from '@/components/animated-route-panel'
 import {ContentImage} from '@/components/content-image'
-import {SectionHeading} from '@/components/section-heading'
 import {RichText} from '@/components/rich-text'
 import type {ArchiveContent, ArchiveProject, Locale} from '@/content/types'
 import {ArchiveExperience} from './archive-experience'
@@ -24,10 +22,9 @@ export function ArchiveView({children, content, language}: ArchiveViewProps) {
 
   return (
     <>
-      <SectionHeading>{content.page.navigationLabel}</SectionHeading>
-
       <ArchiveExperience
         comingSoonLabel={content.page.comingSoonLabel}
+        heading={content.page.navigationLabel}
         introduction={content.page.introduction}
         language={language}
         nextArchiveId={nextArchiveId}
@@ -85,7 +82,7 @@ export function ArchiveProjectDetail({
               href="/archive"
               scroll={false}
             >
-              <Image alt="" height={14} src="/icons/cross.svg" width={14} />
+              <span aria-hidden="true" className={styles.detailCloseIcon} />
             </Link>
 
             <h2 className={styles.detailHeading} id="archive-detail-title">
@@ -107,13 +104,7 @@ export function ArchiveProjectDetail({
                   target="_blank"
                 >
                   {copy.visit}
-                  <Image
-                    alt=""
-                    className={styles.detailActionIcon}
-                    height={17}
-                    src="/icons/up-right-arrow.svg"
-                    width={17}
-                  />
+                  <span aria-hidden="true" className={styles.detailActionIcon} />
                 </a>
               ) : null}
               {project.codeUrl ? (
@@ -124,13 +115,7 @@ export function ArchiveProjectDetail({
                   target="_blank"
                 >
                   {copy.code}
-                  <Image
-                    alt=""
-                    className={styles.detailActionIcon}
-                    height={17}
-                    src="/icons/up-right-arrow.svg"
-                    width={17}
-                  />
+                  <span aria-hidden="true" className={styles.detailActionIcon} />
                 </a>
               ) : null}
             </div>

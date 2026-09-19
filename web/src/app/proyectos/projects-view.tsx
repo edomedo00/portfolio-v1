@@ -24,16 +24,25 @@ export function ProjectsView({
   projects,
 }: ProjectsViewProps) {
   const [listExitReady, setListExitReady] = useState(true);
-  const handleExitStart = useCallback(() => setListExitReady(false), []);
+  const [headingExitReady, setHeadingExitReady] = useState(true);
+  const [headingExiting, setHeadingExiting] = useState(false);
+  const handleExitStart = useCallback(() => {
+    setListExitReady(false);
+    setHeadingExitReady(false);
+    setHeadingExiting(true);
+  }, []);
   const handleExitComplete = useCallback(() => setListExitReady(true), []);
+  const handleHeadingExitComplete = useCallback(() => setHeadingExitReady(true), []);
 
   return (
     <>
-      <SectionHeading>{navigationLabel}</SectionHeading>
+      <SectionHeading exiting={headingExiting} onExitComplete={handleHeadingExitComplete}>
+        {navigationLabel}
+      </SectionHeading>
 
       <RouteScrambleText
         className={styles.collectionIntro}
-        navigationReady={listExitReady}
+        navigationReady={listExitReady && headingExitReady}
         onExitStart={handleExitStart}
         routePrefix="/projects"
         showCursor

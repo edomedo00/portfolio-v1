@@ -64,13 +64,7 @@ export default async function AboutPage() {
               rel="noreferrer"
             >
               {link.label}
-
-              {/* <Image
-                alt=""
-                height={17}
-                src="/icons/up-right-arrow.svg"
-                width={17}
-              /> */}
+              <span aria-hidden="true" className={styles.socialLinkIcon} />
             </a>
           ))}
         </div>

@@ -1,4 +1,4 @@
-.heading {
+.slot {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -10,18 +10,38 @@
   border: 0;
 }
 
+.heading {
+  margin: 0;
+}
+
 @media (max-width: 47.999rem) {
-  .heading {
+  .slot {
     position: relative;
     z-index: 1;
     grid-column: 1 / -1;
     grid-row: 1;
-    width: fit-content;
+    display: grid;
+    width: 100%;
     max-width: 100%;
     height: auto;
     margin: 5.75rem 0 0;
-    overflow: visible;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 720ms cubic-bezier(0.76, 0, 0.24, 1);
     clip: auto;
+  }
+
+  .expanded {
+    grid-template-rows: 1fr;
+  }
+
+  .slotInner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .heading {
+    width: fit-content;
+    max-width: 100%;
     white-space: normal;
     font-size: 1.5rem;
     line-height: 1.2;

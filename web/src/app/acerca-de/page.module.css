@@ -46,10 +46,14 @@
 
 .description {
   display: grid;
-  gap: 1.5rem;
+  row-gap: 0.5rem;
   padding-block: 1.5rem;
   border-bottom: 0.0625rem solid var(--color-black);
   text-transform: uppercase;
+}
+
+.description > p {
+  margin: 0;
 }
 
 .description strong {
@@ -83,6 +87,19 @@
 .socialLink:hover {
   background-color: var(--color-black);
   color: var(--color-about);
+}
+
+.socialLink:focus-visible {
+  background-color: var(--color-black);
+  color: var(--color-about);
+}
+
+.socialLinkIcon {
+  width: 1.0625rem;
+  height: 1.0625rem;
+  flex: 0 0 auto;
+  background-color: currentColor;
+  mask: url('/icons/up-right-arrow.svg') center / contain no-repeat;
 }
 
 @media (min-width: 48rem) and (max-width: 74.999rem) {
@@ -121,7 +138,7 @@
   }
 
   .description {
-    gap: 1.25rem;
+    row-gap: 1.25rem;
     padding-block: 1.25rem;
   }
 

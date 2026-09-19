@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import type { Locale } from "@/content/types";
-import { reducedMotionQuery } from "@/motion-preference";
 import {
   createOrganism,
   DEFAULT_SETTINGS,
@@ -11,7 +10,7 @@ import {
 } from "./organism-engine";
 import styles from "./page.module.css";
 
-const mediaQueries = [reducedMotionQuery, "(max-width: 44rem)"];
+const mediaQueries = ["(max-width: 44rem)"];
 
 const interfaceCopy = {
   es: {
@@ -216,21 +215,19 @@ export function OrganismExperience({
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
   const [unavailable, setUnavailable] = useState(false);
   const preferences = useSyncExternalStore(subscribePreferences, getPreferences, getServerPreferences);
-  const reducedMotion = Boolean(preferences & 1);
   const [motionOverride, setMotionOverride] = useState<boolean | null>(null);
   const [panelOverride, setPanelOverride] = useState<boolean | null>(null);
-  const panelOpen = panelOverride ?? !(preferences & 2);
-  const paused = motionOverride ?? (settings.paused || reducedMotion);
+  const panelOpen = panelOverride ?? !(preferences & 1);
+  const paused = motionOverride ?? settings.paused;
   const isStill = paused || settings.speed === 0;
   const copy = interfaceCopy[language];
 
   useEffect(() => {
-    const media = window.matchMedia(reducedMotionQuery);
     const canvas = canvasRef.current;
     if (!canvas) return;
     const engine = createOrganism(
       canvas,
-      { ...configuredSettings, paused: configuredSettings.paused || media.matches },
+      configuredSettings,
       setUnavailable,
       background ? document.documentElement : canvas,
     );

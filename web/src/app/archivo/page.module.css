@@ -339,6 +339,21 @@
   padding: 0.3125rem;
   place-items: center;
   background-color: var(--color-black);
+  color: var(--color-about);
+}
+
+.detailClose:hover,
+.detailClose:focus-visible {
+  background-color: var(--color-about);
+  color: var(--color-black);
+  outline: 0.0625rem solid var(--color-black);
+}
+
+.detailCloseIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+  background-color: currentColor;
+  mask: url('/icons/cross.svg') center / contain no-repeat;
 }
 
 .detailHeading {
@@ -385,10 +400,18 @@
   text-decoration: none;
 }
 
+.detailAction:hover,
+.detailAction:focus-visible {
+  background-color: var(--color-black);
+  color: var(--color-about);
+}
+
 .detailActionIcon {
   width: 1.0625rem;
   height: 1.0625rem;
   flex: 0 0 auto;
+  background-color: currentColor;
+  mask: url('/icons/up-right-arrow.svg') center / contain no-repeat;
 }
 
 .detailGalleryViewport {

@@ -155,12 +155,6 @@ video {
   }
 }
 
-@media (prefers-reduced-motion: reduce) and (min-width: 48rem) {
-  .terminalCursor {
-    animation: none;
-  }
-}
-
 @media (min-width: 48rem) and (max-width: 74.999rem) {
   :root {
     --grid-column-count: 8;
@@ -297,29 +291,5 @@ video {
 
   100% {
     clip-path: inset(0 0 calc(100% - 2.5rem) 100%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) and (min-width: 48rem) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-delay: 0ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    transition-delay: 0ms !important;
-  }
-
-  .routePanelGrow,
-  .routePanelClosing {
-    clip-path: none !important;
-  }
-
-  .routePanelContent,
-  .routePanelClosing .routePanelContent {
-    visibility: visible !important;
-    opacity: 1 !important;
   }
 }
