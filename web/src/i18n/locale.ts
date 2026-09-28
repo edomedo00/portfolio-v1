@@ -1,7 +1,9 @@
 import {cookies} from 'next/headers'
 import type {Locale} from '@/content/types'
 
-export const languageCookie = 'portfolio-language'
+import {languageCookie} from './config'
+
+export {languageCookie} from './config'
 
 export async function getLocale(): Promise<Locale> {
   const value = (await cookies()).get(languageCookie)?.value
