@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -238,17 +239,26 @@ export function ProjectsGallery({
                         phase={copyPhase}
                         text={[...project.disciplines, String(project.year)].join(" / ")}
                       />
-                      <ProjectText
-                        className={styles.projectDescription}
-                        exitText={
-                          exitTexts[`${project.slug}-description`] ?? ""
-                        }
-                        id={`${project.slug}-description`}
-                        onAnimationEnd={handleTextAnimationEnd}
-                        onAnimationFrame={handleTextAnimationFrame}
-                        phase={copyPhase}
-                        text={project.projectType}
-                      />
+                      <div className={styles.projectTypeRow}>
+                        <ProjectText
+                          className={styles.projectDescription}
+                          exitText={
+                            exitTexts[`${project.slug}-description`] ?? ""
+                          }
+                          id={`${project.slug}-description`}
+                          onAnimationEnd={handleTextAnimationEnd}
+                          onAnimationFrame={handleTextAnimationFrame}
+                          phase={copyPhase}
+                          text={project.projectType}
+                        />
+                        <Image
+                          alt=""
+                          className={styles.projectArrow}
+                          height={17}
+                          src="/icons/up-right-arrow.svg"
+                          width={17}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

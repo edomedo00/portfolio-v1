@@ -120,6 +120,23 @@
   overflow: hidden;
 }
 
+.projectTypeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.projectTypeRow .projectDescription {
+  min-width: 0;
+}
+
+.projectArrow {
+  flex: 0 0 auto;
+  width: 1.0625rem;
+  height: 1.0625rem;
+  filter: invert(1);
+}
+
 .projectCopySpace {
   display: grid;
   grid-template-rows: repeat(2, var(--line-height-body));
