@@ -239,7 +239,10 @@ export function ProjectsGallery({
                         phase={copyPhase}
                         text={[...project.disciplines, String(project.year)].join(" / ")}
                       />
-                      <div className={styles.projectTypeRow}>
+                      <div
+                        className={styles.projectTypeRow}
+                        data-copy-phase={copyPhase}
+                      >
                         <ProjectText
                           className={styles.projectDescription}
                           exitText={

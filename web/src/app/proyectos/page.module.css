@@ -135,6 +135,17 @@
   width: 1.0625rem;
   height: 1.0625rem;
   filter: invert(1);
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+
+.projectTypeRow[data-copy-phase="appearing"] .projectArrow,
+.projectTypeRow[data-copy-phase="visible"] .projectArrow {
+  opacity: 1;
+}
+
+.projectTypeRow[data-copy-phase="exiting"] .projectArrow {
+  transition-timing-function: ease-in;
 }
 
 .projectCopySpace {
